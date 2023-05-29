@@ -29,7 +29,7 @@ SECRET_KEY = '^fo)+o6qd)43v+5*3!2e3ke7)p2qv9b@n$nb+(99&r&f%1c(j*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bigreddog.pythonanywhere.com']
+ALLOWED_HOSTS = ['bigreddog.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition

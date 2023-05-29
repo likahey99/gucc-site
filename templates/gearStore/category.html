@@ -9,14 +9,16 @@
     {% if category %}
         <h1 id="page-header">{{ category.name }}</h1>
         <p>Here you can see pieces of gear available to be borrowed:</p>
-        {% if admin %}
-            <p><a href="{% url 'gearStore:add-gear' category.slug %}">Add a New Piece of Gear</a></p>
-        {% endif %}
-        {% if gear %}
+        {% if gear or admin %}
             <div class="menu-container">
-                {% for piece_of_gear in gear %}
-                    <a href="{% url 'gearStore:view-gear' piece_of_gear.slug %}" class="menu-card-link" style="background-image: url('/media/{{ piece_of_gear.picture }}')"><div class="menu-card"><p>{{ piece_of_gear.name }}</p></div></a>
-                {% endfor %}
+                {% if gear %}
+                    {% for piece_of_gear in gear %}
+                        <a href="{% url 'gearStore:view-gear' piece_of_gear.slug %}" class="menu-card-link" style="background-image: url('/media/{{ piece_of_gear.picture }}')"><div class="menu-card"><p>{{ piece_of_gear.name }}</p></div></a>
+                    {% endfor %}
+                {% endif %}
+                {% if admin %}
+                    <a href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+                {% endif %}
             </div>
         {% else %}
             <strong>No gear currently in category.</strong>

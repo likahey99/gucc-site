@@ -8,14 +8,16 @@
 {% block body_block %}
     <h1 id="page-header">Gear</h1>
     <p>Here you can see the types of gear available for borrowing.</p>
-    {% if admin %}
-        <p><a href="{% url 'gearStore:add-category' %}">Add a New Category</a></p>
-    {% endif %}
-    {% if categories %}
+    {% if categories or admin %}
         <div class="menu-container">
-            {% for c in categories %}
-                <a href="{% url 'gearStore:view-category' c.slug %}" class="menu-card-link" style="background-image: url('/media/{{ c.picture }}')"><div class="menu-card"><p>{{ c.name }}</p></div></a>
-            {% endfor %}
+            {% if categories %}
+                {% for c in categories %}
+                    <a href="{% url 'gearStore:view-category' c.slug %}" class="menu-card-link" style="background-image: url('/media/{{ c.picture }}')"><div class="menu-card"><p>{{ c.name }}</p></div></a>
+                {% endfor %}
+            {% endif %}
+            {% if admin %}
+                <a href="{% url 'gearStore:add-category' %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+            {% endif %}
         </div>
     {% else %}
         <p><strong>There are no categories present.</strong><p>
