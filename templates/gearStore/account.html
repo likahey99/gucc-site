@@ -15,8 +15,14 @@
 {% block body_block %}
     <!-- TODO show account details, etc -->
     <h1 id="page-header">My Account</h1>
-    <img class="picture" src="/media/{{ user_profile.picture }}">
-    <p>Hi, {{user.username}}.</p>
+    <div id="account-header">
+        <img class="profile-picture" src="/media/{{ user_profile.picture }}">
+        <div id="welcome-text">
+            <p id="welcome-text-welcome">Welcome,</p>
+            <p id="welcome-text-username">{{user.username}}</p>
+        </div>
+        <button id="action-button" onclick="showHiddenForm()">Manage Account</button>
+    </div>
     <div class="form-container" id='account-image-form'>
         <div class="form-value">
             <form enctype="multipart/form-data" method="post" action="{% url 'gearStore:account' %}">
@@ -35,7 +41,6 @@
             </form>
         </div>
     </div>
-    <button id="action-button" onclick="showHiddenForm()">Show Profile Picture Manager</button>
     <div class="form-container">
         <div class="form-value">
             <form method="post" action="{% url 'gearStore:account' %}" id ="account-form">
