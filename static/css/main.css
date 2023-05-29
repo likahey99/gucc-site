@@ -456,7 +456,7 @@ footer {
 
     .body-column {
         height: auto;
-        min-height: 70vh;
+        min-height: 100%;
     }
 
     #left-sidebar, #right-sidebar {
