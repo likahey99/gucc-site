@@ -13,13 +13,27 @@
                     <h1 id="image-overlay-header">{{ gear.name }}</h1>
                 </div>
             </div>
-            <div class="right-text">
-                <p><a href="{% url 'gearStore:view-category' category.slug %}">Category: {{ gear.category }}</a></p>
-                <p>Colour: {{ gear.colour.title }}</p>
-                <p>Size: {{ gear.size.title }}</p>
-                <p>Date Added: {{ gear.dateAdded }}</p>
-                <p class="below-picture">Description: {{ gear.description }}</p>
+            <div class="text-widget">
+                <div id="category-section" class="widget-section">
+                    <p class="widget-label">Category</p>
+                    <p class="widget-text"><a href="{% url 'gearStore:view-category' category.slug %}">{{ gear.category }}</a></p>
+
+                </div>
+                <div id="colour-section" class="widget-section">
+                    <p class="widget-label">Colour</p>
+                    <p class="widget-text">{{ gear.colour.title }}</p>
+                </div>
+                <div id="size-section" class="widget-section">
+                    <p class="widget-label">Size</p>
+                    <p class="widget-text">{{ gear.size.title }}</p>
+                </div>
+                <div id="date-added-section" class="widget-section">
+                    <p class="widget-label">Added</p>
+                    <p class="widget-text">{{ gear.dateAdded }}</p>
+                </div>
+
             </div>
+            <p class="below-picture">Description: {{ gear.description }}</p>
         </div>
         {% if borrowed %}
             <p>You cannot currently borrow this item - it has already been borrowed!</p>
