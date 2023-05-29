@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, COLOUR_CHOICES
 
+import hashlib
 
 # Create your views here.
 def index(request):
@@ -164,22 +165,41 @@ def account(request):
     picture_form = UserProfileForm()
 
     if request.method == "POST":
-        post_type = request.POST.get("post-type")
-        if post_type == "picture":
-            # get new profile picture
+        # check picture
+        if request.FILES:
             picture_form = UserProfileForm(request.POST or None, request.FILES, instance=user_profile)
             if picture_form.is_valid():
                 picture_form.save()
-        elif post_type == "password":
+        # check password
+        if request.POST.get("password"):
             password_form = AdminForm(request.POST)
             if password_form.is_valid():
                 if not passwords:
                     password = password_form.save(commit=True)
+                    passwords = AdminPassword.objects.all()
+
+                    input_password = request.POST.get("password")
+                    plaintext = input_password.encode()
+                    hash = hashlib.sha256(plaintext)
+                    readable_hash = hash.hexdigest()
+
+                    passwords[0].password = readable_hash
+                    passwords[0].save()
                 elif user_profile.adminStatus:
-                    passwords[0].password = request.POST.get("password")
+                    input_password = request.POST.get("password")
+                    plaintext = input_password.encode()
+                    hash = hashlib.sha256(plaintext)
+                    readable_hash = hash.hexdigest()
+
+                    passwords[0].password = readable_hash
                     passwords[0].save()
                 else:
-                    if passwords[0].password == request.POST.get("password"):
+                    input_password = request.POST.get("password")
+                    plaintext = input_password.encode()
+                    hash = hashlib.sha256(plaintext)
+                    readable_hash = hash.hexdigest()
+
+                    if passwords[0].password == readable_hash:
                         user_profile.adminStatus = True
                         user_profile.save()
     context_dict['picture_form'] = picture_form

@@ -23,17 +23,26 @@
         </div>
         <button id="action-button" onclick="showHiddenForm()">Manage Account</button>
     </div>
-    <div class="form-container" id='account-image-form'>
+    <div class="form-container" id="account-change-form">
         <div class="form-value">
             <form enctype="multipart/form-data" method="post" action="{% url 'gearStore:account' %}">
                 {% csrf_token %}
                 {% for hidden in picture_form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
-                <input type="hidden" name="post-type" value="picture">
                 <div class="input-box">
-                    <p>Please choose a new profile picture.</p>
-                    <input id="file-choice" type="file" name="picture" accept="image/*" required>
+                    <ion-icon name="image-outline"></ion-icon>
+                    <Label for="">Profile Picture</Label>
+                    <input id="file-choice" type="file" name="picture" accept="image/*">
+                </div>
+                <div class="input-box">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <Label for="">Admin Password</Label>
+                    {% if user_profile.adminStatus %}
+                        <input type="password" name="password" id="password" placeholder="New Admin Password">
+                    {% else %}
+                        <input type="password" name="password" id="password" placeholder="Become Admin">
+                    {% endif %}
                 </div>
                 <div class="submit-button">
                     <button>Submit</button>
@@ -41,30 +50,8 @@
             </form>
         </div>
     </div>
-    <div class="form-container">
-        <div class="form-value">
-            <form method="post" action="{% url 'gearStore:account' %}" id ="account-form">
-                {% csrf_token %}
-                <input type="hidden" name="post-type" value="password">
-                <div class="input-box">
-                    <ion-icon name="lock-closed-outline"></ion-icon>
-                    <Label for="">Admin Password</Label>
-                    <input type="password" name="password" id="password" placeholder="Admin Password" required>
-                </div>
-                <div class="submit-button">
-                    <button onclick="process_login('account-form')">
-                        {% if user_profile.adminStatus %}
-                            Change Password
-                        {% else %}
-                            Become Admin
-                        {% endif %}
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
     
-    <h2>
+    <h2 id="borrow-menu-toggle">
         <Button class="borrow-menu-title" id="user-bookings-title" onclick="setBorrowMenu('user')" style="text-decoration: underline;">My Borrowed Gear</Button>
         {% if user_profile.adminStatus %}
             | <Button class="borrow-menu-title" onclick="setBorrowMenu('all')" id="all-bookings-title">All Borrowed Gear</Button>
@@ -78,7 +65,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <strong>You currently have no borrowed Gear.</strong>
+            <p id="no-gear-error">You currently have no borrowed Gear.</p>
         {% endif %}
     </div>
     {% if user_profile.adminStatus %}
@@ -90,7 +77,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <strong>There is currently no borrowed gear.</strong>
+                <p id="no-gear-error">There is currently no borrowed gear.</p>
             {% endif %}
         </div>
     {% endif %}
