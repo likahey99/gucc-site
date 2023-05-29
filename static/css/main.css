@@ -556,3 +556,12 @@ footer {
     margin-top: 0;
     margin-right: 10px;
 }
+
+h3 {
+    padding-top: 10px;
+}
+
+p {
+    padding-left: 10px;
+    padding-right: 10px;
+}
