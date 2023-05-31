@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm
-from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, COLOUR_CHOICES
+from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword
 
 import hashlib
 
@@ -120,6 +120,7 @@ def view_gear(request, gear_name_slug):
 
     try:
         gear = Gear.objects.get(slug=gear_name_slug)
+        context_dict['category'] = gear.category
         context_dict['gear'] = gear
 
         # attempt to borrow the gear
@@ -185,6 +186,9 @@ def account(request):
 
                     passwords[0].password = readable_hash
                     passwords[0].save()
+
+                    user_profile.adminStatus = True
+                    user_profile.save()
                 elif user_profile.adminStatus:
                     input_password = request.POST.get("password")
                     plaintext = input_password.encode()
@@ -251,6 +255,18 @@ def view_category(request, category_name_slug):
         gear = Gear.objects.filter(category=category)
         context_dict['gear'] = gear
         context_dict['category'] = category
+
+        # calculate numbers total and available
+        num_total = len(gear)
+        num_available = num_total
+        for gear_item in gear:
+            borrows = Booking.objects.filter(gearItem=gear_item)
+            for borrow in borrows:
+                if borrow.is_current():
+                    num_available -= 1
+
+        context_dict['available'] = num_available
+        context_dict['total'] = num_total
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['gear'] = None
@@ -312,3 +328,68 @@ def add_gear(request, category_name_slug):
     context_dict['form'] = form
     context_dict['category'] = category
     return render(request, 'gearStore/add_gear.html', context=context_dict)
+
+@login_required
+def edit_category(request, category_name_slug):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+    context_dict = {'categories': Category.objects.all()}
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Gear.DoesNotExist:
+        category = None
+
+    if category is None:
+        return redirect(reverse("gearStore:index"))
+
+    form = CategoryForm()
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            if category:
+                category = form.save(commit=False)
+                category.save()
+                return redirect(reverse('gearStore:view-category',
+                                        kwargs={'category_name_slug': category_name_slug}))
+        else:
+            print(form.errors)
+    context_dict['form'] = form
+    return render(request, 'gearStore/edit_category.html', context=context_dict)
+
+@login_required
+def edit_gear(request, category_name_slug, gear_name_slug):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+    context_dict = {'categories': Category.objects.all()}
+    try:
+        gear = Gear.objects.get(slug=gear_name_slug)
+    except Gear.DoesNotExist:
+        gear = None
+
+    if gear is None:
+        return redirect(reverse("gearStore:index"))
+
+    form = GearForm()
+
+    if request.method == 'POST':
+        form = GearForm(request.POST or None, request.FILES or None, instance=gear)
+
+        if form.is_valid():
+            if gear:
+                gear = form.save()
+                # gear.name = request.POST.get("name")
+                # gear.description = request.POST.get("description")
+                # gear.size = request.POST.get("size")
+                # gear.save()
+                return redirect(reverse('gearStore:view-gear',
+                                        kwargs={'gear_name_slug': gear.slug}))
+        else:
+            print(form.errors)
+    context_dict['form'] = form
+    context_dict['gear'] = gear
+    context_dict['category'] = gear.category
+    return render(request, 'gearStore/edit_gear.html', context=context_dict)

@@ -7,7 +7,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class GearAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'category', 'colour', 'size', 'dateAdded', 'picture')
+    list_display = ('name', 'description', 'category', 'size', 'dateAdded', 'picture')
 
 
 class BookingAdmin(admin.ModelAdmin):

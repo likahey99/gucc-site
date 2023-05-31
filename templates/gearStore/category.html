@@ -7,8 +7,29 @@
 
 {% block body_block %}
     {% if category %}
-        <h1 id="page-header">{{ category.name }}</h1>
-        <p>Here you can see pieces of gear available to be borrowed:</p>
+        <div class="gear-view-contents">
+            <div class="top-image" style="background-image: url('/media/{{ category.picture }}')">
+                <div class="top-image-overlay">
+                    <h1 id="image-overlay-header">{{ category.name }}</h1>
+                    <a href="{% url 'gearStore:edit-category' category.slug %}"><img id="edit-button" src='{% static 'images/edit_symbol.png' %}'></a>
+                </div>
+            </div>
+            <div class="text-widget" id="category-view-text-widget">
+                <div id="number-total-section" class="widget-section">
+                    <p class="widget-label">Total No.</p>
+                    <p class="widget-text">{{ total }}</p>
+                </div>
+                <div id="number-available-section" class="widget-section">
+                    <p class="widget-label">No. Available</p>
+                    <p class="widget-text">{{ available }}</p>
+                </div>
+                <div id="date-added-section" class="widget-section">
+                    <p class="widget-label">Added</p>
+                    <p class="widget-text">{{ category.dateAdded }}</p>
+                </div>
+            </div>
+            <p class="below-picture">Description: {{ category.description }}</p>
+        </div>
         {% if gear or admin %}
             <div class="menu-container">
                 {% if gear %}
@@ -17,7 +38,7 @@
                     {% endfor %}
                 {% endif %}
                 {% if admin %}
-                    <a href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+                    <a href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p>Add New</p></div></a>
                 {% endif %}
             </div>
         {% else %}

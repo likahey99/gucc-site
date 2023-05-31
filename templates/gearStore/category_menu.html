@@ -16,7 +16,7 @@
                 {% endfor %}
             {% endif %}
             {% if admin %}
-                <a href="{% url 'gearStore:add-category' %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+                <a href="{% url 'gearStore:add-category' %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p>Add New</p></div></a>
             {% endif %}
         </div>
     {% else %}

@@ -16,5 +16,7 @@ urlpatterns = [
     path('logout/', views.process_logout, name='logout'),
     path('admin-error/', views.admin_error, name='admin-error'),
     path('category/<slug:category_name_slug>/add-gear/', views.add_gear, name='add-gear'),
-    path('add-category/', views.add_category, name='add-category')
+    path('add-category/', views.add_category, name='add-category'),
+    path('edit-category/<slug:category_name_slug>', views.edit_category, name='edit-category'),
+    path('category/<slug:category_name_slug>/edit-gear/<slug:gear_name_slug>/', views.edit_gear, name='edit-gear')
 ]

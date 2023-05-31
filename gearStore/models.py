@@ -31,31 +31,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-
-COLOUR_CHOICES = (
-    ('green', 'GREEN'),
-    ('blue', 'BLUE'),
-    ('red', 'RED'),
-    ('orange', 'ORANGE'),
-    ('black', 'BLACK'),
-)
-
-SIZE_CHOICES = (
-    ('small', 'SMALL'),
-    ('medium', 'MEDIUM'),
-    ('large', 'LARGE'),
-
-)
-
-
 class Gear(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
     dateAdded = models.DateField(auto_now_add=True)
     picture = models.ImageField(upload_to="gear_images", default="gear_images/default.png")
-    colour = models.CharField(max_length=6, choices=COLOUR_CHOICES, default="GREEN")
-    size = models.CharField(max_length=30, choices=SIZE_CHOICES, default="SMALL")
+    size = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
 
     class Meta:

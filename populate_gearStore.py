@@ -14,31 +14,31 @@ from gearStore.models import Gear, Booking, UserProfile, Category
 
 def populate():
     gear = [
-        {'name': 'Climbing Rope', 'description': 'A strong, dynamic rope used for climbing', 'colour': 'blue',
+        {'name': 'Climbing Rope', 'description': 'A strong, dynamic rope used for climbing',
          'size': 'medium', 'category': 'Rope', 'picture': '/gear_images/rope.jpg'},
-        {'name': 'Climbing Harnesses', 'description': 'A safety harness worn by climbers', 'colour': 'black',
+        {'name': 'Climbing Harnesses', 'description': 'A safety harness worn by climbers',
          'size': 'medium', 'category': 'Harnesses', 'picture': '/gear_images/harness.jpg'},
-        {'name': 'Climbing Helmet', 'description': 'A protective helmet worn by climbers', 'colour': 'green',
+        {'name': 'Climbing Helmet', 'description': 'A protective helmet worn by climbers',
          'size': 'large', 'category': 'Clothing', 'picture': '/gear_images/helmet.jpg'},
-        {'name': 'Climbing Shoes', 'description': 'Specialized shoes used for rock climbing', 'colour': 'green',
+        {'name': 'Climbing Shoes', 'description': 'Specialized shoes used for rock climbing',
          'size': 'medium', 'category': 'Clothing', 'picture': '/gear_images/shoes.jpg'},
-        {'name': 'Climbing Chalk Bag', 'description': 'A bag used to hold chalk for climbing', 'colour': 'red',
+        {'name': 'Climbing Chalk Bag', 'description': 'A bag used to hold chalk for climbing',
          'size': 'small', 'category': 'Accessories', 'picture': '/gear_images/chalkbag.jpg'},
-        {'name': 'Crampons', 'description': 'Spiky attachments for climbing shoes', 'colour': 'black', 'size': 'small',
+        {'name': 'Crampons', 'description': 'Spiky attachments for climbing shoes', 'size': 'small',
          'category': 'Accessories', 'picture': '/gear_images/g12.jpg'},
-        {'name': 'Steel Ice Axe', 'description': 'A tool used for ice climbing and mountaineering', 'colour': 'blue',
+        {'name': 'Steel Ice Axe', 'description': 'A tool used for ice climbing and mountaineering',
          'size': 'large', 'category': 'Axes', 'picture': '/gear_images/petzl.jpeg'},
-        {'name': 'Raven Ice Axe', 'description': 'A tool used for ice climbing and mountaineering', 'colour': 'black',
+        {'name': 'Raven Ice Axe', 'description': 'A tool used for ice climbing and mountaineering',
          'size': 'large', 'category': 'Axes', 'picture': '/gear_images/raven.png'},
-        {'name': 'Mountaineering Boots', 'description': 'Boots designed for use in mountaineering', 'colour': 'green',
+        {'name': 'Mountaineering Boots', 'description': 'Boots designed for use in mountaineering',
          'size': 'large', 'category': 'Clothing', 'picture': '/gear_images/b2.jpg'},
-        {'name': 'Backpack', 'description': 'A bag for carrying gear', 'colour': 'blue',
+        {'name': 'Backpack', 'description': 'A bag for carrying gear',
          'size': 'medium', 'category': 'Backpacks', 'picture': '/gear_images/default.png'},
-        {'name': 'Rucksack', 'description': ' A rucksack for carrying gear', 'colour': 'black', 'size': 'small',
+        {'name': 'Rucksack', 'description': ' A rucksack for carrying gear', 'size': 'small',
          'category': 'Backpacks', 'picture': '/gear_images/tempest30.jpg'},
-        {'name': 'Belay Device', 'description': 'A device used to control a climbing rope', 'colour': 'red',
+        {'name': 'Belay Device', 'description': 'A device used to control a climbing rope',
          'size': 'small', 'category': 'Accessories', 'picture': '/gear_images/bigair.jpg'},
-        {'name': 'Hiking Boots', 'description': 'Boots designed for use in hiking', 'colour': 'black', 'size': 'medium',
+        {'name': 'Hiking Boots', 'description': 'Boots designed for use in hiking', 'size': 'medium',
          'category': 'Clothing', 'picture': '/gear_images/summer.png'}
     ]
 
@@ -83,7 +83,6 @@ def populate():
             name=gearItem['name'],
             category=categorydict[gearItem['category']],
             description=gearItem['description'],
-            colour=gearItem['colour'],
             size=gearItem['size'],
             picture = gearItem['picture']
         )[0]

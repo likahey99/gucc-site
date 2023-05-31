@@ -8,20 +8,24 @@
 {% block body_block %}
     {% if gear %}
         <div class="gear-view-contents">
-            <div class="top-image" style="background-image: url('/media{{ gear.picture }}')">
+            <div class="top-image" style="background-image: url('/media/{{ gear.picture }}')">
                 <div class="top-image-overlay">
                     <h1 id="image-overlay-header">{{ gear.name }}</h1>
+                    <a href="{% url 'gearStore:edit-gear' category.slug gear.slug %}"><img id="edit-button" src='{% static 'images/edit_symbol.png' %}'></a>
                 </div>
             </div>
             <div class="text-widget">
                 <div id="category-section" class="widget-section">
                     <p class="widget-label">Category</p>
                     <p class="widget-text"><a href="{% url 'gearStore:view-category' category.slug %}">{{ gear.category }}</a></p>
-
                 </div>
                 <div id="colour-section" class="widget-section">
-                    <p class="widget-label">Colour</p>
-                    <p class="widget-text">{{ gear.colour.title }}</p>
+                    <p class="widget-label">Status</p>
+                    {% if borrowed %}
+                        <p class="widget-text">Borrowed</p>
+                    {% else %}
+                        <p class="widget-text">Available</p>
+                    {% endif %}
                 </div>
                 <div id="size-section" class="widget-section">
                     <p class="widget-label">Size</p>
@@ -31,7 +35,6 @@
                     <p class="widget-label">Added</p>
                     <p class="widget-text">{{ gear.dateAdded }}</p>
                 </div>
-
             </div>
             <p class="below-picture">Description: {{ gear.description }}</p>
         </div>
