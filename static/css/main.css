@@ -253,20 +253,35 @@ p {
     font-size: 35px;
 }
 
-#edit-button {
+.edit-delete-button, .edit-delete-button-parent {
     margin: 0;
-    width:50px;
-    height: 50px;
-    padding: 20px;
+    width:25px;
+    height: 25px;
+    padding: 30px;
     position: absolute;
+}
+
+.edit-delete-button-parent:hover {
+    background-color: rgba(0,0,0,0.25);
+    transition: background-color 0.5s;
+}
+
+#edit-button-parent, #edit-button {
     top: 0;
     right: 0;
 }
 
-#edit-button:hover {
-    background-color: rgba(0,0,0,0.25);
-    transition: background-color 0.5s;
+#delete-button-parent, #delete-button {
+    top: 0;
+    left: 0;
+}
+
+#edit-button-parent:hover {
     border-radius: 0% 0% 0% 50%;
+}
+
+#delete-button-parent:hover {
+    border-radius: 0% 0% 50% 0%;
 }
 
 .text-widget {

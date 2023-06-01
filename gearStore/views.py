@@ -56,11 +56,11 @@ def register(request):
         return render(request, 'gearStore/login.html', context=context_dict)
 
     else:
-        errorList = []
+        errors = []
         for error_category in user_form.errors:
             for error in user_form.errors[error_category]:
-                errorList.append(error)
-        context_dict['errors'] = errorList
+                errors.append(error)
+        context_dict['errors'] = errors
         context_dict['user_form'] = user_form
         context_dict['registered'] = registered
 
@@ -70,7 +70,7 @@ def register(request):
 def login_page(request):
     context_dict = {'categories': Category.objects.all()}
     context_dict['category'] = None
-    errorList = []
+    errors = []
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -80,11 +80,11 @@ def login_page(request):
                 login(request, user)
                 return redirect(reverse('gearStore:index'))
             else:
-                errorList.append("Account has been disabled due to inactivity. Please create a new account.")
+                errors.append("Account has been disabled due to inactivity. Please create a new account.")
         else:
             print(f"Invalid login details: {username}, {password}")
-            errorList.append("Invalid combination of user and password.")
-        context_dict['errors'] = errorList
+            errors.append("Invalid combination of user and password.")
+        context_dict['errors'] = errors
         return render(request, 'gearStore/login.html', context=context_dict)
     else:
         return render(request, 'gearStore/login.html', context=context_dict)
@@ -150,6 +150,14 @@ def view_gear(request, gear_name_slug):
             context_dict['category'] = None
     except Gear.DoesNotExist:
         context_dict['gear'] = None
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
     return render(request, 'gearStore/view_gear.html', context_dict)
 
 
@@ -278,7 +286,7 @@ def add_category(request):
     user_profile = UserProfile.objects.get(user=request.user)
     if not user_profile.adminStatus:
         return redirect(reverse("gearStore:admin-error"))
-    errorList = []
+    errors = []
     context_dict = {'categories': Category.objects.all()}
     form = None
     if request.method == 'POST':
@@ -291,8 +299,8 @@ def add_category(request):
             print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
-                    errorList.append(error)
-    context_dict['errors'] = errorList
+                    errors.append(error)
+    context_dict['errors'] = errors
     context_dict['form'] = form
     return render(request, 'gearStore/add_category.html', context_dict)
 
@@ -315,7 +323,7 @@ def add_gear(request, category_name_slug):
 
     if request.method == 'POST':
         form = GearForm(request.POST, request.FILES)
-
+        errors = []
         if form.is_valid():
             if category:
                 gear = form.save(commit=False)
@@ -325,6 +333,10 @@ def add_gear(request, category_name_slug):
                                         kwargs={'category_name_slug': category_name_slug}))
         else:
             print(form.errors)
+            for error_category in form.errors:
+                for error in form.errors[error_category]:
+                    errors.append(error)
+        context_dict['errors'] = errors
     context_dict['form'] = form
     context_dict['category'] = category
     return render(request, 'gearStore/add_gear.html', context=context_dict)
@@ -346,16 +358,20 @@ def edit_category(request, category_name_slug):
     form = CategoryForm()
 
     if request.method == 'POST':
-        form = CategoryForm(request.POST, request.FILES)
-
+        form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
+        errors = []
         if form.is_valid():
             if category:
-                category = form.save(commit=False)
-                category.save()
+                category = form.save()
                 return redirect(reverse('gearStore:view-category',
-                                        kwargs={'category_name_slug': category_name_slug}))
+                                        kwargs={'category_name_slug': category.slug}))
         else:
             print(form.errors)
+            for error_category in form.errors:
+                for error in form.errors[error_category]:
+                    errors.append(error)
+        context_dict['errors'] = errors
+    context_dict['category'] = category
     context_dict['form'] = form
     return render(request, 'gearStore/edit_category.html', context=context_dict)
 
@@ -377,18 +393,18 @@ def edit_gear(request, category_name_slug, gear_name_slug):
 
     if request.method == 'POST':
         form = GearForm(request.POST or None, request.FILES or None, instance=gear)
-
+        errors = []
         if form.is_valid():
             if gear:
                 gear = form.save()
-                # gear.name = request.POST.get("name")
-                # gear.description = request.POST.get("description")
-                # gear.size = request.POST.get("size")
-                # gear.save()
                 return redirect(reverse('gearStore:view-gear',
                                         kwargs={'gear_name_slug': gear.slug}))
         else:
             print(form.errors)
+            for error_category in form.errors:
+                for error in form.errors[error_category]:
+                    errors.append(error)
+        context_dict['errors'] = errors
     context_dict['form'] = form
     context_dict['gear'] = gear
     context_dict['category'] = gear.category

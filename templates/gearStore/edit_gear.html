@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 {% block title_block %}
-    Add a piece of gear
+    Edit {{ gear.name }}
 {% endblock %}
 
 {% block body_block %}
@@ -34,15 +34,13 @@
                     <Label for="">Gear Image</Label>
                     <input type="file" name="picture" accept="image/*">
                 </div>
-
                 <div class="input-box">
                     <ion-icon name="resize-outline"></ion-icon>
                     <Label for="">Size</Label>
                     <input type="text" name="size" placeholder="size" value="{{ gear.size }}" required>
                 </div>
-
                 <div class="submit-button">
-                    <button>Add Gear!</button>
+                    <button>Submit Changes</button>
                 </div>
             </form>
         </div>
