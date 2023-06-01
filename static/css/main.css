@@ -600,3 +600,12 @@ p {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+a#add-button .menu-card {
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0);
+}
+
+a#add-button .menu-card:hover {
+    background-color: rgba(0,0,0,0.25);
+}
