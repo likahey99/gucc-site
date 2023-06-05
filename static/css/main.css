@@ -114,6 +114,7 @@ header, #left-sidebar, #right-sidebar {
 
 #content {
     background-color: rgba(0,0,0,0.1875);
+    position: relative;
 }
 
 a {
@@ -136,6 +137,7 @@ h3 {
     text-align: center;
     margin: 0;
     padding-top: 10px;
+    padding-bottom: 30px;
 }
 
 .body-column ul {
@@ -334,6 +336,26 @@ p {
     width: 33%;
 }
 
+#contact-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    width: 200px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 50px;
+}
+
+#contact-container-parent {
+    width: 200px;
+    margin: auto;
+}
+
+
 /*
     Form Styling
  */
@@ -481,7 +503,7 @@ h1, h2, h3 {
  }
 
 input#file-choice, input#password {
-    clear: both;
+    float: right;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -510,7 +532,7 @@ footer {
     width: 100%;
     margin: 0;
     background-repeat: no-repeat;
-    background-size: 105%;
+    background-size: 100%;
     background-attachment: fixed;
 }
 

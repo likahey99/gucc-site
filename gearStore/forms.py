@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from gearStore.models import UserProfile, Category, Gear, AdminPassword
+from gearStore.models import UserProfile, Category, Gear, AdminPassword, PageContents, CONTACT_CHOICES
 
 
 class UserForm(forms.ModelForm):
@@ -53,3 +53,23 @@ class AdminForm(forms.ModelForm):
     class Meta:
         model = AdminPassword
         fields = ('password',)
+
+class PageContentsForm(forms.ModelForm):
+    background_image = forms.ImageField(required=False)
+    logo_image = forms.ImageField(required=False)
+    home_contents = forms.CharField(widget=forms.Textarea)
+    about_contents = forms.CharField(widget=forms.Textarea)
+    contact_contents = forms.CharField(widget=forms.Textarea)
+    contact = forms.CharField(max_length=128)
+    contact_option = forms.ChoiceField(choices=CONTACT_CHOICES)
+
+    class Meta:
+        model = PageContents
+        fields = ('background_image',
+                  'logo_image',
+                  'home_contents',
+                  'about_contents',
+                  'contact_contents',
+                  'contact',
+                  'contact_option'
+                  )

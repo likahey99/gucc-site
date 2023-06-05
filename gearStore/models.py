@@ -4,6 +4,15 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 
+WHATSAPP = 'logo-whatsapp'
+PHONE = 'call-outline'
+EMAIL = 'mail-outline'
+
+CONTACT_CHOICES = (
+    (WHATSAPP, 'WhatsApp'),
+    (PHONE, 'Phone Number'),
+    (EMAIL, 'Email'),
+)
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -76,3 +85,12 @@ class AdminPassword(models.Model):
 
     def __str__(self):
         return self.password
+
+class PageContents(models.Model):
+    background_image = models.ImageField(upload_to="site_images", default="site_images/default_background.jpg")
+    logo_image = models.ImageField(upload_to="site_images", default="site_images/default_logo.png")
+    home_contents = models.TextField()
+    about_contents = models.TextField()
+    contact_contents = models.TextField()
+    contact = models.CharField(max_length=128)
+    contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=PHONE)

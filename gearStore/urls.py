@@ -18,5 +18,7 @@ urlpatterns = [
     path('category/<slug:category_name_slug>/add-gear/', views.add_gear, name='add-gear'),
     path('add-category/', views.add_category, name='add-category'),
     path('edit-category/<slug:category_name_slug>', views.edit_category, name='edit-category'),
-    path('category/<slug:category_name_slug>/edit-gear/<slug:gear_name_slug>/', views.edit_gear, name='edit-gear')
+    path('category/<slug:category_name_slug>/edit-gear/<slug:gear_name_slug>/', views.edit_gear, name='edit-gear'),
+    path('category/<slug:category_name_slug>/delete-gear/<slug:gear_name_slug>/', views.delete_gear, name='delete-gear'),
+    path('delete-category/<slug:category_name_slug>', views.delete_category, name='delete-category')
 ]

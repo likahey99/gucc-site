@@ -13,7 +13,7 @@
                     <h1 id="image-overlay-header">{{ category.name }}</h1>
                     {% if admin %}
                         <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-category' category.slug %}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
-                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-category' category.slug %}"><img id="delete-button" class="edit-delete-button" src='{% static 'images/delete_symbol.png' %}'></a>
+                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-category' category.slug %}"><img id="delete-button" class="edit-delete-button" src='{% static 'images/delete_symbol.png' %}'></a>
                     {% endif %}
                 </div>
             </div>

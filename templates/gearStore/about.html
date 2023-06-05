@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block body_block %}
+    <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:index'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
     <h1 id="page-header">About Gear Store</h1>
-    <p>Hi, welcome to Gear Store! Here, you are able to view various pieces of gear available to be borrowed, and add them to your own account.</p>
-    <br>
-    <p>If you don't already have an account, feel free to create one and log in, and view the My Account page. Here you can manage your account and your bookings, as well as logout.</p>
-    <br>
-    <p>If you are a manager of the club, please create an account and enter your admin password to become a site admin. Then, you will be able to add gear and categories, as well as view all current bookings.</p>
+    {% if content %}
+        <p>{{ content.about_contents|linebreaks }}</p>
+    {% endif %}
+
 {% endblock %}

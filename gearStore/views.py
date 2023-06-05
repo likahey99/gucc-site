@@ -6,16 +6,21 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm
-from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword
+from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm
+from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, PageContents
+
+from django.template.defaultfilters import slugify
 
 import hashlib
 
 # Create your views here.
 def index(request):
     context_dict = {'categories': Category.objects.all()}
-    context_dict['categories'] = Category.objects.all()
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
     context_dict['category'] = None
+    context_dict['content'] = content
     return render(request, 'gearStore/index.html', context_dict)
 
 
@@ -92,13 +97,21 @@ def login_page(request):
 
 def about(request):
     context_dict = {'categories': Category.objects.all()}
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
     context_dict['category'] = None
+    context_dict['content'] = content
     return render(request, 'gearStore/about.html', context_dict)
 
 
 def contact(request):
     context_dict = {'categories': Category.objects.all()}
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
     context_dict['category'] = None
+    context_dict['content'] = content
     return render(request, 'gearStore/contact.html', context_dict)
 
 
@@ -168,17 +181,25 @@ def account(request):
     user_profile = UserProfile.objects.get(user=request.user)
     context_dict['user_profile'] = user_profile
     passwords = AdminPassword.objects.all()
-    if not passwords:
-        user_profile.adminStatus = True
+
     password_form = AdminForm()
     picture_form = UserProfileForm()
-
+    context_dict['form_open'] = False
+    errors = []
     if request.method == "POST":
+        print("post")
+        context_dict['form_open'] = True
         # check picture
         if request.FILES:
             picture_form = UserProfileForm(request.POST or None, request.FILES, instance=user_profile)
             if picture_form.is_valid():
                 picture_form.save()
+            else:
+                print(picture_form.errors)
+                for error_category in picture_form.errors:
+                    for error in picture_form.errors[error_category]:
+                        errors.append(error)
+
         # check password
         if request.POST.get("password"):
             password_form = AdminForm(request.POST)
@@ -214,6 +235,13 @@ def account(request):
                     if passwords[0].password == readable_hash:
                         user_profile.adminStatus = True
                         user_profile.save()
+                    else:
+                        errors.append("Error: Could not become admin - incorrect password.")
+            else:
+                print(picture_form.errors)
+                for error_category in picture_form.errors:
+                    for error in picture_form.errors[error_category]:
+                        errors.append(error)
     context_dict['picture_form'] = picture_form
     context_dict['password_form'] = password_form
 
@@ -229,7 +257,7 @@ def account(request):
             if not booking.is_current():
                 all_bookings = all_bookings.exclude(id = booking.id)
         context_dict["all_bookings"] = all_bookings
-
+    context_dict['errors'] = errors
     return render(request, 'gearStore/account.html', context_dict)
 
 
@@ -294,7 +322,7 @@ def add_category(request):
 
         if form.is_valid():
             form.save()
-            return redirect('/gear-store/')
+            return redirect(reverse('gearStore:find-gear'))
         else:
             print(form.errors)
             for error_category in form.errors:
@@ -360,17 +388,28 @@ def edit_category(request, category_name_slug):
     if request.method == 'POST':
         form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
         errors = []
+
         if form.is_valid():
-            if category:
-                category = form.save()
-                return redirect(reverse('gearStore:view-category',
-                                        kwargs={'category_name_slug': category.slug}))
+            new_slug = slugify(request.POST.get("name"))
+            if category_name_slug != new_slug:
+                try:
+                     existing_obj = Category.objects.get(slug=new_slug)
+                except Category.DoesNotExist:
+                    existing_obj = None
+                if not existing_obj:
+                    category = form.save()
+                    return redirect(reverse('gearStore:view-category',
+                                            kwargs={'category_name_slug': category.slug}))
+                else:
+                    errors.append("Error: Category name already exists.")
+
         else:
             print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
         context_dict['errors'] = errors
+    category = Category.objects.get(slug=category_name_slug)
     context_dict['category'] = category
     context_dict['form'] = form
     return render(request, 'gearStore/edit_category.html', context=context_dict)
@@ -395,17 +434,92 @@ def edit_gear(request, category_name_slug, gear_name_slug):
         form = GearForm(request.POST or None, request.FILES or None, instance=gear)
         errors = []
         if form.is_valid():
-            if gear:
-                gear = form.save()
-                return redirect(reverse('gearStore:view-gear',
-                                        kwargs={'gear_name_slug': gear.slug}))
+            new_slug = slugify(request.POST.get("name"))
+            if gear_name_slug != new_slug:
+                try:
+                     existing_obj = Gear.objects.get(slug=new_slug)
+                except Gear.DoesNotExist:
+                    existing_obj = None
+                if not existing_obj:
+                    gear = form.save()
+                    return redirect(reverse('gearStore:view-gear',
+                                            kwargs={'gear_name_slug': gear.slug}))
+                else:
+                    errors.append("Error: Gear name already exists.")
         else:
             print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
         context_dict['errors'] = errors
+
+    gear = Gear.objects.get(slug=gear_name_slug)
+
     context_dict['form'] = form
     context_dict['gear'] = gear
     context_dict['category'] = gear.category
     return render(request, 'gearStore/edit_gear.html', context=context_dict)
+
+@login_required
+def delete_gear(request, category_name_slug, gear_name_slug):
+    # check if user is admin
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+    context_dict = {'categories': Category.objects.all()}
+    try:
+        gear = Gear.objects.get(slug=gear_name_slug)
+    except Gear.DoesNotExist:
+        gear = None
+
+    if gear is None:
+        return redirect(reverse("gearStore:index"))
+
+    if request.method == 'POST':
+        errors = []
+        input_password = request.POST.get("password")
+        plaintext = input_password.encode()
+        hash = hashlib.sha256(plaintext)
+        readable_hash = hash.hexdigest()
+        passwords = AdminPassword.objects.all()
+        if passwords[0].password == readable_hash:
+            gear.delete()
+            return redirect(reverse('gearStore:view-category',
+                                    kwargs={'category_name_slug': gear.category.slug}))
+        else:
+            errors.append("Error: Incorrect Password.")
+        context_dict['errors'] = errors
+    context_dict['gear'] = gear
+    context_dict['category'] = gear.category
+    return render(request, 'gearStore/delete_gear.html', context=context_dict)
+
+@login_required
+def delete_category(request, category_name_slug):
+    # check if user is admin
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+    context_dict = {'categories': Category.objects.all()}
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+
+    if category is None:
+        return redirect(reverse("gearStore:index"))
+
+    if request.method == 'POST':
+        errors = []
+        input_password = request.POST.get("password")
+        plaintext = input_password.encode()
+        hash = hashlib.sha256(plaintext)
+        readable_hash = hash.hexdigest()
+        passwords = AdminPassword.objects.all()
+        if passwords[0].password == readable_hash:
+            category.delete()
+            return redirect(reverse('gearStore:find-gear'))
+        else:
+            errors.append("Error: Incorrect Password.")
+        context_dict['errors'] = errors
+    context_dict['category'] = category
+    return render(request, 'gearStore/delete_category.html', context=context_dict)

@@ -1,7 +1,6 @@
 {% extends 'gearStore/base.html' %}
 {% load staticfiles %}
 
-
 {% block title_block %}
     Account
 {% endblock %}
@@ -9,7 +8,6 @@
 {% block head_block %}
     <script src="{% static 'js/showForm.js' %}"></script>
     <script src="{% static 'js/passwordCheck.js' %}"> </script>
-    <script src="{% static 'js/logoutAlert.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -59,6 +57,11 @@
             <br>
         {% endif %}
     </div>
+    {% if form_open == True %}
+        <script type="text/javascript">
+            showHiddenForm()
+        </script>
+    {% endif %}
     
     <h2 id="borrow-menu-toggle">
         <Button class="borrow-menu-title" id="user-bookings-title" onclick="setBorrowMenu('user')" style="text-decoration: underline;">My Borrowed Gear</Button>
@@ -90,5 +93,5 @@
             {% endif %}
         </div>
     {% endif %}
-    <p><a href="{% url 'gearStore:logout' %}" onclick="logoutAlert()">Click Here to Logout</a></p>
+    <p><a href="{% url 'gearStore:logout' %}">Click Here to Logout</a></p>
 {% endblock %}
