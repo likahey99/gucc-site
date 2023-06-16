@@ -14,7 +14,7 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = ('User.username', 'GearItem', 'DateToReturn')
 
 class ContentsAdmin(admin.ModelAdmin):
-    list_display = ('background_image', 'logo_image', 'home_contents', 'about_contents', 'contact_contents', 'contact', 'contact_option')
+    list_display = ('title', 'background_image', 'logo_image', 'home_contents', 'about_contents', 'contact_contents', 'contact', 'contact_option')
 
 
 admin.site.register(UserProfile)

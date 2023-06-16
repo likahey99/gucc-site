@@ -62,6 +62,7 @@ class PageContentsForm(forms.ModelForm):
     contact_contents = forms.CharField(widget=forms.Textarea)
     contact = forms.CharField(max_length=128)
     contact_option = forms.ChoiceField(choices=CONTACT_CHOICES)
+    title = forms.CharField(max_length=32)
 
     class Meta:
         model = PageContents
@@ -73,3 +74,13 @@ class PageContentsForm(forms.ModelForm):
                   'contact',
                   'contact_option'
                   )
+
+class BackgroundImageForm(forms.ModelForm):
+    class Meta:
+        model = PageContents
+        fields = ('background_image',)
+
+class LogoImageForm(forms.ModelForm):
+    class Meta:
+        model = PageContents
+        fields = ('logo_image',)

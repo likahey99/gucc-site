@@ -11,5 +11,7 @@
         <img src="/media/{{ content.logo_image }}" class="picture">
         <p>{{ content.home_contents|linebreaks }}</p>
     {% endif %}
-    <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:index'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
-    {% endblock %}
+    {% if admin %}
+        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-home'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
+    {% endif %}
+{% endblock %}

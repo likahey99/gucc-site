@@ -1,0 +1,52 @@
+{% extends 'gearStore/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if booking %}
+        Booking Reference: {{ booking.id }}
+    {% else %}
+        Missing Booking
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    {% if booking %}
+        <div class="gear-view-contents">
+            <div class="top-image" style="background-image: url('/media/{{ booking.gearItem.picture }}')">
+                <div class="top-image-overlay">
+                    <h1 id="image-overlay-header">Booking Reference: #{{ booking.id }}</h1>
+                </div>
+            </div>
+            <div class="text-widget">
+                <div id="category-section" class="widget-section">
+                    <p class="widget-label">Item</p>
+                    <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{  booking.gearItem }}</a></p>
+                </div>
+                <div id="colour-section" class="widget-section">
+                    <p class="widget-label">Status</p>
+                    {% if borrowed %}
+                        <p class="widget-text">Borrowed</p>
+                    {% else %}
+                        <p class="widget-text">Available</p>
+                    {% endif %}
+                </div>
+                <div id="date-borrowed-section" class="widget-section">
+                    <p class="widget-label">Borrowed From</p>
+                    <p class="widget-text">{{ booking.dateBorrowed }}</p>
+                </div>
+                <div id="date-borrowed-until-section" class="widget-section">
+                    <p class="widget-label">Borrowed Until</p>
+                    <p class="widget-text">{{ booking.dateToReturn }}</p>
+                </div>
+            </div>
+        </div>
+        <h3 id="booking-comments">Booking Comments:</h3>
+        <p id="booking-comment">{{ booking.gearItem.description }}</p>
+        <br>
+        <br>
+        <br>
+    {% else %}
+        <h1 id="page-header">Missing Booking</h1>
+        <p>Error! No such booking exists.</p>
+    {% endif %}
+{% endblock %}

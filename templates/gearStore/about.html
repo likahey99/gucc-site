@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block body_block %}
-    <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:index'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
+    {% if admin %}
+        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-about'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
+    {% endif %}
     <h1 id="page-header">About Gear Store</h1>
     {% if content %}
         <p>{{ content.about_contents|linebreaks }}</p>

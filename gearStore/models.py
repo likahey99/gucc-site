@@ -1,8 +1,10 @@
+import string
 from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils import timezone
+import random
 
 WHATSAPP = 'logo-whatsapp'
 PHONE = 'call-outline'
@@ -13,6 +15,21 @@ CONTACT_CHOICES = (
     (PHONE, 'Phone Number'),
     (EMAIL, 'Email'),
 )
+
+
+# define a method to generate a random id not in use
+def id_generator():
+    ID_LENGTH = 6
+    # define a string to hold the id
+    id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=ID_LENGTH))
+    try:
+        booking = Booking.objects.get(id=id)
+        print("Booking ID already exists. Creating new ID.")
+        return id_generator()
+    except Booking.DoesNotExist:
+        print("Booking ID is valid.")
+        return id
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -40,6 +57,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Gear(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -66,6 +84,7 @@ def return_date_time():
 
 
 class Booking(models.Model):
+    id = models.TextField(max_length=6, primary_key=True, default=id_generator)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     gearItem = models.ForeignKey(Gear, on_delete=models.CASCADE)
     dateBorrowed = models.DateField(auto_now_add=True)
@@ -73,7 +92,7 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username} booking of {self.gearItem.name}"
-    
+
     def is_current(self):
         if self.dateToReturn >= timezone.now().date():
             return True
@@ -86,6 +105,7 @@ class AdminPassword(models.Model):
     def __str__(self):
         return self.password
 
+
 class PageContents(models.Model):
     background_image = models.ImageField(upload_to="site_images", default="site_images/default_background.jpg")
     logo_image = models.ImageField(upload_to="site_images", default="site_images/default_logo.png")
@@ -94,3 +114,4 @@ class PageContents(models.Model):
     contact_contents = models.TextField()
     contact = models.CharField(max_length=128)
     contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=PHONE)
+    title = models.TextField(default="Gear Store")

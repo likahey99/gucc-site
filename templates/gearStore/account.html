@@ -36,10 +36,14 @@
                 <div class="input-box">
                     <ion-icon name="lock-closed-outline"></ion-icon>
                     <Label for="">Admin Password</Label>
-                    {% if user_profile.adminStatus %}
-                        <input type="password" name="password" id="password" placeholder="New Admin Password">
+                    {% if nopass %}
+                         <input type="password" name="password" id="password" placeholder="Set Admin Password">
                     {% else %}
-                        <input type="password" name="password" id="password" placeholder="Become Admin">
+                        {% if user_profile.adminStatus %}
+                            <input type="password" name="password" id="password" placeholder="New Admin Password">
+                        {% else %}
+                            <input type="password" name="password" id="password" placeholder="Become Admin">
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="submit-button">
