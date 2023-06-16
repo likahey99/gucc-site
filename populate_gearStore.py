@@ -81,7 +81,8 @@ borrow@gearstore.com
 You can drop us a follow on instagram @gear-store
          ''',
          'contact': '07933 123 456',
-         'contact_option': 'logo-whatsapp'
+         'contact_option': 'logo-whatsapp',
+         'title': 'Gear Store'
          }
     ]
 
@@ -117,7 +118,8 @@ You can drop us a follow on instagram @gear-store
             about_contents=data['about_contents'],
             contact_contents=data['contact_contents'],
             contact=data['contact'],
-            contact_option=data['contact_option']
+            contact_option=data['contact_option'],
+            title=data['title']
         )[0]
         d.save()
 

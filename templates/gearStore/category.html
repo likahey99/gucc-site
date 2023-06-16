@@ -2,7 +2,11 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Gear
+    {% if category %}
+        {{ category.name }}
+    {% else %}
+        Missing Category
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
@@ -48,6 +52,7 @@
             <strong>No gear currently in category.</strong>
         {% endif %}
     {% else %}
-        The specified category does not exist.
+        <h1 id="page-header">Missing Category</h1>
+        <p>Error: No such category exists.</p>
     {% endif %}
 {% endblock %}

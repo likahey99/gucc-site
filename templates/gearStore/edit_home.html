@@ -1,10 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'gearStore/base.html' %}
+{% load staticfiles %}
 
-</body>
-</html>
+{% block title_block %}
+    Edit Home
+{% endblock %}
+
+{% block body_block %}
+    <h1 id="page-header">Edit Home</h1>
+    <div class="form-container">
+        <div class="form-value">
+            <form enctype="multipart/form-data" id='edit-home-form' method="post"
+                  action="{% url "gearStore:edit-home" %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                <div class="input-box">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                    <Label for="">Site Name</Label>
+                    {% if content %}
+                        <input type="text" name="site-title" placeholder="Site Title" value="{{ content.title }}" required>
+                    {% else %}
+                        <input type="text" name="site-title" placeholder="Site Title" required>
+                    {% endif %}
+                </div>
+                <div class="input-box">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                    <Label for="">Home Page Text</Label>
+                    {% if content %}
+                        <textarea type="text" name="home-text" placeholder="Home Page Text" required>{{ content.home_contents }}</textarea>
+                    {% else %}
+                        <textarea type="text" name="home-text" placeholder="Home Page Text" required></textarea>
+                    {% endif %}
+                </div>
+
+                <div class="input-box">
+                    <ion-icon name="image-outline"></ion-icon>
+                    <Label for="">Background Image</Label>
+                    <input type="file" name="background_image" accept="image/*">
+                </div>
+
+                <div class="input-box">
+                    <ion-icon name="image-outline"></ion-icon>
+                    <Label for="">Logo Image</Label>
+                    <input type="file" name="logo_image" accept="image/*">
+                </div>
+
+                <div class="submit-button">
+                    <button>Submit Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if errors %}
+        <ul class='form-errors'>
+            <li class="error-warning">An error has occurred:</li>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+    {% endif %}
+{% endblock %}

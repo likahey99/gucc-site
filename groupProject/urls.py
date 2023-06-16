@@ -20,8 +20,8 @@ from django.urls import path, include
 from gearStore import views
 
 urlpatterns = [
-  path('', views.index, name='index'),
   path('gear-store/', include('gearStore.urls')),
   # The above line means any urls starting with gearStore/ are handled by gearStore
   path('admin/', admin.site.urls),
+  path('', views.index, name='index')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

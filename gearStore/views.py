@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm
-from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, PageContents
+from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, BackgroundImageForm, LogoImageForm
+from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, PageContents, CONTACT_CHOICES
 
 from django.template.defaultfilters import slugify
 
@@ -21,6 +21,14 @@ def index(request):
         content = content[0]
     context_dict['category'] = None
     context_dict['content'] = content
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
     return render(request, 'gearStore/index.html', context_dict)
 
 
@@ -102,6 +110,14 @@ def about(request):
         content = content[0]
     context_dict['category'] = None
     context_dict['content'] = content
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
     return render(request, 'gearStore/about.html', context_dict)
 
 
@@ -112,6 +128,14 @@ def contact(request):
         content = content[0]
     context_dict['category'] = None
     context_dict['content'] = content
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
     return render(request, 'gearStore/contact.html', context_dict)
 
 
@@ -181,7 +205,9 @@ def account(request):
     user_profile = UserProfile.objects.get(user=request.user)
     context_dict['user_profile'] = user_profile
     passwords = AdminPassword.objects.all()
-
+    context_dict['nopass'] = False
+    if not passwords:
+        context_dict['nopass'] = True
     password_form = AdminForm()
     picture_form = UserProfileForm()
     context_dict['form_open'] = False
@@ -523,3 +549,198 @@ def delete_category(request, category_name_slug):
         context_dict['errors'] = errors
     context_dict['category'] = category
     return render(request, 'gearStore/delete_category.html', context=context_dict)
+
+@login_required
+def edit_home(request):
+    # check if user is admin
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+
+    # add categories into the context dict for left sidebar
+    context_dict = {'categories': Category.objects.all()}
+    context_dict['category'] = None
+
+    # add page content into context dict for form autofill
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
+    else:
+        context_dict['content'] = None
+        return render(request, 'gearStore/index.html', context=context_dict)
+
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("site-title"):
+            content.title = request.POST.get("site-title")
+
+        if request.POST.get("home-text"):
+            content.home_contents = request.POST.get("home-text")
+
+            content = content.save()
+
+        if request.FILES:
+            # update background-image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = BackgroundImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+                print(content.background_image)
+            else:
+                print(errors)
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+            # update logo image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = LogoImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+                print(content.logo_image)
+            else:
+                print(errors)
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return render(request, 'gearStore/index.html', context_dict)
+            #return redirect('gearStore:index', context_dict=context_dict)
+    # render the page
+    context_dict['content'] = content
+    return render(request, 'gearStore/edit_home.html', context=context_dict)
+
+@login_required
+def edit_about(request):
+    # check if user is admin
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+
+    # add categories into the context dict for left sidebar
+    context_dict = {'categories': Category.objects.all()}
+    context_dict['category'] = None
+
+    # add page content into context dict for form autofill
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
+    else:
+        context_dict['content'] = None
+        return render(request, 'gearStore/about.html', context=context_dict)
+
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("about-text"):
+            content.about_contents = request.POST.get("about-text")
+
+            content = content.save()
+
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return render(request, 'gearStore/about.html', context_dict)
+
+    # render the page
+    context_dict['content'] = content
+    return render(request, 'gearStore/edit_about.html', context=context_dict)
+
+
+@login_required
+def edit_contact(request):
+    # check if user is admin
+    user_profile = UserProfile.objects.get(user=request.user)
+    if not user_profile.adminStatus:
+        return redirect(reverse("gearStore:admin-error"))
+
+    # add categories into the context dict for left sidebar
+    context_dict = {'categories': Category.objects.all()}
+    context_dict['category'] = None
+
+    # add page content into context dict for form autofill
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
+    else:
+        context_dict['content'] = None
+        return render(request, 'gearStore/contact.html', context=context_dict)
+
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("contact-text"):
+            content.contact_contents = request.POST.get("contact-text")
+
+        if request.POST.get("contact"):
+            content.contact = request.POST.get("contact")
+
+        if request.POST.get("contact-option"):
+            content.contact_option = request.POST.get("contact-option")
+
+        content = content.save()
+
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return render(request, 'gearStore/contact.html', context_dict)
+
+    context_dict['options'] = CONTACT_CHOICES
+    # render the page
+    context_dict['content'] = content
+    return render(request, 'gearStore/edit_contact.html', context=context_dict)
+
+@login_required
+def booking(request, booking_id):
+    context_dict = {'categories': Category.objects.all()}
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
+    try:
+        # find and pass the booking
+        booking = Booking.objects.get(id=booking_id)
+        context_dict['booking'] = booking
+
+        context_dict['borrowed'] = False
+        if booking.is_current():
+            context_dict['borrowed'] = True
+
+        # find and pass the page contents
+        content = PageContents.objects.all()
+        if content:
+            content = content[0]
+        context_dict['content'] = content
+
+    except Booking.DoesNotExist:
+        context_dict['booking'] = None
+
+    return render(request, 'gearStore/booking.html', context=context_dict)

@@ -2,7 +2,11 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Gear
+    {% if gear %}
+        {{ gear.name }}
+    {% else %}
+        Missing Gear
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
@@ -67,6 +71,6 @@
         <br>
     {% else %}
         <h1 id="page-header">Missing Gear</h1>
-        <p>Error! No such piece of gear exists!</p>
+        <p>Error: No such piece of gear exists.</p>
     {% endif %}
 {% endblock %}
