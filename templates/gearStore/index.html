@@ -9,7 +9,7 @@
     <h1 id="page-header">Home</h1>
     {% if content %}
         <img src="/media/{{ content.logo_image }}" class="picture">
-        <p>{{ content.home_contents|linebreaks }}</p>
+        <div class="bubble-text">{{ content.home_contents|linebreaks }}</div>
     {% endif %}
     {% if admin %}
         <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-home'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>

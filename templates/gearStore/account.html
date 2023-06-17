@@ -17,7 +17,7 @@
         <img class="profile-picture" src="/media/{{ user_profile.picture }}">
         <div id="welcome-text">
             <p id="welcome-text-welcome">Welcome,</p>
-            <p id="welcome-text-username">{{user.username}}</p>
+            <p id="welcome-text-username">{{user_profile.first_name}} {{ user_profile.last_name }}</p>
         </div>
         <button id="action-button" onclick="showHiddenForm()">Manage Account</button>
     </div>
@@ -66,30 +66,69 @@
             showHiddenForm()
         </script>
     {% endif %}
-    
     <h2 id="borrow-menu-toggle">
         <Button class="borrow-menu-title" id="user-bookings-title" onclick="setBorrowMenu('user')" style="text-decoration: underline;">My Borrowed Gear</Button>
         {% if user_profile.adminStatus %}
             | <Button class="borrow-menu-title" onclick="setBorrowMenu('all')" id="all-bookings-title">All Borrowed Gear</Button>
         {% endif %}
     </h2>
-    <div id="user-bookings">
-        {% if user_bookings %}
-            <div class="menu-container">
-                {% for booking in user_bookings %}
-                    <a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}" class="menu-card-link" style="background-image: url('/media/{{ booking.gearItem.picture }}')"><div class="menu-card"><p>{{ booking.gearItem.name }}</p></div></a>
-                {% endfor %}
+    <div class="gear-view-contents" id="user-bookings">
+    {% if user_bookings %}
+        {% for booking in user_bookings %}
+            <div class="text-widget" id="category-view-text-widget">
+                <div id="gear-item-section" class="widget-section">
+                    <p class="widget-label">Gear Item</p>
+                    <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                </div>
+                <div id="return-date-section" class="widget-section">
+                    <p class="widget-label">Borrowed Until</p>
+                    <p class="widget-text">{{ booking.dateToReturn }}</p>
+                </div>
+                <div id="borrow-status-section" class="widget-section">
+                    <p class="widget-label">Status</p>
+                    <p class="widget-text"></p>
+                </div>
+                <div id="booking-link-section" class="widget-section">
+                    <p class="widget-label">Booking</p>
+                    <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                </div>
             </div>
-        {% else %}
-            <p id="no-gear-error">You currently have no borrowed Gear.</p>
-        {% endif %}
+        {% endfor %}
+    {% else %}
+        <p id="no-gear-error">You currently have no borrowed Gear.</p>
+    {% endif %}
     </div>
+
     {% if user_profile.adminStatus %}
         <div id="all-bookings" style="display: none;">
             {% if all_bookings %}
                 <div class="menu-container">
                     {% for booking in all_bookings %}
-                        <a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}" class="menu-card-link" style="background-image: url('/media/{{ booking.gearItem.picture }}')"><div class="menu-card"><p>{{ booking.gearItem.name }}</p></div></a>
+                        <div class="text-widget" id="category-view-text-widget">
+                            <div id="user-borrower-section" class="widget-section">
+                                <p class="widget-label">User</p>
+                                <div id="profile-pic-and-name">
+                                    <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
+                                    <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                                </div>
+                            </div>
+                            <div id="gear-item-section" class="widget-section">
+                                <p class="widget-label">Gear Item</p>
+                                <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                            </div>
+                            <div id="return-date-section" class="widget-section">
+                                <p class="widget-label">Borrowed Until</p>
+                                <p class="widget-text">{{ booking.dateToReturn }}</p>
+                            </div>
+                            <div id="borrow-status-section" class="widget-section">
+                                <p class="widget-label">Status</p>
+                                <p class="widget-text"></p>
+                            </div>
+                            <div id="booking-link-section" class="widget-section">
+                                <p class="widget-label">Booking</p>
+                                <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             {% else %}

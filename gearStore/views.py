@@ -56,6 +56,8 @@ def register(request):
             user.set_password(user.password)
             user.save()
             profile = UserProfile()
+            profile.first_name = request.POST.get('first_name')
+            profile.last_name = request.POST.get('last_name')
             profile.user = user
             profile.save()
             registered = True

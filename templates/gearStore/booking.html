@@ -3,7 +3,7 @@
 
 {% block title_block %}
     {% if booking %}
-        Booking Reference: {{ booking.id }}
+        Booking {{ booking.id }}
     {% else %}
         Missing Booking
     {% endif %}
@@ -14,7 +14,7 @@
         <div class="gear-view-contents">
             <div class="top-image" style="background-image: url('/media/{{ booking.gearItem.picture }}')">
                 <div class="top-image-overlay">
-                    <h1 id="image-overlay-header">Booking Reference: #{{ booking.id }}</h1>
+                    <h1 id="image-overlay-header">Booking of {{ booking.gearItem.name }} by {{ booking.user.first_name }} {{ booking.user.last_name }}</h1>
                 </div>
             </div>
             <div class="text-widget">
@@ -37,6 +37,23 @@
                 <div id="date-borrowed-until-section" class="widget-section">
                     <p class="widget-label">Borrowed Until</p>
                     <p class="widget-text">{{ booking.dateToReturn }}</p>
+                </div>
+            </div>
+            <div class="text-widget" id="category-view-text-widget">
+                <div id="user-borrower-section" class="widget-section">
+                    <p class="widget-label">User</p>
+                    <div id="profile-pic-and-name">
+                        <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
+                        <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                    </div>
+                </div>
+                <div id="borrower-contact-section" class="widget-section">
+                    <p class="widget-label">User Contact Email</p>
+                    <p class="widget-text">{{ booking.user.user.email }}</p>
+                </div>
+                <div id="booking-link-section" class="widget-section">
+                    <p class="widget-label">Booking Reference</p>
+                    <p class="widget-text">{{ booking.id }}</p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,6 @@
 from django.contrib import admin
 from gearStore.models import Category, UserProfile, Gear, Booking, PageContents
 
-
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'dateAdded', 'picture')
 

@@ -105,7 +105,7 @@ body{
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     color: white;
-    height: 90%;
+    height: 100%;
 }
 
 header, #left-sidebar, #right-sidebar {
@@ -305,7 +305,7 @@ p {
     border-right: black 1px solid;
 }
 
-#date-added-section, #date-borrowed-until-section {
+#date-added-section, #date-borrowed-until-section, #booking-link-section {
     border: none;
 }
 
@@ -322,6 +322,11 @@ p {
 
 .widget-text {
     color: #454444;
+}
+
+.widget-text a:hover {
+    color: gray;
+    transition: all 0.5s;
 }
 
 .text-widget .widget-section p {
@@ -554,7 +559,8 @@ footer {
     width: 100%;
     margin: 0;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-position: initial;
+    background-size: cover;
     background-attachment: fixed;
 }
 
@@ -563,7 +569,7 @@ footer {
         display: block;
         grid-template-columns: none;
         color: white;
-        height: 90%;
+        height: 100%;
     }
 
     #left-sidebar ul {
@@ -603,6 +609,12 @@ footer {
     #left-sidebar, #right-sidebar {
         display: none;
     }
+
+    #content .bubble-text p {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
+    }
 }
 
 #account-change-form {
@@ -621,13 +633,15 @@ footer {
 }
 
 .borrow-menu-title{
-    background: none;
+    background-color: white;
+    border-radius: 25px;
+    color: black;
     outline: none;
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
-    padding: 0;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
     border: none;
+
 }
 
 .input-box Label.dropdown-label {
@@ -654,8 +668,9 @@ a#add-button .menu-card:hover {
 }
 
 h2#borrow-menu-toggle {
-    text-align: left;
+    text-align: center;
     padding-left: 10px;
+    font-weight: bolder;
 }
 
 h3#booking-comments, p#booking-comment {
@@ -663,4 +678,75 @@ h3#booking-comments, p#booking-comment {
     clear: both;
     margin-left: 30px;
     margin-right: 30px;
+}
+
+/* Table styling */
+table {
+    border: lightgray 1px solid;
+    border-collapse: collapse;
+    border-radius: 10px;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: left;
+    padding: 0;
+    font-size: large;
+}
+
+tr {
+
+}
+
+th, td {
+    border: gray 1px solid;
+    border-collapse: collapse;
+    padding: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-weight: normal;
+    width: auto;
+}
+
+th {
+    font-weight: bold;
+}
+
+th a, td a {
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+
+tr:nth-child(odd), tr:nth-child(odd) a {
+    color: white;
+}
+
+tr:nth-child(even), tr:nth-child(even) a {
+    background-color: #454444;
+    color: lightgray;
+}
+
+#profile-pic-and-name {
+    display: inline-flex;
+    justify-content: center;
+}
+
+#small-profile-pic {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+}
+
+#user-name-text {
+}
+
+.bubble-text p {
+    background-color: transparent;
+    color: white;
+    border-radius: 25px;
+    width: 70%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }
