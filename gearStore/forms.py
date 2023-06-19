@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from gearStore.models import UserProfile, Category, Gear, AdminPassword, PageContents, CONTACT_CHOICES
+from gearStore.models import UserProfile, Category, Gear, AdminPassword, PageContents, CONTACT_CHOICES, BookingComments
 
 
 class UserForm(forms.ModelForm):
@@ -15,7 +15,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('picture','first_name', 'last_name')
+        fields = ('picture',)
 
 
 class CategoryForm(forms.ModelForm):
@@ -84,3 +84,8 @@ class LogoImageForm(forms.ModelForm):
     class Meta:
         model = PageContents
         fields = ('logo_image',)
+
+class BookingCommentsForm(forms.ModelForm):
+    class Meta:
+        model = BookingComments
+        fields = ('comment',)

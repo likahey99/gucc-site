@@ -6,12 +6,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, BackgroundImageForm, LogoImageForm
-from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, PageContents, CONTACT_CHOICES
+from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
+    BackgroundImageForm, LogoImageForm, BookingCommentsForm
+from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
+    CONTACT_CHOICES
 
 from django.template.defaultfilters import slugify
 
 import hashlib
+
 
 # Create your views here.
 def index(request):
@@ -270,20 +273,29 @@ def account(request):
                 for error_category in picture_form.errors:
                     for error in picture_form.errors[error_category]:
                         errors.append(error)
+
+        if request.POST.get("first_name"):
+            user_profile.first_name = request.POST.get("first_name")
+            user_profile.save()
+
+        if request.POST.get("last_name"):
+            user_profile.last_name = request.POST.get("last_name")
+            user_profile.save()
+
     context_dict['picture_form'] = picture_form
     context_dict['password_form'] = password_form
 
     user_bookings = Booking.objects.filter(user=user_profile)
     for booking in user_bookings:
         if not booking.is_current():
-            user_bookings = user_bookings.exclude(id = booking.id)
+            user_bookings = user_bookings.exclude(id=booking.id)
     context_dict["user_bookings"] = user_bookings
 
     if user_profile.adminStatus:
         all_bookings = Booking.objects.all()
         for booking in all_bookings:
             if not booking.is_current():
-                all_bookings = all_bookings.exclude(id = booking.id)
+                all_bookings = all_bookings.exclude(id=booking.id)
         context_dict["all_bookings"] = all_bookings
     context_dict['errors'] = errors
     return render(request, 'gearStore/account.html', context_dict)
@@ -397,6 +409,7 @@ def add_gear(request, category_name_slug):
     context_dict['category'] = category
     return render(request, 'gearStore/add_gear.html', context=context_dict)
 
+
 @login_required
 def edit_category(request, category_name_slug):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -421,7 +434,7 @@ def edit_category(request, category_name_slug):
             new_slug = slugify(request.POST.get("name"))
             if category_name_slug != new_slug:
                 try:
-                     existing_obj = Category.objects.get(slug=new_slug)
+                    existing_obj = Category.objects.get(slug=new_slug)
                 except Category.DoesNotExist:
                     existing_obj = None
                 if not existing_obj:
@@ -441,6 +454,7 @@ def edit_category(request, category_name_slug):
     context_dict['category'] = category
     context_dict['form'] = form
     return render(request, 'gearStore/edit_category.html', context=context_dict)
+
 
 @login_required
 def edit_gear(request, category_name_slug, gear_name_slug):
@@ -465,7 +479,7 @@ def edit_gear(request, category_name_slug, gear_name_slug):
             new_slug = slugify(request.POST.get("name"))
             if gear_name_slug != new_slug:
                 try:
-                     existing_obj = Gear.objects.get(slug=new_slug)
+                    existing_obj = Gear.objects.get(slug=new_slug)
                 except Gear.DoesNotExist:
                     existing_obj = None
                 if not existing_obj:
@@ -487,6 +501,7 @@ def edit_gear(request, category_name_slug, gear_name_slug):
     context_dict['gear'] = gear
     context_dict['category'] = gear.category
     return render(request, 'gearStore/edit_gear.html', context=context_dict)
+
 
 @login_required
 def delete_gear(request, category_name_slug, gear_name_slug):
@@ -521,6 +536,7 @@ def delete_gear(request, category_name_slug, gear_name_slug):
     context_dict['category'] = gear.category
     return render(request, 'gearStore/delete_gear.html', context=context_dict)
 
+
 @login_required
 def delete_category(request, category_name_slug):
     # check if user is admin
@@ -551,6 +567,7 @@ def delete_category(request, category_name_slug):
         context_dict['errors'] = errors
     context_dict['category'] = category
     return render(request, 'gearStore/delete_category.html', context=context_dict)
+
 
 @login_required
 def edit_home(request):
@@ -619,10 +636,11 @@ def edit_home(request):
             context_dict['content'] = content
             context_dict['admin'] = True
             return render(request, 'gearStore/index.html', context_dict)
-            #return redirect('gearStore:index', context_dict=context_dict)
+            # return redirect('gearStore:index', context_dict=context_dict)
     # render the page
     context_dict['content'] = content
     return render(request, 'gearStore/edit_home.html', context=context_dict)
+
 
 @login_required
 def edit_about(request):
@@ -716,6 +734,7 @@ def edit_contact(request):
     context_dict['content'] = content
     return render(request, 'gearStore/edit_contact.html', context=context_dict)
 
+
 @login_required
 def booking(request, booking_id):
     context_dict = {'categories': Category.objects.all()}
@@ -736,13 +755,40 @@ def booking(request, booking_id):
         if booking.is_current():
             context_dict['borrowed'] = True
 
+        # pass the comments on the booking
+        comments = BookingComments.objects.filter(booking=booking)
+        context_dict['comments'] = comments
+
         # find and pass the page contents
         content = PageContents.objects.all()
         if content:
             content = content[0]
         context_dict['content'] = content
 
+        context_dict['form_open'] = False
+        if request.method == "POST":
+            context_dict['form_open'] = True
+            form = BookingCommentsForm(request.POST, request.FILES)
+            errors = []
+            if form.is_valid():
+                if request.POST.get("comment"):
+                    comment = form.save(commit=False)
+                    comment.user = user_profile
+                    comment.booking = booking
+                    comment.save()
+                    context_dict['form_open'] = False
+
+            else:
+                print(form.errors)
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+            context_dict['errors'] = errors
+            return redirect(reverse("gearStore:booking", kwargs={'booking_id': booking.id}))
+        else:
+            context_dict['form'] = BookingCommentsForm
     except Booking.DoesNotExist:
         context_dict['booking'] = None
 
+    context_dict['user'] = user_profile
     return render(request, 'gearStore/booking.html', context=context_dict)

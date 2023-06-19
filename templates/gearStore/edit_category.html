@@ -15,18 +15,24 @@
                     {{ hidden }}
                 {% endfor %}
                 <div class="input-box">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <Label for="">Category Name</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Category Name</Label>
+                    </div>
                     <input type="text" name="name" placeholder="category name" value="{{ category.name }}" required>
                 </div>
                 <div class="input-box">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    <Label for="">Description</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <Label for="">Description</Label>
+                    </div>
                     <input type="text" name="description" placeholder="description" value="{{ category.description }}" required>
                 </div>
                 <div class="input-box">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <Label for="">Category Image</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <Label for="">Category Image</Label>
+                    </div>
                     <input type="file" name="picture" accept="image/*">
                 </div>
                 <div class="submit-button">

@@ -16,8 +16,10 @@
                     {{ hidden }}
                 {% endfor %}
                 <div class="input-box">
-                    <ion-icon name="pencil-outline"></ion-icon>
-                    <Label for="">Site Name</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Site Name</Label>
+                    </div>
                     {% if content %}
                         <input type="text" name="site-title" placeholder="Site Title" value="{{ content.title }}" required>
                     {% else %}
@@ -25,8 +27,10 @@
                     {% endif %}
                 </div>
                 <div class="input-box">
-                    <ion-icon name="pencil-outline"></ion-icon>
-                    <Label for="">Home Page Text</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Home Page Text</Label>
+                    </div>
                     {% if content %}
                         <textarea type="text" name="home-text" placeholder="Home Page Text" required>{{ content.home_contents }}</textarea>
                     {% else %}
@@ -35,14 +39,18 @@
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <Label for="">Background Image</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <Label for="">Background Image</Label>
+                    </div>
                     <input type="file" name="background_image" accept="image/*">
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <Label for="">Logo Image</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <Label for="">Logo Image</Label>
+                    </div>
                     <input type="file" name="logo_image" accept="image/*">
                 </div>
 

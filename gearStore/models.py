@@ -117,3 +117,9 @@ class PageContents(models.Model):
     contact = models.CharField(max_length=128)
     contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=PHONE)
     title = models.TextField(default="Gear Store")
+
+
+class BookingComments(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    comment = models.TextField()

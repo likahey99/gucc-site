@@ -17,25 +17,33 @@
                 {% endfor %}
 
                 <div class="input-box">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <Label for="">Gear Name</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Gear Name</Label>
+                    </div>
                     <input type="text" name="name" placeholder="gear name" value="{{ gear.name }}" required>
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    <Label for="">Description</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <Label for="">Description</Label>
+                    </div>
                     <input type="text" name="description" placeholder="description" value="{{ gear.description }}" required>
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <Label for="">Gear Image</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <Label for="">Gear Image</Label>
+                    </div>
                     <input type="file" name="picture" accept="image/*">
                 </div>
                 <div class="input-box">
-                    <ion-icon name="resize-outline"></ion-icon>
-                    <Label for="">Size</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="resize-outline"></ion-icon>
+                        <Label for="">Size</Label>
+                    </div>
                     <input type="text" name="size" placeholder="size" value="{{ gear.size }}" required>
                 </div>
                 <div class="submit-button">

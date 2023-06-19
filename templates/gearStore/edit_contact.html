@@ -27,8 +27,10 @@
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <Label for="">Contact</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Contact</Label>
+                    </div>
                     {% if content %}
                         <input type="text" name="contact" placeholder="Contact" value="{{ content.contact }}" required>
                     {% else %}
@@ -37,8 +39,10 @@
                 </div>
 
                 <div class="input-box">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <Label for="">Contact Option</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Contact Option</Label>
+                    </div>
                     <div id="dropdown-selector">
                         <select name="contact-option" id="dropdown" required>
                         {% if options %}

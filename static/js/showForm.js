@@ -1,14 +1,26 @@
 function showHiddenForm() {
-    console.log("Hi!");
     var form = document.getElementById("account-change-form");
     var button = document.getElementById("action-button");
-    if (form.style.display != "block") {
-        form.style.display = "block";
+    if (form.style.display != "flex") {
+        form.style.display = "flex";
         button.innerHTML = "Hide Account Manager"
     }
     else {
         form.style.display = "none";
          button.innerHTML = "Manage Account";
+    }
+}
+
+function showCommentForm() {
+    var form = document.getElementById("add-comment-form");
+    var button = document.getElementById("action-button");
+    if (form.style.display != "block") {
+        form.style.display = "block";
+        button.innerHTML = "Hide Comment Prompt"
+    }
+    else {
+        form.style.display = "none";
+         button.innerHTML = "Add Comment";
     }
 }
 

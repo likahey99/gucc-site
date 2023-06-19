@@ -1,6 +1,10 @@
 {% extends 'gearStore/base.html' %}
 {% load staticfiles %}
 
+{% block head_block %}
+    <script src="{% static 'js/showForm.js' %}"></script>
+{% endblock %}
+
 {% block title_block %}
     {% if booking %}
         Booking {{ booking.id }}
@@ -39,7 +43,7 @@
                     <p class="widget-text">{{ booking.dateToReturn }}</p>
                 </div>
             </div>
-            <div class="text-widget" id="category-view-text-widget">
+            <div class="text-widget" id="booking-view-text-widget">
                 <div id="user-borrower-section" class="widget-section">
                     <p class="widget-label">User</p>
                     <div id="profile-pic-and-name">
@@ -47,21 +51,91 @@
                         <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
                     </div>
                 </div>
-                <div id="borrower-contact-section" class="widget-section">
-                    <p class="widget-label">User Contact Email</p>
-                    <p class="widget-text">{{ booking.user.user.email }}</p>
-                </div>
                 <div id="booking-link-section" class="widget-section">
                     <p class="widget-label">Booking Reference</p>
                     <p class="widget-text">{{ booking.id }}</p>
                 </div>
             </div>
+            <div class="text-widget" id="contact-detail-view-text-widget">
+                <div id="borrower-contact-section" class="widget-section">
+                    <p class="widget-label">User Contact Email</p>
+                    <p class="widget-text">{{ booking.user.user.email }}</p>
+                </div>
+            </div>
         </div>
-        <h3 id="booking-comments">Booking Comments:</h3>
-        <p id="booking-comment">{{ booking.gearItem.description }}</p>
-        <br>
-        <br>
-        <br>
+        <div id="comments-section">
+            <h3 id="booking-comments">Comments on Changes to Gear Condition:</h3>
+            {% if comments %}
+                {% for comment in comments %}
+                    {% if user == comment.user %}
+                    <div class="speech-bubble-right">
+                        <div class="speech-bubble-box-right">
+                            <div class="speech-contents-wrapper">
+                                <div class="speech-bubble-header">
+                                    <img class="speech-bubble-profile-pic" src="/media/{{ comment.user.picture }}">
+                                    <p id="comment-user">You</p>
+                                </div>
+                                <div class="speech-bubble-comment">
+                                    {{ comment.comment }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="speech-bubble-tail-right-container">
+                            <div class="speech-bubble-tail-right">
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    {% else %}
+                    <div class="speech-bubble-left">
+                        <div class="speech-bubble-tail-left"></div>
+                        <div class="speech-bubble-box-left">
+                            <div class="speech-bubble-header">
+                                <img class="speech-bubble-profile-pic" src="/media/{{ comment.user.picture }}">
+                                <p id="comment-user">{{ comment.user.first_name}} {{ comment.user.last_name}}</p>
+                            </div>
+                            <div class="speech-bubble-comment">
+                                {{ comment.comment }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% else %}
+                <div class="bubble-text">
+                    <p>There are currently no comments.</p>
+                </div>
+            {% endif %}
+
+            <div id="centered-button-container">
+                <button id="action-button" onclick="showCommentForm()">Add Comment</button>
+            </div>
+        </div>
+        <div id="add-comment-form">
+            <form enctype="multipart/form-data" id='edit-about-form' method="post" action="{% url "gearStore:booking" booking.id %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Comment Text</Label>
+                    </div>
+                    <textarea type="text" name="comment" placeholder="Write Comment Here" required></textarea>
+                </div>
+                <div class="submit-button">
+                    <button>Submit</button>
+                </div>
+            </form>
+        </div>
+        {% if form_open == True %}
+            <script type="text/javascript">
+                showHiddenForm()
+            </script>
+        {% endif %}
     {% else %}
         <h1 id="page-header">Missing Booking</h1>
         <p>Error! No such booking exists.</p>

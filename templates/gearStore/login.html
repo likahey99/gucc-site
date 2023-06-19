@@ -13,13 +13,17 @@
                 <form method="post" action="{% url 'gearStore:login' %}">
                     {% csrf_token %}
                     <div class="input-box">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <Label for="">Username</Label>
+                        <div class="icon-input-segment">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Username</Label>
+                        </div>
                         <input type="username" name="username" placeholder="janedoe1" required>
                     </div>
                     <div class="input-box">
-                        <ion-icon name="lock-closed-outline"></ion-icon>
-                        <Label for="">Password</Label>
+                        <div class="icon-input-segment">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <Label for="">Password</Label>
+                        </div>
                         <input type="password" name="password" placeholder="*********" required>
                     </div>
                     <div class="submit-button">

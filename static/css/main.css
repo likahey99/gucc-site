@@ -3,6 +3,9 @@ Imports
  */
 @import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600&display=swap'); /* Header and text fonts */
 
+html.hydrated {
+    width: 100%;
+}
 /*
     Header styling
 */
@@ -305,7 +308,7 @@ p {
     border-right: black 1px solid;
 }
 
-#date-added-section, #date-borrowed-until-section, #booking-link-section {
+#date-added-section, #date-borrowed-until-section, #booking-link-section, #borrower-contact-section {
     border: none;
 }
 
@@ -339,6 +342,15 @@ p {
 
 #category-view-text-widget .widget-section {
     width: 33%;
+}
+
+#contact-detail-view-text-widget .widget-section {
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+#booking-view-text-widget .widget-section {
+    width: 50%;
 }
 
 #contact-container {
@@ -511,6 +523,25 @@ h1, h2, h3 {
     background-color: grey;
 }
 
+#comments-section {
+    width: 100%;
+}
+
+#comments-section button#action-button {
+    float: none;
+    margin: 0;
+    margin-top: 25px;
+}
+
+#centered-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+
 #account-change-form {
     padding-top: 10px;
 }
@@ -521,7 +552,7 @@ h1, h2, h3 {
 
 #account-change-form .form-value form div.input-box {
     display:flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
 }
 
@@ -529,11 +560,8 @@ h1, h2, h3 {
     margin-top: 0;
  }
 
-input#file-choice, input#password {
-    float: right;
+input#file-choice, input#password, input#text-input {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
     width: 200px;
 }
 
@@ -629,7 +657,7 @@ footer {
 
 #no-gear-error {
     text-align: left;
-    padding-left: 10px;
+    padding-left: 50px;
 }
 
 .borrow-menu-title{
@@ -678,6 +706,17 @@ h3#booking-comments, p#booking-comment {
     clear: both;
     margin-left: 30px;
     margin-right: 30px;
+}
+
+h3#booking-comments {
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+p#comment-user {
+    padding: 0;
+    padding-left: 5px;
 }
 
 /* Table styling */
@@ -749,4 +788,167 @@ tr:nth-child(even), tr:nth-child(even) a {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+}
+
+.speech-bubble-left {
+    width: 80%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    align-items: center;
+    margin-left: 15px;
+    margin-top: 10px;
+    color: black;
+}
+
+.speech-bubble-right {
+    width: 80%;
+    height: auto;
+    position: relative;
+    display: block;
+    align-items: center;
+    margin-top: 10px;
+    color: black;
+    margin-right: 15px;
+    margin-left: auto;
+    float: right;
+}
+
+.speech-bubble-tail-left {
+    width: 25px;
+    height: 10px;
+    position: absolute;
+    bottom: 0;
+    background-color: white;
+    display: inline-block;
+    border-radius: 100% 0 0 0;
+        border: 0;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.speech-bubble-comment {
+    width: auto;
+    margin-right: 0;
+    word-break: break-word;
+}
+
+.speech-bubble-box-right {
+    width: calc(100% - 20px);
+    height: 90%;
+    display: inline-block;
+    background-color: white;
+    border-radius: 10px 0px 10px 10px;
+    margin-right: auto;
+
+
+}
+
+.speech-bubble-tail-right-container {
+    width: 20px;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    border: 0;
+    margin-right: 0;
+    padding-right: 0;
+    float: right;
+    clear: right;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.speech-bubble-tail-right {
+    width: 20px;
+    height: 10px;
+    position: relative;
+    background-color: white;
+    display: inline-block;
+    border-radius: 0 0 100% 0;
+    border: 0;
+    margin-right: 0;
+    padding-right: 0;
+    float: right;
+    clear: right;
+    margin-bottom: 0;
+}
+
+.speech-bubble-box-left {
+    width: calc(100% - 60px);
+    height: 90%;
+    margin-left: 20px;
+    display: inline-block;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px 10px 10px 0px;
+}
+
+.speech-contents-wrapper {
+    padding: 20px;
+    width: auto;
+}
+
+.speech-bubble-profile-pic {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.speech-bubble-header {
+    display: inline-flex;
+    color: grey;
+}
+
+.speech-bubble-header p {
+    margin: 0;
+}
+
+#add-comment-form {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.input-box {
+    display: inline-flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+input{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+input#password {}
+
+.icon-input-segment {
+    display: inline-block;
+    min-width: 110px;
+}
+
+div.form-value {
+    margin-left: 0;
+    margin-right: 0;
+    display: initial;
+}
+
+div.form-container {
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.form-text-wrapper {
+    min-width: 150px;
 }

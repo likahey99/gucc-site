@@ -17,8 +17,10 @@
                 {% endfor %}
 
                 <div class="input-box">
-                    <ion-icon name="pencil-outline"></ion-icon>
-                    <Label for="">About Page Text</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">About Page Text</Label>
+                    </div>
                     {% if content %}
                         <textarea type="text" name="about-text" placeholder="About Page Text" required>{{ content.about_contents }}</textarea>
                     {% else %}
