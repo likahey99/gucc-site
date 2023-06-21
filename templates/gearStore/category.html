@@ -24,15 +24,21 @@
             <div class="text-widget" id="category-view-text-widget">
                 <div id="number-total-section" class="widget-section">
                     <p class="widget-label">Total No.</p>
-                    <p class="widget-text">{{ total }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ total }}</p>
+                    </div>
                 </div>
                 <div id="number-available-section" class="widget-section">
                     <p class="widget-label">No. Available</p>
-                    <p class="widget-text">{{ available }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ available }}</p>
+                    </div>
                 </div>
                 <div id="date-added-section" class="widget-section">
                     <p class="widget-label">Added</p>
-                    <p class="widget-text">{{ category.dateAdded }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ category.dateAdded }}</p>
+                    </div>
                 </div>
             </div>
             <p class="below-picture">Description: {{ category.description }}</p>

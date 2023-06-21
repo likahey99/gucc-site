@@ -16,6 +16,30 @@ CONTACT_CHOICES = (
     (EMAIL, 'Email'),
 )
 
+ACTIVE = 'Active'
+REQUESTED = 'Requested'
+ACCEPTED = 'Accepted'
+DENIED = 'Denied'
+RETURNED = 'Returned'
+NOT_RETURNED = 'Not Returned'
+
+STATUS_CHOICES = (
+    (ACTIVE, 'Active'),
+    (REQUESTED, 'Requested'),
+    (ACCEPTED, 'Accepted'),
+    (DENIED, 'Denied'),
+    (RETURNED, 'Returned'),
+    (NOT_RETURNED, 'Not Returned'),
+)
+
+IN_SERVICE = 'In Service'
+OUT_OF_SERVICE = 'Out Of Service'
+
+GEAR_STATUS_CHOICES = (
+    (IN_SERVICE, 'In Service'),
+    (OUT_OF_SERVICE, 'Out Of Service'),
+)
+
 
 # define a method to generate a random id not in use
 def id_generator():
@@ -64,6 +88,7 @@ class Gear(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
+    status = models.CharField(max_length=16, choices=GEAR_STATUS_CHOICES, default=IN_SERVICE)
     dateAdded = models.DateField(auto_now_add=True)
     picture = models.ImageField(upload_to="gear_images", default="gear_images/default.png")
     size = models.CharField(max_length=128)
@@ -91,6 +116,7 @@ class Booking(models.Model):
     gearItem = models.ForeignKey(Gear, on_delete=models.CASCADE)
     dateBorrowed = models.DateField(auto_now_add=True)
     dateToReturn = models.DateField(default=return_date_time)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=REQUESTED)
 
     def __str__(self):
         return f"{self.user.user.username} booking of {self.gearItem.name}"
@@ -99,7 +125,6 @@ class Booking(models.Model):
         if self.dateToReturn >= timezone.now().date():
             return True
         return False
-
 
 class AdminPassword(models.Model):
     password = models.CharField(max_length=64, default="password123")
@@ -111,10 +136,10 @@ class AdminPassword(models.Model):
 class PageContents(models.Model):
     background_image = models.ImageField(upload_to="site_images", default="site_images/default_background.jpg")
     logo_image = models.ImageField(upload_to="site_images", default="site_images/default_logo.png")
-    home_contents = models.TextField()
-    about_contents = models.TextField()
-    contact_contents = models.TextField()
-    contact = models.CharField(max_length=128)
+    home_contents = models.TextField(default="")
+    about_contents = models.TextField(default="")
+    contact_contents = models.TextField(default="")
+    contact = models.CharField(max_length=128, default="07123 456 789")
     contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=PHONE)
     title = models.TextField(default="Gear Store")
 

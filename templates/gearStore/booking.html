@@ -1,4 +1,5 @@
 {% extends 'gearStore/base.html' %}
+{% load gearstore_template_tags %}
 {% load staticfiles %}
 
 {% block head_block %}
@@ -21,48 +22,90 @@
                     <h1 id="image-overlay-header">Booking of {{ booking.gearItem.name }} by {{ booking.user.first_name }} {{ booking.user.last_name }}</h1>
                 </div>
             </div>
-            <div class="text-widget">
+            <div class="text-widget" style="background-color: {% get_colour booking.id %};">
                 <div id="category-section" class="widget-section">
                     <p class="widget-label">Item</p>
-                    <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{  booking.gearItem }}</a></p>
+                    <div class="widget-bottom">
+                        <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{  booking.gearItem }}</a></p>
+                    </div>
                 </div>
                 <div id="colour-section" class="widget-section">
                     <p class="widget-label">Status</p>
-                    {% if borrowed %}
-                        <p class="widget-text">Borrowed</p>
-                    {% else %}
-                        <p class="widget-text">Available</p>
-                    {% endif %}
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.status }}</p>
+                    </div>
                 </div>
                 <div id="date-borrowed-section" class="widget-section">
                     <p class="widget-label">Borrowed From</p>
-                    <p class="widget-text">{{ booking.dateBorrowed }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.dateBorrowed }}</p>
+                    </div>
                 </div>
                 <div id="date-borrowed-until-section" class="widget-section">
                     <p class="widget-label">Borrowed Until</p>
-                    <p class="widget-text">{{ booking.dateToReturn }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.dateToReturn }}</p>
+                    </div>
                 </div>
             </div>
             <div class="text-widget" id="booking-view-text-widget">
                 <div id="user-borrower-section" class="widget-section">
                     <p class="widget-label">User</p>
-                    <div id="profile-pic-and-name">
-                        <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
-                        <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                    <div class="widget-bottom">
+                        <div id="profile-pic-and-name">
+                            <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
+                            <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                        </div>
                     </div>
                 </div>
                 <div id="booking-link-section" class="widget-section">
                     <p class="widget-label">Booking Reference</p>
-                    <p class="widget-text">{{ booking.id }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.id }}</p>
+                    </div>
                 </div>
             </div>
             <div class="text-widget" id="contact-detail-view-text-widget">
                 <div id="borrower-contact-section" class="widget-section">
                     <p class="widget-label">User Contact Email</p>
-                    <p class="widget-text">{{ booking.user.user.email }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.user.user.email }}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        {% if user.adminStatus %}
+            <div class="form-container" id="status-form">
+                <div class="form-value">
+                    <form enctype="multipart/form-data" method="post" action="{% url 'gearStore:booking' booking.id %}">
+                        {% csrf_token %}
+                        <div class="input-box">
+                            <div class="form-text-wrapper">
+                                <ion-icon name="stats-chart-outline"></ion-icon>
+                                <Label for="">Change Status</Label>
+                            </div>
+                            <div id="dropdown-selector">
+                                <select name="status" id="dropdown" required>
+                                {% if options %}
+                                    {% for option in options %}
+                                        {% if option.0 == booking.status %}
+                                            <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                        {% else %}
+                                            <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="submit-button">
+                            <button>Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
         <div id="comments-section">
             <h3 id="booking-comments">Comments on Changes to Gear Condition:</h3>
             {% if comments %}

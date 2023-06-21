@@ -323,8 +323,16 @@ p {
     color: grey;
 }
 
+.widget-bottom {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .widget-text {
     color: #454444;
+    margin-top: auto;
+    align-self: center;
 }
 
 .widget-text a:hover {
@@ -386,7 +394,7 @@ p {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10%;
+    margin-top: 15px;
 }
 
 .input-box {
@@ -397,6 +405,7 @@ p {
     float: left;
     margin-left: 10px;
     margin-top: 15px;
+    margin-bottom: 5px;
 }
 
 .input-box ion-icon {
@@ -415,7 +424,7 @@ p {
 }
 
 .input-box textarea {
-    height: 60px;
+    height: 180px;
 }
 
 .input-box textarea:focus{
@@ -468,6 +477,12 @@ form .submit-button button:hover {
 
 .form-errors {
     text-align: center;
+    clear: both;
+    display: block;
+    width: 100%;
+    min-width: 100%;
+    flex-grow: 4;
+    padding-left: 0px;
 }
 
 h1, h2, h3 {
@@ -477,8 +492,8 @@ h1, h2, h3 {
 }
 
 .profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     margin-left: 20px;
 }
@@ -487,6 +502,28 @@ h1, h2, h3 {
     display: flex;
     align-items: center;
     width: 100%;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+#account-header #welcome-buttons-holder {
+    width: auto;
+    flex-grow: 1;
+}
+
+#account-header #welcome-buttons-holder #manage-buttons, #account-header #welcome-buttons-holder #welcome-text {
+    display: inline-block;
+    clear: none;
+}
+
+#account-header #welcome-buttons-holder #manage-buttons {
+    float: right;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+#account-header #welcome-buttons-holder #welcome-text {
+    float: left;
 }
 
 #welcome-text {
@@ -503,7 +540,7 @@ h1, h2, h3 {
     font-size: 25px;
 }
 
-#action-button {
+#action-button, #logout-button {
     margin-left: auto;
     margin-right: 20px;
     clear: both;
@@ -516,8 +553,31 @@ h1, h2, h3 {
     background-color: white;
     font-weight: bold;
 }
+#manage-buttons #action-button {
+    margin-bottom: 10px;
+}
+
+#logout-button {
+    color: black;
+    font-weight: bold;
+}
+
+
+#account-header #manage-buttons {
+    margin-left: auto;
+    margin-right: 20px;
+    float: right;
+    width: 150px;
+    border: none;
+}
 
 #action-button:hover {
+    color: white;
+    transition: all 0.5s;
+    background-color: grey;
+}
+
+#logout-button:hover {
     color: white;
     transition: all 0.5s;
     background-color: grey;
@@ -543,7 +603,6 @@ h1, h2, h3 {
 
 
 #account-change-form {
-    padding-top: 10px;
 }
 
 #account-change-form .form-value {
@@ -558,7 +617,13 @@ h1, h2, h3 {
 
 #account-change-form .form-value form div.submit-button button {
     margin-top: 0;
- }
+}
+
+#status-form .form-value form div.submit-button {
+    width: 100%;
+    justify-content: center;
+    flex-grow: 1;
+}
 
 input#file-choice, input#password, input#text-input {
     display: block;
@@ -768,6 +833,8 @@ tr:nth-child(even), tr:nth-child(even) a {
 #profile-pic-and-name {
     display: inline-flex;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 #small-profile-pic {
@@ -914,7 +981,7 @@ tr:nth-child(even), tr:nth-child(even) a {
 
 .input-box {
     display: inline-flex;
-    width: 100%;
+    width: 240px;
     flex-wrap: wrap;
     justify-content: space-between;
 }
@@ -940,10 +1007,11 @@ div.form-value {
 div.form-container {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 form {
-    width: auto;
+    width: 240px;
     margin-left: auto;
     margin-right: auto;
 
@@ -952,3 +1020,87 @@ form {
 .form-text-wrapper {
     min-width: 150px;
 }
+
+@media only screen and (max-width: 450px) {
+    div#account-header {
+        display: inline-block;
+    }
+
+    div#account-header div#manage-buttons #action-button, div#account-header div#manage-buttons a #logout-button {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    div#welcome-buttons-holder div#manage-buttons, div#welcome-buttons-holder div#welcome-text {
+        margin: 0;
+    }
+
+    #account-header #welcome-buttons-holder #manage-buttons {
+        margin: 0;
+    }
+
+
+    #content #account-header div#welcome-buttons-holder {
+        display: inline-flex;
+        justify-content: center;
+        width: 100%;
+
+    }
+
+    div#account-header .profile-picture {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        clear: both;
+        display: block;
+    }
+
+    div#account-header #welcome-text {
+        margin-bottom: 10px;
+        width: auto;
+        display: inline-block;
+    }
+
+    body div.admin-user-view-header#account-header .profile-picture {
+        width: 60px;
+        height: 60px;
+    }
+
+}
+
+.admin-user-view-header {
+    justify-content: center;
+}
+
+    div.admin-user-view-header#account-header {
+        display: inline-block;
+    }
+
+    .admin-user-view-header div#welcome-buttons-holder div#welcome-text {
+        margin: 0;
+    }
+
+    #content .admin-user-view-header#account-header div#welcome-buttons-holder {
+        display: inline-flex;
+        justify-content: center;
+        width: 100%;
+
+    }
+
+    div.admin-user-view-header#account-header .profile-picture {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        clear: both;
+        display: block;
+    }
+
+    div.admin-user-view-header#account-header #welcome-text {
+        margin-bottom: 10px;
+        width: auto;
+        display: inline-block;
+    }

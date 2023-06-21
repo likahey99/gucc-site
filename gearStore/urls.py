@@ -24,5 +24,6 @@ urlpatterns = [
     path('edit-home/', views.edit_home, name='edit-home'),
     path('edit-about/', views.edit_about, name='edit-about'),
     path('edit-contact', views.edit_contact, name='edit-contact'),
-    path('booking/<booking_id>/', views.booking, name='booking')
+    path('booking/<booking_id>/', views.booking, name='booking'),
+    path('user/<user>/', views.user, name='user')
 ]

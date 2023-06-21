@@ -23,7 +23,25 @@
                     </div>
                     <input type="text" name="name" placeholder="gear name" value="{{ gear.name }}" required>
                 </div>
-
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="stats-chart-outline"></ion-icon>
+                        <Label for="">Change Status</Label>
+                    </div>
+                    <div id="dropdown-selector">
+                        <select name="status" id="dropdown" required>
+                        {% if options %}
+                            {% for option in options %}
+                                {% if option.0 == gear.status %}
+                                    <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                {% else %}
+                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        </select>
+                    </div>
+                </div>
                 <div class="input-box">
                     <div class="form-text-wrapper">
                         <ion-icon name="mail-outline"></ion-icon>

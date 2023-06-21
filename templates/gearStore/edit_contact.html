@@ -17,8 +17,10 @@
                 {% endfor %}
 
                 <div class="input-box">
-                    <ion-icon name="pencil-outline"></ion-icon>
-                    <Label for="">Contact Page Text</Label>
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Contact Page Text</Label>
+                    </div>
                     {% if content %}
                         <textarea type="text" name="contact-text" placeholder="Contact Page Text" required>{{ content.contact_contents }}</textarea>
                     {% else %}

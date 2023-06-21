@@ -1,4 +1,5 @@
 {% extends 'gearStore/base.html' %}
+{% load gearstore_template_tags %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -15,11 +16,16 @@
     <h1 id="page-header">My Account</h1>
     <div id="account-header">
         <img class="profile-picture" src="/media/{{ user_profile.picture }}">
-        <div id="welcome-text">
-            <p id="welcome-text-welcome">Welcome,</p>
-            <p id="welcome-text-username">{{user_profile.first_name}} {{ user_profile.last_name }}</p>
+        <div id="welcome-buttons-holder">
+            <div id="welcome-text">
+                <p id="welcome-text-welcome">Welcome,</p>
+                <p id="welcome-text-username">{{user_profile.first_name}} {{ user_profile.last_name }}</p>
+            </div>
+            <div id="manage-buttons">
+                <button id="action-button" onclick="showHiddenForm()">Manage Account</button>
+                <a href="{% url 'gearStore:logout' %}"><button id="logout-button">Logout</button></a>
+            </div>
         </div>
-        <button id="action-button" onclick="showHiddenForm()">Manage Account</button>
     </div>
     <div class="form-container" id="account-change-form">
         <div class="form-value">
@@ -90,22 +96,30 @@
     <div class="gear-view-contents" id="user-bookings">
     {% if user_bookings %}
         {% for booking in user_bookings %}
-            <div class="text-widget" id="category-view-text-widget">
+            <div class="text-widget" id="category-view-text-widget" style="background-color: {% get_colour booking.id %};">
                 <div id="gear-item-section" class="widget-section">
                     <p class="widget-label">Gear Item</p>
-                    <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                    <div class="widget-bottom">
+                        <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                    </div>
                 </div>
                 <div id="return-date-section" class="widget-section">
                     <p class="widget-label">Borrowed Until</p>
-                    <p class="widget-text">{{ booking.dateToReturn }}</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.dateToReturn }}</p>
+                    </div>
                 </div>
                 <div id="borrow-status-section" class="widget-section">
                     <p class="widget-label">Status</p>
-                    <p class="widget-text"></p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.status }}</p>
+                    </div>
                 </div>
                 <div id="booking-link-section" class="widget-section">
                     <p class="widget-label">Booking</p>
-                    <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                    <div class="widget-bottom">
+                        <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -119,29 +133,39 @@
             {% if all_bookings %}
                 <div class="menu-container">
                     {% for booking in all_bookings %}
-                        <div class="text-widget" id="category-view-text-widget">
+                        <div class="text-widget" id="category-view-text-widget" style="background-color: {% get_colour booking.id %};">
                             <div id="user-borrower-section" class="widget-section">
                                 <p class="widget-label">User</p>
-                                <div id="profile-pic-and-name">
-                                    <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
-                                    <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                                <div class="widget-bottom">
+                                    <div id="profile-pic-and-name">
+                                        <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
+                                        <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                                    </div>
                                 </div>
                             </div>
                             <div id="gear-item-section" class="widget-section">
                                 <p class="widget-label">Gear Item</p>
-                                <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                                <div class="widget-bottom">
+                                   <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
+                                </div>
                             </div>
                             <div id="return-date-section" class="widget-section">
                                 <p class="widget-label">Borrowed Until</p>
-                                <p class="widget-text">{{ booking.dateToReturn }}</p>
+                                <div class="widget-bottom">
+                                    <p class="widget-text">{{ booking.dateToReturn }}</p>
+                                </div>
                             </div>
                             <div id="borrow-status-section" class="widget-section">
                                 <p class="widget-label">Status</p>
-                                <p class="widget-text"></p>
+                                <div class="widget-bottom">
+                                    <p class="widget-text">{{ booking.status }}</p>
+                                </div>
                             </div>
                             <div id="booking-link-section" class="widget-section">
                                 <p class="widget-label">Booking</p>
-                                <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                                <div class="widget-bottom">
+                                    <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
