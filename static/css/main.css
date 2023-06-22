@@ -10,20 +10,6 @@ html.hydrated {
     Header styling
 */
 
-.material-symbols-outlined {
-    margin-top: 30px;
-    margin-left: 10px;
-    float: left;
-    color: white;
-    width: 40px;
-    height: 40px;
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 700,
-    'GRAD' 0,
-    'opsz' 48
-}
-
 header {
     padding-bottom: 20px;
     border-bottom: 1px solid white;
@@ -33,6 +19,15 @@ header .top-bar {
     margin: 0;
     padding: 0;
     width: 100%;
+}
+
+header .top-bar #header-logo-image {
+    margin-top: 21px;
+    margin-left: 20px;
+    margin-right: 10px;
+    float: left;
+    width: 40px;
+    height: 40px;
 }
 
 header .top-bar h1 {
@@ -658,6 +653,10 @@ footer {
 }
 
 @media only screen and (max-width: 800px) {
+    body .view-filter-bar {
+        width: calc(0.9 * 100vw);
+    }
+
     #main-body {
         display: block;
         grid-template-columns: none;
@@ -831,13 +830,16 @@ tr:nth-child(even), tr:nth-child(even) a {
 }
 
 #profile-pic-and-name {
-    display: inline-flex;
+    display: block;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
 
 #small-profile-pic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     width: 25px;
     height: 25px;
     border-radius: 25px;
@@ -1074,33 +1076,134 @@ form {
     justify-content: center;
 }
 
-    div.admin-user-view-header#account-header {
-        display: inline-block;
-    }
+div.admin-user-view-header#account-header {
+    display: inline-block;
+}
 
-    .admin-user-view-header div#welcome-buttons-holder div#welcome-text {
-        margin: 0;
-    }
+.admin-user-view-header div#welcome-buttons-holder div#welcome-text {
+    margin: 0;
+}
 
-    #content .admin-user-view-header#account-header div#welcome-buttons-holder {
-        display: inline-flex;
-        justify-content: center;
-        width: 100%;
+#content .admin-user-view-header#account-header div#welcome-buttons-holder {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
 
-    }
+}
 
-    div.admin-user-view-header#account-header .profile-picture {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 20px;
-        margin-left: auto;
-        margin-right: auto;
-        clear: both;
-        display: block;
-    }
+div.admin-user-view-header#account-header .profile-picture {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+    display: block;
+}
 
-    div.admin-user-view-header#account-header #welcome-text {
-        margin-bottom: 10px;
-        width: auto;
-        display: inline-block;
-    }
+div.admin-user-view-header#account-header #welcome-text {
+    margin-bottom: 10px;
+    width: auto;
+    display: inline-block;
+}
+
+#bookings-view-Active, #bookings-view-Requested, #bookings-view-Accepted, #bookings-view-Denied, #bookings-view-Returned, #bookings-view-Unreturned {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+
+}
+
+.view-filter-bar {
+    width: calc(0.6 * 0.9 * 100vw);
+    height: 60px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-left: 5%;
+}
+
+.view-filter-bar button {
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 25px;
+    border: none;
+    text-decoration: none;
+    background-color: white;
+    font-weight: bold;
+    transition: all 0.5s;
+}
+
+/* simple rainbow animation based off of a transition by @nohoid on codepen */
+#booking-filter-button-All:hover, .rainbow-anim, ::-webkit-scrollbar-thumb:hover, #action-button:hover, #logout-button:hover {
+    background: linear-gradient(270deg, #b2bda6, #e8d9b7, #b5c9c6, #d6bcb8, #dacfe3, #c9c7c7);
+    background-size: 1800% 1800%;
+    -webkit-animation: rainbow 15s infinite;
+    -z-animation: rainbow 15s infinite;
+    -o-animation: rainbow 15s infinite;
+      animation: rainbow 15s infinite;
+}
+
+@-webkit-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-moz-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-o-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+
+#booking-filter-button-Active:hover {
+    background-color: #b2bda6;
+}
+
+#booking-filter-button-Requested:hover {
+    background-color: #e8d9b7;
+}
+
+#booking-filter-button-Accepted:hover {
+    background-color: #b5c9c6;
+}
+
+#booking-filter-button-Denied:hover {
+    background-color: #d6bcb8;
+}
+
+#booking-filter-button-Returned:hover {
+    background-color: #dacfe3;
+}
+
+#booking-filter-button-Unreturned:hover {
+    background-color: #c9c7c7;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: gray;
+    transition: all 0.5s;
+}

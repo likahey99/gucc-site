@@ -21,7 +21,7 @@ REQUESTED = 'Requested'
 ACCEPTED = 'Accepted'
 DENIED = 'Denied'
 RETURNED = 'Returned'
-NOT_RETURNED = 'Not Returned'
+NOT_RETURNED = 'Unreturned'
 
 STATUS_CHOICES = (
     (ACTIVE, 'Active'),
@@ -29,7 +29,7 @@ STATUS_CHOICES = (
     (ACCEPTED, 'Accepted'),
     (DENIED, 'Denied'),
     (RETURNED, 'Returned'),
-    (NOT_RETURNED, 'Not Returned'),
+    (NOT_RETURNED, 'Unreturned'),
 )
 
 IN_SERVICE = 'In Service'
@@ -136,6 +136,7 @@ class AdminPassword(models.Model):
 class PageContents(models.Model):
     background_image = models.ImageField(upload_to="site_images", default="site_images/default_background.jpg")
     logo_image = models.ImageField(upload_to="site_images", default="site_images/default_logo.png")
+    icon_image = models.ImageField(upload_to="site_images", default="site_images/default_icon.png", )
     home_contents = models.TextField(default="")
     about_contents = models.TextField(default="")
     contact_contents = models.TextField(default="")
@@ -148,3 +149,7 @@ class BookingComments(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     comment = models.TextField()
+
+class SidebarLinks(models.Model):
+    link_text = models.TextField()
+    url = models.URLField()

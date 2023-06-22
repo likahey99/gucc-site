@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
-    BackgroundImageForm, LogoImageForm, BookingCommentsForm
+    BackgroundImageForm, LogoImageForm, BookingCommentsForm, IconImageForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
     CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES
 
@@ -65,9 +65,6 @@ def register(request):
             profile.user = user
             profile.save()
             registered = True
-        else:
-            print("")
-            print(user_form.errors)
     else:
         user_form = UserForm()
 
@@ -101,7 +98,6 @@ def login_page(request):
             else:
                 errors.append("Account has been disabled due to inactivity. Please create a new account.")
         else:
-            print(f"Invalid login details: {username}, {password}")
             errors.append("Invalid combination of user and password.")
         context_dict['errors'] = errors
         return render(request, 'gearStore/login.html', context=context_dict)
@@ -219,7 +215,6 @@ def account(request):
     context_dict['form_open'] = False
     errors = []
     if request.method == "POST":
-        print("post")
         context_dict['form_open'] = True
         # check picture
         if request.FILES:
@@ -227,7 +222,6 @@ def account(request):
             if picture_form.is_valid():
                 picture_form.save()
             else:
-                print(picture_form.errors)
                 for error_category in picture_form.errors:
                     for error in picture_form.errors[error_category]:
                         errors.append(error)
@@ -270,7 +264,6 @@ def account(request):
                     else:
                         errors.append("Error: Could not become admin - incorrect password.")
             else:
-                print(picture_form.errors)
                 for error_category in picture_form.errors:
                     for error in picture_form.errors[error_category]:
                         errors.append(error)
@@ -289,9 +282,6 @@ def account(request):
     user_bookings = Booking.objects.filter(user=user_profile)
     context_dict["user_bookings"] = user_bookings
 
-    if user_profile.adminStatus:
-        all_bookings = Booking.objects.all()
-        context_dict["all_bookings"] = all_bookings
     context_dict['errors'] = errors
     return render(request, 'gearStore/account.html', context_dict)
 
@@ -359,7 +349,6 @@ def add_category(request):
             form.save()
             return redirect(reverse('gearStore:find-gear'))
         else:
-            print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
@@ -395,7 +384,6 @@ def add_gear(request, category_name_slug):
                 return redirect(reverse('gearStore:view-category',
                                         kwargs={'category_name_slug': category_name_slug}))
         else:
-            print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
@@ -440,7 +428,6 @@ def edit_category(request, category_name_slug):
                     errors.append("Error: Category name already exists.")
 
         else:
-            print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
@@ -491,7 +478,6 @@ def edit_gear(request, category_name_slug, gear_name_slug):
                 return redirect(reverse('gearStore:view-gear',
                                         kwargs={'gear_name_slug': gear.slug}))
         else:
-            print(form.errors)
             for error_category in form.errors:
                 for error in form.errors[error_category]:
                     errors.append(error)
@@ -609,9 +595,7 @@ def edit_home(request):
             form = BackgroundImageForm(request.POST or None, request.FILES, instance=content)
             if form.is_valid():
                 content = form.save()
-                print(content.background_image)
             else:
-                print(errors)
                 for error_category in form.errors:
                     for error in form.errors[error_category]:
                         errors.append(error)
@@ -622,9 +606,19 @@ def edit_home(request):
             form = LogoImageForm(request.POST or None, request.FILES, instance=content)
             if form.is_valid():
                 content = form.save()
-                print(content.logo_image)
             else:
-                print(errors)
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+
+            # update icon image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = IconImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+            else:
                 for error_category in form.errors:
                     for error in form.errors[error_category]:
                         errors.append(error)
@@ -788,7 +782,6 @@ def booking(request, booking_id):
                         context_dict['form_open'] = False
 
                 else:
-                    print(form.errors)
                     for error_category in form.errors:
                         for error in form.errors[error_category]:
                             errors.append(error)

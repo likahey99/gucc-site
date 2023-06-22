@@ -60,38 +60,7 @@
         <h3>{{user_page_profile.first_name}} {{ user_page_profile.last_name }}'s Bookings</h3>
         <br>
         <div class="gear-view-contents" id="user-bookings">
-        {% if user_bookings %}
-            {% for booking in user_bookings %}
-                <div class="text-widget" id="category-view-text-widget" style="background-color: {% get_colour booking.id %};">
-                    <div id="gear-item-section" class="widget-section">
-                        <p class="widget-label">Gear Item</p>
-                        <div class="widget-bottom">
-                            <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{ booking.gearItem.name }}</a></p>
-                        </div>
-                    </div>
-                    <div id="return-date-section" class="widget-section">
-                        <p class="widget-label">Borrowed Until</p>
-                        <div class="widget-bottom">
-                            <p class="widget-text">{{ booking.dateToReturn }}</p>
-                        </div>
-                    </div>
-                    <div id="borrow-status-section" class="widget-section">
-                        <p class="widget-label">Status</p>
-                        <div class="widget-bottom">
-                            <p class="widget-text">{{ booking.status }}</p>
-                        </div>
-                    </div>
-                    <div id="booking-link-section" class="widget-section">
-                        <p class="widget-label">Booking</p>
-                        <div class="widget-bottom">
-                            <p class="widget-text"><a href="{% url 'gearStore:booking' booking.id %}">View Booking</a></p>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p id="no-gear-error">You currently have no borrowed Gear.</p>
-        {% endif %}
+            {% show_user_bookings user_page_profile %}
         </div>
 
     {% else %}
