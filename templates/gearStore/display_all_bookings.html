@@ -2,10 +2,10 @@
 {% if orders|dict_lookup:"Default"|dict_lookup:"bookings" %}
     {% if booking_views %}
         {% if orders %}
-            {% show_order_filter_bar orders_without_bookings %}
+            {% show_order_filter_bar orders_without_bookings section %}
             {% for order in orders %}
                 <div id="booking-section-{{ orders|dict_lookup:order|dict_lookup:"id" }}" style="display: {% if order == "Default" %}block{% else %}none{% endif %}">
-                    {% show_view_filter_bar orders|dict_lookup:order|dict_lookup:"id" %}
+                    {% show_view_filter_bar orders|dict_lookup:order|dict_lookup:"id" booking_views section %}
                     {% for view in booking_views %}
                          <div id="bookings-view-{{ view }}">
                              {% for booking in orders|dict_lookup:order|dict_lookup:"bookings" %}

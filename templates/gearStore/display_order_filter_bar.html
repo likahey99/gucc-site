@@ -3,6 +3,6 @@
 <div class="order-filter-bar">
     <script src="{% static 'js/updateOrder.js' %}"></script>
     {% for order in orders %}
-        <button {% if order == "Default" %}class="rainbow-anim" {% endif %}onclick="updateOrderSections({{ orders }}, '{{ orders|dict_lookup:order }}')" id="order-filter-button-{{ orders|dict_lookup:order }}">{{ order }}</button>
+        <button {% if order == "Default" %}class="rainbow-anim" {% endif %}onclick="updateOrderSections({{ orders }}, '{{ orders|dict_lookup:order }}', '{{ section }}')" id="order-filter-button-{{ orders|dict_lookup:order }}">{{ order }}</button>
     {% endfor %}
 </div>

@@ -1116,6 +1116,7 @@ div.admin-user-view-header#account-header #welcome-text {
 }
 
 .view-filter-bar, .order-filter-bar {
+    display: block;
     width: calc(0.6 * 0.9 * 100vw);
     height: 60px;
     overflow-x: auto;

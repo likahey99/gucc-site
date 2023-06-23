@@ -1,16 +1,15 @@
-function updateOrderSections(orders, inputOrder) {
-    console.log(inputOrder)
+function updateOrderSections(orders, inputOrder, section) {
+    let sectionTag = section + '-bookings';
     for (const [order, id] of Object.entries(orders)) {
-        let viewID = 'booking-section-' + id;
-        let buttonID = 'order-filter-button-' + id;
-        console.log(order)
+        let viewID = '#booking-section-' + id;
+        let buttonID = '#order-filter-button-' + id;
         if (inputOrder === id) {
-            document.getElementById(viewID).style.display = "block";
-            document.getElementById(buttonID).classList.add('rainbow-anim');
+            document.getElementById(sectionTag).querySelector(viewID).style.display = "block";
+            document.getElementById(sectionTag).querySelector(buttonID).classList.add('rainbow-anim');
         }
         else {
-            document.getElementById(viewID).style.display = "none";
-            document.getElementById(buttonID).classList.remove('rainbow-anim');
+            document.getElementById(sectionTag).querySelector(viewID).style.display = "none";
+            document.getElementById(sectionTag).querySelector(buttonID).classList.remove('rainbow-anim');
         }
     }
 

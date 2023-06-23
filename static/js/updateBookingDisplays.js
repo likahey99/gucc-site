@@ -1,15 +1,16 @@
-function updateBookingDisplays(statuses, clickedStatus, orderID){
-    let orderTag = 'booking-section-' + orderID;
+function updateBookingDisplays(statuses, clickedStatus, orderID, section){
+    let orderTag = '#booking-section-' + orderID;
+    let sectionTag = section + '-bookings';
     let buttonStatusMap = Object.create(null);
     statuses.forEach((status) => {
         var id = '#booking-filter-button-' + status;
-        buttonStatusMap[status] = document.getElementById(orderTag).querySelector(id);
+        buttonStatusMap[status] = document.getElementById(sectionTag).querySelector(orderTag).querySelector(id);
     });
 
     let divStatusMap = Object.create(null);
     statuses.forEach((status) => {
         let id = '#bookings-view-' + status;
-        divStatusMap[status] = document.getElementById(orderTag).querySelector(id);
+        divStatusMap[status] = document.getElementById(sectionTag).querySelector(orderTag).querySelector(id);
     });
 
     let colourStatusMap = Object.create(null);
