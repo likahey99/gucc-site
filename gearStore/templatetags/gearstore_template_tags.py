@@ -3,6 +3,7 @@ from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES
 
 register = template.Library()
 
+
 def get_active_booking_statuses():
     views = []
     booking_views = STATUS_CHOICES
@@ -11,6 +12,7 @@ def get_active_booking_statuses():
         if bookings:
             views.append(view[0])
     return views
+
 
 @register.inclusion_tag('gearStore/category_menu.html')
 def get_category_list():
@@ -76,10 +78,49 @@ def get_background():
 
 @register.inclusion_tag('gearStore/display_all_bookings.html')
 def show_all_bookings():
-    all_bookings = Booking.objects.all()
+    orders = {
+        "Default": {
+            "id": "unordered",
+            "bookings": Booking.objects.all()
+        },
+        "Due Sooner": {
+            "id": "due-soon",
+            "bookings": Booking.objects.all().order_by('-dateToReturn')
+        },
+        "Due Later": {
+            "id": "due-later",
+            "bookings": Booking.objects.all().order_by('dateToReturn')
+        },
+        "New": {
+            "id": "new",
+            "bookings": Booking.objects.all().order_by('-dateBorrowed')
+        },
+        "Old": {
+            "id": "old",
+            "bookings": Booking.objects.all().order_by('dateBorrowed')
+        },
+        "Name Asc.": {
+            "id": "name-asc",
+            "bookings": Booking.objects.all().order_by('user__last_name', 'user__first_name')
+        },
+        "Name Desc.": {
+            "id": "name-desc",
+            "bookings": Booking.objects.all().order_by('-user__last_name', '-user__first_name')
+        }
+
+    }
+
+    orders_without_bookings = {}
+    for order in orders:
+        orders_without_bookings[order] = orders[order]["id"]
+
+    print(orders)
+
+    print(orders_without_bookings)
     return \
         {
-            "all_bookings": all_bookings,
+            'orders': orders,
+            'orders_without_bookings': orders_without_bookings,
             "booking_views": get_active_booking_statuses()
         }
 
@@ -96,9 +137,20 @@ def show_booking_details(booking):
 
 
 @register.inclusion_tag('gearStore/display_view_filter_bar.html')
-def show_view_filter_bar():
+def show_view_filter_bar(order_id):
     booking_views = get_active_booking_statuses()
-    booking_views.insert(0,"All")
+    booking_views.insert(0, "All")
     return {
-        "booking_views": booking_views
+        "booking_views": booking_views,
+        "order_id": order_id
     }
+
+
+@register.filter
+def dict_lookup(dict, key):
+    return dict.get(key)
+
+
+@register.inclusion_tag('gearStore/display_order_filter_bar.html')
+def show_order_filter_bar(orders):
+    return {"orders": orders}

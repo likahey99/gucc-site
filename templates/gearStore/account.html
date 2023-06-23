@@ -88,7 +88,7 @@
     {% endif %}
 
     <h2 id="borrow-menu-toggle">
-        <Button class="borrow-menu-title" id="user-bookings-title" onclick="setBorrowMenu('user')" style="text-decoration: underline;">My Borrowed Gear</Button>
+        <Button class="borrow-menu-title rainbow-anim" id="user-bookings-title" onclick="setBorrowMenu('user')">My Borrowed Gear</Button>
         {% if user_profile.adminStatus %}
             | <Button class="borrow-menu-title" onclick="setBorrowMenu('all')" id="all-bookings-title">All Borrowed Gear</Button>
         {% endif %}

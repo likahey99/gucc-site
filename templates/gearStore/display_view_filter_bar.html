@@ -2,6 +2,6 @@
 <div class="view-filter-bar">
     <script src="{% static 'js/updateBookingDisplays.js' %}"></script>
     {% for view in booking_views %}
-        <button onclick="updateBookingDisplays({{ booking_views }}, '{{ view }}')" id="booking-filter-button-{{ view }}">{{ view }}</button>
+        <button {% if view == "All" %}class="rainbow-anim" {% endif %}onclick="updateBookingDisplays({{ booking_views }}, '{{ view }}', '{{ order_id }}')" id="booking-filter-button-{{ view }}">{{ view }}</button>
     {% endfor %}
 </div>

@@ -653,7 +653,7 @@ footer {
 }
 
 @media only screen and (max-width: 800px) {
-    body .view-filter-bar {
+    body .view-filter-bar, body .order-filter-bar {
         width: calc(0.9 * 100vw);
     }
 
@@ -1115,7 +1115,7 @@ div.admin-user-view-header#account-header #welcome-text {
 
 }
 
-.view-filter-bar {
+.view-filter-bar, .order-filter-bar {
     width: calc(0.6 * 0.9 * 100vw);
     height: 60px;
     overflow-x: auto;
@@ -1124,7 +1124,7 @@ div.admin-user-view-header#account-header #welcome-text {
     margin-left: 5%;
 }
 
-.view-filter-bar button {
+.view-filter-bar button, .order-filter-bar button {
     width: 150px;
     height: 40px;
     display: inline-block;
@@ -1136,14 +1136,19 @@ div.admin-user-view-header#account-header #welcome-text {
     transition: all 0.5s;
 }
 
+.order-filter-bar {
+    margin-bottom: 20px;
+}
+
 /* simple rainbow animation based off of a transition by @nohoid on codepen */
-#booking-filter-button-All:hover, .rainbow-anim, ::-webkit-scrollbar-thumb:hover, #action-button:hover, #logout-button:hover {
+#booking-filter-button-All:hover, .rainbow-anim, ::-webkit-scrollbar-thumb:hover, #action-button:hover, #logout-button:hover, #borrow-menu-toggle button:hover, .order-filter-bar button:hover {
     background: linear-gradient(270deg, #b2bda6, #e8d9b7, #b5c9c6, #d6bcb8, #dacfe3, #c9c7c7);
     background-size: 1800% 1800%;
-    -webkit-animation: rainbow 15s infinite;
-    -z-animation: rainbow 15s infinite;
-    -o-animation: rainbow 15s infinite;
-      animation: rainbow 15s infinite;
+    -webkit-animation: rainbow 25s infinite;
+    -z-animation: rainbow 25s infinite;
+    -o-animation: rainbow 25s infinite;
+      animation: rainbow 25s infinite;
+    color: white;
 }
 
 @-webkit-keyframes rainbow {
@@ -1195,15 +1200,11 @@ div.admin-user-view-header#account-header #welcome-text {
   width: 10px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: white;
     border-radius: 10px;
-    transition: all 0.5s;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: gray;
-    transition: all 0.5s;
+    background: white;
 }
