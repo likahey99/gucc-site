@@ -439,7 +439,7 @@ def edit_category(request, category_name_slug):
 
 
 @login_required
-def edit_gear(request, category_name_slug, gear_name_slug):
+def edit_gear(request, gear_name_slug):
     user_profile = UserProfile.objects.get(user=request.user)
     if not user_profile.adminStatus:
         return redirect(reverse("gearStore:admin-error"))
@@ -493,7 +493,7 @@ def edit_gear(request, category_name_slug, gear_name_slug):
 
 
 @login_required
-def delete_gear(request, category_name_slug, gear_name_slug):
+def delete_gear(request, gear_name_slug):
     # check if user is admin
     user_profile = UserProfile.objects.get(user=request.user)
     if not user_profile.adminStatus:

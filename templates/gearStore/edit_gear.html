@@ -10,7 +10,7 @@
     <div class="form-container">
         <div class="form-value">
             <form enctype="multipart/form-data" id='gear_form' method="post"
-                  action="{% url "gearStore:edit-gear" category.slug gear.slug %}">
+                  action="{% url "gearStore:edit-gear" gear.slug %}">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
@@ -44,7 +44,14 @@
                 </div>
                 <div class="input-box">
                     <div class="form-text-wrapper">
-                        <ion-icon name="mail-outline"></ion-icon>
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Deposit Required</Label>
+                    </div>
+                    <input type="text" name="deposit" placeholder="deposit" value="{{ gear.deposit }}" required>
+                </div>
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
                         <Label for="">Description</Label>
                     </div>
                     <input type="text" name="description" placeholder="description" value="{{ gear.description }}" required>

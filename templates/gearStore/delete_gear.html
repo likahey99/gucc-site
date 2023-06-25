@@ -11,7 +11,7 @@
     <div class="form-container">
         <div class="form-value">
             <form enctype="multipart/form-data" id='gear_form' method="post"
-                  action="{% url "gearStore:delete-gear" category.slug gear.slug %}">
+                  action="{% url "gearStore:delete-gear" gear.slug %}">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}

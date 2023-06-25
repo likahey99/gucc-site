@@ -16,6 +16,14 @@ CONTACT_CHOICES = (
     (EMAIL, 'Email'),
 )
 
+PRIMARY_PURPOSE = "Affiliated"
+SECONDARY_PURPOSE = "Personal"
+
+PURPOSE_CHOICES = (
+    (PRIMARY_PURPOSE, PRIMARY_PURPOSE),
+    (SECONDARY_PURPOSE, SECONDARY_PURPOSE),
+)
+
 ACTIVE = 'Active'
 REQUESTED = 'Requested'
 ACCEPTED = 'Accepted'
@@ -24,12 +32,12 @@ RETURNED = 'Returned'
 NOT_RETURNED = 'Unreturned'
 
 STATUS_CHOICES = (
-    (ACTIVE, 'Active'),
-    (REQUESTED, 'Requested'),
-    (ACCEPTED, 'Accepted'),
-    (DENIED, 'Denied'),
-    (RETURNED, 'Returned'),
-    (NOT_RETURNED, 'Unreturned'),
+    (ACTIVE, ACTIVE),
+    (REQUESTED, REQUESTED),
+    (ACCEPTED, ACCEPTED),
+    (DENIED, DENIED),
+    (RETURNED, RETURNED),
+    (NOT_RETURNED, NOT_RETURNED),
 )
 
 IN_SERVICE = 'In Service'
@@ -87,6 +95,7 @@ class UserProfile(models.Model):
 class Gear(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
+    deposit = models.TextField(max_length=16, default="Free")
     description = models.CharField(max_length=128)
     status = models.CharField(max_length=16, choices=GEAR_STATUS_CHOICES, default=IN_SERVICE)
     dateAdded = models.DateField(auto_now_add=True)
@@ -113,6 +122,7 @@ def return_date_time():
 class Booking(models.Model):
     id = models.TextField(max_length=6, primary_key=True, default=id_generator)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    purpose = models.TextField(choices=PURPOSE_CHOICES, default=SECONDARY_PURPOSE)
     gearItem = models.ForeignKey(Gear, on_delete=models.CASCADE)
     dateBorrowed = models.DateField(auto_now_add=True)
     dateToReturn = models.DateField(default=return_date_time)
@@ -125,6 +135,7 @@ class Booking(models.Model):
         if self.dateToReturn >= timezone.now().date():
             return True
         return False
+
 
 class AdminPassword(models.Model):
     password = models.CharField(max_length=64, default="password123")
@@ -149,6 +160,7 @@ class BookingComments(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     comment = models.TextField()
+
 
 class SidebarLinks(models.Model):
     link_text = models.TextField()

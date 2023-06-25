@@ -1,5 +1,5 @@
 from django import template
-from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES
+from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE
 
 register = template.Library()
 
@@ -90,26 +90,42 @@ def show_all_bookings():
             "id": "unordered",
             "bookings": Booking.objects.all()
         },
+
+        "Personal": {
+            "id": "personal",
+            "bookings": Booking.objects.all().filter(purpose=SECONDARY_PURPOSE)
+        },
+
+        "Affiliated": {
+            "id": "affiliated",
+            "bookings": Booking.objects.all().filter(purpose=PRIMARY_PURPOSE)
+        },
+
         "Due Sooner": {
             "id": "due-soon",
             "bookings": Booking.objects.all().order_by('dateToReturn')
         },
+
         "Due Later": {
             "id": "due-later",
             "bookings": Booking.objects.all().order_by('-dateToReturn')
         },
+
         "New": {
             "id": "new",
             "bookings": Booking.objects.all().order_by('-dateBorrowed')
         },
+
         "Old": {
             "id": "old",
             "bookings": Booking.objects.all().order_by('dateBorrowed')
         },
+
         "Name Asc.": {
             "id": "name-asc",
             "bookings": Booking.objects.all().order_by('user__last_name', 'user__first_name')
         },
+
         "Name Desc.": {
             "id": "name-desc",
             "bookings": Booking.objects.all().order_by('-user__last_name', '-user__first_name')
@@ -137,6 +153,17 @@ def show_user_bookings(user_profile):
             "id": "unordered",
             "bookings": Booking.objects.all().filter(user=user_profile)
         },
+
+        "Personal": {
+            "id": "personal",
+            "bookings": Booking.objects.all().filter(user=user_profile).filter(purpose=SECONDARY_PURPOSE)
+        },
+
+        "Affiliated": {
+            "id": "affiliated",
+            "bookings": Booking.objects.all().filter(user=user_profile).filter(purpose=PRIMARY_PURPOSE)
+        },
+
         "Due Sooner": {
             "id": "due-soon",
             "bookings": Booking.objects.all().filter(user=user_profile).order_by('dateToReturn')

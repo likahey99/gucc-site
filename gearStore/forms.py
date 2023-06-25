@@ -36,6 +36,7 @@ class CategoryForm(forms.ModelForm):
 class GearForm(forms.ModelForm):
     name = forms.CharField(max_length=128,
                            help_text="Please the enter the gear name.")
+    deposit = forms.CharField(max_length=16)
     description = forms.CharField(max_length=128)
     dateAdded = forms.DateField(widget=forms.HiddenInput(), required=False)
     picture = forms.ImageField(required=False)
@@ -45,7 +46,7 @@ class GearForm(forms.ModelForm):
     class Meta:
         model = Gear
         exclude = ('category',)
-        fields = ('name', 'description', 'picture', 'size')
+        fields = ('name', 'description', 'picture', 'size', 'deposit')
 
 
 class AdminForm(forms.ModelForm):

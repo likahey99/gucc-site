@@ -29,16 +29,22 @@
                         <p class="widget-text"><a href="{% url 'gearStore:view-gear' booking.gearItem.slug %}">{{  booking.gearItem }}</a></p>
                     </div>
                 </div>
-                <div id="colour-section" class="widget-section">
+                <div id="status-section" class="widget-section">
                     <p class="widget-label">Status</p>
                     <div class="widget-bottom">
                         <p class="widget-text">{{ booking.status }}</p>
                     </div>
                 </div>
-                <div id="date-borrowed-section" class="widget-section">
-                    <p class="widget-label">Borrowed From</p>
+                <div id="purpose-section" class="widget-section">
+                    <p class="widget-label">Purpose</p>
                     <div class="widget-bottom">
-                        <p class="widget-text">{{ booking.dateBorrowed }}</p>
+                        <p class="widget-text">{{ booking.purpose }}</p>
+                    </div>
+                </div>
+                <div id="date-borrowed-section" class="widget-section">
+                    <p class="widget-label">Deposit Required</p>
+                    <div class="widget-bottom">
+                        <p class="widget-text">{{ booking.gearItem.deposit }}</p>
                     </div>
                 </div>
                 <div id="date-borrowed-until-section" class="widget-section">
