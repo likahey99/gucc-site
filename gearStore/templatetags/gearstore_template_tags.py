@@ -232,3 +232,8 @@ def show_order_filter_bar(orders, section):
     return {"orders": orders,
             "section": section
             }
+
+
+@register.inclusion_tag('gearStore/display_description.html')
+def show_description(description):
+    return {"description": description}

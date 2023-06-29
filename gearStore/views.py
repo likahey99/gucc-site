@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
     BackgroundImageForm, LogoImageForm, BookingCommentsForm, IconImageForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
-    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES
+    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE
 
 from django.template.defaultfilters import slugify
 
@@ -157,6 +157,18 @@ def category_menu(request):
 def view_gear(request, gear_name_slug):
     context_dict = {'categories': Category.objects.all()}
 
+    user_profile = None
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+    context_dict['user_profile'] = user_profile
+
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
+    context_dict['content'] = content
+
+    context_dict['primary_purpose'] = PRIMARY_PURPOSE
+
     try:
         gear = Gear.objects.get(slug=gear_name_slug)
         context_dict['category'] = gear.category
@@ -172,14 +184,9 @@ def view_gear(request, gear_name_slug):
                 borrow.save()
 
         # find if the gear is currently on loan
-        current_borrow = False
-        borrows = Booking.objects.filter(gearItem=gear)
-        for borrow in borrows:
-            if borrow.is_current():
-                current_borrow = True
-                context_dict["borrow"] = borrow
-                break
-        context_dict['borrowed'] = current_borrow
+        is_available, active_booking = gear.is_available()
+        context_dict['available'] = is_available
+        context_dict['active_booking'] = active_booking
 
         # find the gear's category
         try:
@@ -196,7 +203,6 @@ def view_gear(request, gear_name_slug):
         if user_profile:
             if user_profile.adminStatus:
                 context_dict['admin'] = True
-
     return render(request, 'gearStore/view_gear.html', context_dict)
 
 
@@ -321,10 +327,8 @@ def view_category(request, category_name_slug):
         num_total = len(gear)
         num_available = num_total
         for gear_item in gear:
-            borrows = Booking.objects.filter(gearItem=gear_item)
-            for borrow in borrows:
-                if borrow.is_current():
-                    num_available -= 1
+            if not gear_item.is_available()[0]:
+                num_available -= 1
 
         context_dict['available'] = num_available
         context_dict['total'] = num_total
@@ -380,6 +384,8 @@ def add_gear(request, category_name_slug):
             if category:
                 gear = form.save(commit=False)
                 gear.category = category
+                if not request.FILES:
+                    gear.picture = category.picture
                 gear.save()
                 return redirect(reverse('gearStore:view-category',
                                         kwargs={'category_name_slug': category_name_slug}))

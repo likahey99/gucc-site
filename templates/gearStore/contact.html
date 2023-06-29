@@ -7,19 +7,21 @@
 
 {% block body_block %}
     {% if admin %}
-        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-contact'%}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
+        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-contact'%}"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
     {% endif %}
     <h1 id="page-header">Contact Us</h1>
     {% if content %}
-        <div class="bubble-text">{{ content.contact_contents|linebreaks }}</div>
-        <br>
-        <p>Please use the following contact to reach out:</p>
-        <br>
-        <div id="contact-container-parent">
-            <div id="contact-container">
-                <ion-icon name="{{ content.contact_option }}"></ion-icon>
-                <p>{{ content.contact }}</p>
+        <div class="bubble-text">{{ content.contact_contents|linebreaks }}
+            <br>
+            <p>Please use the following contact to reach out:</p>
+            <br>
+            <div id="contact-container-parent">
+                <div id="contact-container">
+                    <ion-icon name="{{ content.contact_option }}"></ion-icon>
+                    <p>{{ content.contact }}</p>
+                </div>
             </div>
+            <br>
         </div>
     {% endif %}
 {% endblock %}

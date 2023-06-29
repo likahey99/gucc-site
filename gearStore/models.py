@@ -1,5 +1,7 @@
 import string
 from datetime import timedelta
+
+import django
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -49,7 +51,7 @@ GEAR_STATUS_CHOICES = (
 )
 
 
-# define a method to generate a random id not in use
+# define a method to generate a random id not in use for bookings
 def id_generator():
     ID_LENGTH = 6
     # define a string to hold the id
@@ -62,6 +64,18 @@ def id_generator():
         print("Booking ID is valid.")
         return id
 
+# define a method to generate a random id not in use for comments
+def comment_id_generator():
+    ID_LENGTH = 6
+    # define a string to hold the id
+    id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=ID_LENGTH))
+    try:
+        booking = BookingComments.objects.get(id=id)
+        print("Booking ID already exists. Creating new ID.")
+        return id_generator()
+    except BookingComments.DoesNotExist:
+        print("Booking ID is valid.")
+        return id
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -113,6 +127,14 @@ class Gear(models.Model):
         self.slug = slugify(self.name)
         super(Gear, self).save(*args, **kwargs)
 
+    def is_available(self):
+        bookings = Booking.objects.all().filter(gearItem=self)
+        for booking in bookings:
+            if booking.dateBorrowed <= timezone.now().date() and booking.dateToReturn >= timezone.now().date():
+                if not (booking.status == "Returned" or booking.status == "Denied"):
+                    return False, booking
+        return True, None
+
 
 def return_date_time():
     now = timezone.now()
@@ -160,6 +182,10 @@ class BookingComments(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     comment = models.TextField()
+    starred = models.BooleanField(default=False)
+    id = models.TextField(max_length=6, primary_key=True, default=comment_id_generator)
+    dateAdded = models.DateField(auto_now_add=True)
+
 
 
 class SidebarLinks(models.Model):

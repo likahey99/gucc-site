@@ -1,5 +1,6 @@
 {% extends 'gearStore/base.html' %}
 {% load staticfiles %}
+{% load gearstore_template_tags %}
 
 {% block title_block %}
     {% if gear %}
@@ -16,8 +17,8 @@
                 <div class="top-image-overlay">
                     <h1 id="image-overlay-header">{{ gear.name }}</h1>
                     {% if admin %}
-                        <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-gear' gear.slug %}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
-                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-gear' gear.slug %}"><img id="delete-button" class="edit-delete-button" src='{% static 'images/delete_symbol.png' %}'></a>
+                        <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-gear' gear.slug %}"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-gear' gear.slug %}"><ion-icon id="delete-button" class="edit-delete-button" name="trash-outline"></ion-icon></a>
                     {% endif %}
                     </div>
             </div>
@@ -31,10 +32,10 @@
                 <div id="colour-section" class="widget-section">
                     <p class="widget-label">Status</p>
                     {% if gear.status == "In Service" %}
-                        {% if borrowed %}
-                            <p class="widget-text">Borrowed</p>
-                        {% else %}
+                        {% if available %}
                             <p class="widget-text">Available</p>
+                        {% else %}
+                            <p class="widget-text">Borrowed</p>
                         {% endif %}
                     {% else %}
                         <p class="widget-text">{{ gear.status }}</p>
@@ -59,11 +60,39 @@
                     </div>
                 </div>
             </div>
-            <p class="below-picture">Description: {{ gear.description }}</p>
+            {% show_description gear.description %}
         </div>
-        {% if borrowed %}
-            <p>You cannot currently borrow this item - it has already been borrowed!</p>
-            <p>Return Date: {{ borrow.dateToReturn}}</p>
+        {% if not available %}
+            {% if active_booking.user == user_profile %}
+                <div class="bubble-text">
+                    <p>You are currently borrowing this item.</p>
+                    <p>It is due to be returned on {{ active_booking.dateToReturn}}.</p>
+                    <p><a href="{% url 'gearStore:booking' active_booking.id %}">Link to Current Booking</a></p>
+                </div>
+            {% else %}
+                <div class="bubble-text">
+                    <p>You cannot currently borrow this item as it has already been borrowed.</p>
+                    <p>It is due to be returned on {{ active_booking.dateToReturn}}.</p>
+                    {% if active_booking.purpose != primary_purpose %}
+                        <p>As this item is only borrowed as a {{ active_booking.purpose }} booking, it may still be possible to borrow it if you get in touch.</p>
+                        {% if admin %}
+                            <p><a href="{% url 'gearStore:booking' active_booking.id %}">Link to Current Booking</a></p>
+                        {% endif %}
+                    {% endif %}
+                {% if content %}
+                    <br>
+                    <p>If you have any queries, please use the following contact to reach out:</p>
+                    <br>
+                    <div id="contact-container-parent">
+                        <div id="contact-container">
+                            <ion-icon name="{{ content.contact_option }}"></ion-icon>
+                            <p>{{ content.contact }}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+                </div>
+            {% endif %}
         {% else %}
             <p>Not currently borrowed</p>
             {% if user.is_authenticated %}
