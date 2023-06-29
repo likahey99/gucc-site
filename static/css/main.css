@@ -323,6 +323,7 @@ a.edit-delete-button-parent:hover {
     height: 100%;
     display: flex;
     justify-content: center;
+    word-break: break-word;
 }
 
 .widget-text {
@@ -344,22 +345,35 @@ a.edit-delete-button-parent:hover {
 
 }
 
-#category-view-text-widget .widget-section {
+.text-widget {
+    flex-wrap: wrap;
+}
+
+#booking-view-text-widget .widget-section {
     width: 33%;
+}
+
+#booking-view-text-widget #user-borrower-section {}
+
+#booking-view-text-widget #borrow-status-section {
+    border-right: none;
+}
+
+#booking-view-text-widget #booking-link-section, #booking-view-text-widget #user-borrower-section {
+    width: 100%;
+    flex-grow: 1;
+    border-right: none;
 }
 
 #description-view-text-widget .widget-section {
     width: 100%;
-    border: none;
+    border-right: none;
 }
+
 
 #contact-detail-view-text-widget .widget-section {
     width: 100%;
     overflow-wrap: break-word;
-}
-
-#booking-view-text-widget .widget-section {
-    width: 50%;
 }
 
 #contact-container {
@@ -380,7 +394,6 @@ a.edit-delete-button-parent:hover {
     width: 200px;
     margin: auto;
 }
-
 
 /*
     Form Styling
@@ -1242,4 +1255,23 @@ div.admin-user-view-header#account-header #welcome-text {
 
 .text-widget, .menu-card, #contact-container, button {
   box-shadow: -4px 8px 8px -4px #292828;
+}
+
+#content p.widget-text {
+    padding: 0;
+}
+
+div#profile-pic-and-name {
+    width: 100%;
+    display: inline-flex;
+    align-content: space-around;
+    align-items: center;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+div#profile-pic-and-name img {
+    width: 25px;
+    margin: 0;
+    margin-right: 10px;
 }
