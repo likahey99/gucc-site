@@ -22,7 +22,7 @@
                     {% endif %}
                     </div>
             </div>
-            <div class="text-widget">
+            <div id="gear-view-text-widget" class="text-widget">
                 <div id="category-section" class="widget-section">
                     <p class="widget-label">Category</p>
                     <div class="widget-bottom">
@@ -31,6 +31,7 @@
                 </div>
                 <div id="colour-section" class="widget-section">
                     <p class="widget-label">Status</p>
+                    <div class="widget-bottom">
                     {% if gear.status == "In Service" %}
                         {% if available %}
                             <p class="widget-text">Available</p>
@@ -40,6 +41,7 @@
                     {% else %}
                         <p class="widget-text">{{ gear.status }}</p>
                     {% endif %}
+                    </div>
                 </div>
                 <div id="deposit-section" class="widget-section">
                     <p class="widget-label">Deposit Required</p>
@@ -51,12 +53,6 @@
                     <p class="widget-label">Size</p>
                     <div class="widget-bottom">
                         <p class="widget-text">{{ gear.size.title }}</p>
-                    </div>
-                </div>
-                <div id="date-added-section" class="widget-section">
-                    <p class="widget-label">Added</p>
-                    <div class="widget-bottom">
-                        <p class="widget-text">{{ gear.dateAdded }}</p>
                     </div>
                 </div>
             </div>
@@ -112,10 +108,17 @@
             {% endif %}
         {% endif %}
         <br>
-        <br>
-        <br>
+        {% if admin %}
+            <h3>Bookings of {{ gear.name }}</h3>
+            <br>
+            <div id="gear-bookings">
+                {% show_gear_bookings gear %}
+            </div>
+        {% endif %}
     {% else %}
         <h1 id="page-header">Missing Gear</h1>
-        <p>Error: No such piece of gear exists.</p>
+        <div class="bubble-text">
+            <p>Error: No such piece of gear exists.</p>
+        </div>
     {% endif %}
 {% endblock %}

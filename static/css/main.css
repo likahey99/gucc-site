@@ -304,7 +304,7 @@ a.edit-delete-button-parent:hover {
     border-right: black 1px solid;
 }
 
-#date-added-section, #date-borrowed-until-section, #booking-link-section, #borrower-contact-section {
+#date-added-section, #date-borrowed-until-section, #booking-link-section, #borrower-contact-section, #size-section {
     border: none;
 }
 
@@ -735,7 +735,7 @@ footer {
 }
 
 #no-gear-error {
-    text-align: left;
+    text-align: center;
     padding-left: 50px;
 }
 

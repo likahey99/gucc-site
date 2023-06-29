@@ -23,6 +23,15 @@ def get_active_booking_statuses_for_user(user_profile):
             views.append(view[0])
     return views
 
+def get_active_booking_statuses_for_gear(gear):
+    views = []
+    booking_views = STATUS_CHOICES
+    for view in booking_views:
+        bookings = Booking.objects.filter(gearItem=gear).filter(status=view[0])
+        if bookings:
+            views.append(view[0])
+    return views
+
 
 @register.inclusion_tag('gearStore/category_menu.html')
 def get_category_list():
@@ -204,6 +213,63 @@ def show_user_bookings(user_profile):
             "section": "user"
         }
 
+@register.inclusion_tag('gearStore/display_all_bookings.html')
+def show_gear_bookings(gear):
+    orders = {
+        "Default": {
+            "id": "unordered",
+            "bookings": Booking.objects.all().filter(gearItem=gear)
+        },
+
+        "Personal": {
+            "id": "personal",
+            "bookings": Booking.objects.all().filter(gearItem=gear).filter(purpose=SECONDARY_PURPOSE)
+        },
+
+        "Affiliated": {
+            "id": "affiliated",
+            "bookings": Booking.objects.all().filter(gearItem=gear).filter(purpose=PRIMARY_PURPOSE)
+        },
+
+        "Due Sooner": {
+            "id": "due-soon",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('dateToReturn')
+        },
+        "Due Later": {
+            "id": "due-later",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('-dateToReturn')
+        },
+        "New": {
+            "id": "new",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('-dateBorrowed')
+        },
+        "Old": {
+            "id": "old",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('dateBorrowed')
+        },
+        "Name Asc.": {
+            "id": "name-asc",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('user__last_name', 'user__first_name')
+        },
+        "Name Desc.": {
+            "id": "name-desc",
+            "bookings": Booking.objects.all().filter(gearItem=gear).order_by('-user__last_name',
+                                                                                 '-user__first_name')
+        }
+
+    }
+
+    orders_without_bookings = {}
+    for order in orders:
+        orders_without_bookings[order] = orders[order]["id"]
+
+    return \
+        {
+            'orders': orders,
+            'orders_without_bookings': orders_without_bookings,
+            "booking_views": get_active_booking_statuses_for_gear(gear),
+            "section": "gear"
+        }
 
 @register.inclusion_tag('gearStore/display_booking_details.html')
 def show_booking_details(booking):
