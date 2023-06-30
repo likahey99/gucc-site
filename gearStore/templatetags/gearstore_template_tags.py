@@ -155,7 +155,7 @@ def show_all_bookings():
         }
 
 
-@register.inclusion_tag('gearStore/display_all_bookings.html')
+@register.inclusion_tag('gearStore/display_user_bookings.html')
 def show_user_bookings(user_profile):
     orders = {
         "Default": {
@@ -275,6 +275,9 @@ def show_gear_bookings(gear):
 def show_booking_details(booking):
     return {"booking": booking}
 
+@register.inclusion_tag('gearStore/display_user_booking_details.html')
+def show_user_booking_details(booking):
+    return {"booking": booking}
 
 @register.inclusion_tag('gearStore/display_view_filter_bar.html')
 def show_view_filter_bar(order_id, booking_views, section):

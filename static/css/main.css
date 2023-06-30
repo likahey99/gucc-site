@@ -401,12 +401,29 @@ a.edit-delete-button-parent:hover {
     margin-bottom: 0;
 }
 
+#content #user-booking-view-text-widget .widget-section {
+    width: 24.8%;
+}
+
+#content #user-booking-view-text-widget #borrow-status-section {
+    border-right: 1px solid black;
+}
+
 @media only screen and (max-width: 450px) {
+
+    #content #user-booking-view-text-widget .widget-section {
+        width: 49%;
+    }
+
     #content #booking-view-text-widget .widget-section {
         width: 49%;
     }
 
-    #content #booking-view-text-widget .widget-section, #content #gear-view-text-widget .widget-section {
+    #content #user-booking-view-text-widget #return-date-section {
+        border-right: none;
+    }
+
+    #content #booking-view-text-widget .widget-section, #content #gear-view-text-widget .widget-section, #content #user-booking-view-text-widget .widget-section {
         margin-bottom: 5px;
     }
 
