@@ -5,7 +5,7 @@
         <div class="widget-bottom">
             <div id="profile-pic-and-name">
                 <img id="small-profile-pic" src="/media/{{ booking.user.picture }}">
-                <p class="widget-text" id="user-name-text">{{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                <p class="widget-text" id="user-name-text"><a href="{% url 'gearStore:user' booking.user.user.username %}">{{ booking.user.first_name }} {{ booking.user.last_name }}</a></p>
             </div>
         </div>
     </div>

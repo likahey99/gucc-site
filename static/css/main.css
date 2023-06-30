@@ -761,6 +761,15 @@ footer {
 }
 
 @media only screen and (max-width: 800px) {
+
+    body header .top-bar ul.loginOrAccountLinks {
+        clear: both;
+    }
+
+    body header .top-bar ul.loginOrAccountLinks, body header .top-bar ul.loginOrAccountLinks li {
+        margin-top: 0;
+    }
+
     body .view-filter-bar, body .order-filter-bar {
         width: calc(0.9 * 100vw);
     }
@@ -883,7 +892,6 @@ h3#booking-comments, p#booking-comment {
 
 h3#booking-comments {
     padding: 20px;
-    margin-top: 30px;
     text-align: center;
 }
 
@@ -1148,6 +1156,7 @@ form {
 }
 
 @media only screen and (max-width: 450px) {
+
     div#account-header {
         display: inline-block;
     }
