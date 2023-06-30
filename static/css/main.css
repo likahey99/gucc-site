@@ -349,31 +349,112 @@ a.edit-delete-button-parent:hover {
     flex-wrap: wrap;
 }
 
-#booking-view-text-widget .widget-section {
-    width: 33%;
-}
-
-#booking-view-text-widget #user-borrower-section {}
-
-#booking-view-text-widget #borrow-status-section {
+#content #description-view-text-widget .widget-section {
+    width: 100%;
     border-right: none;
 }
 
-#booking-view-text-widget #booking-link-section, #booking-view-text-widget #user-borrower-section {
+#content #category-view-text-widget .widget-section {
+    width: 33%;
+}
+
+#content #gear-view-text-widget .widget-section {
+    width: 24.8%;
+}
+
+#content #contact-detail-view-text-widget .widget-section {
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+#content #gear-view-text-widget #borrow-status-section {
+    border-right: solid black 1px;
+}
+
+#content #booking-reference-text-widget .widget-section {
+    width: 49%;
+}
+
+#content #booking-details-text-widget .widget-section {
+    width: 24.8%;
+}
+
+#content #booking-details-text-widget #return-date-section {
+    border-right: none;
+}
+
+#content #booking-details-text-widget #item-section {
     width: 100%;
     flex-grow: 1;
     border-right: none;
 }
 
-#description-view-text-widget .widget-section {
-    width: 100%;
+#user-text-widget .widget-section {
+    width: 33%;
+}
+
+#content #booking-details-text-widget .widget-section {
+    margin-bottom: 5px;
+}
+
+#account-header.admin-user-view-header {
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 450px) {
+    #content #booking-view-text-widget .widget-section {
+        width: 49%;
+    }
+
+    #content #booking-view-text-widget .widget-section, #content #gear-view-text-widget .widget-section {
+        margin-bottom: 5px;
+    }
+
+    #content #booking-view-text-widget #user-borrower-section {
+    }
+
+    #content #booking-view-text-widget #return-date-section {
+        border-right: none;
+    }
+
+    #content #booking-view-text-widget #user-borrower-section {
+        width: 100%;
+        flex-grow: 1;
+        border-right: none;
+    }
+
+    #content #booking-view-text-widget #borrow-status-section {
+        border-right: solid black 1px;
+    }
+
+    #content #gear-view-text-widget .widget-section {
+        width: 49%;
+    }
+
+    #content #gear-view-text-widget #borrow-status-section {
+        border-right: none;
+    }
+
+    #content #booking-details-text-widget .widget-section {
+        width: 49%;
+    }
+
+    #content #booking-details-text-widget #purpose-section {
+        border-right: none;
+    }
+}
+
+#booking-view-text-widget .widget-section {
+    width: 24.8%;
+}
+
+#borrow-status-section {
     border-right: none;
 }
 
-
-#contact-detail-view-text-widget .widget-section {
+#booking-link-section {
     width: 100%;
-    overflow-wrap: break-word;
+    flex-grow: 1;
 }
 
 #contact-container {
