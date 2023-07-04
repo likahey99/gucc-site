@@ -156,7 +156,9 @@ def category_menu(request):
 
 def view_gear(request, gear_name_slug):
     context_dict = {'categories': Category.objects.all()}
-
+    context_dict['min_date'] = datetime.now().date()
+    context_dict['default_date'] = datetime.now().date() + timedelta(days=14)
+    context_dict['max_date'] = datetime.now().date() + timedelta(days=365)
     user_profile = None
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)

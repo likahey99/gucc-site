@@ -1,5 +1,6 @@
 from django import template
-from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE
+from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE, \
+    BookingComments
 
 register = template.Library()
 
@@ -306,3 +307,17 @@ def show_order_filter_bar(orders, section):
 @register.inclusion_tag('gearStore/display_description.html')
 def show_description(description):
     return {"description": description}
+
+@register.inclusion_tag('gearStore/display_comments.html')
+def show_all_booking_comments(booking, user):
+    comments = BookingComments.objects.all().filter(booking=booking)
+    return {"comments": comments,
+            "user": user,
+            "show_comment_links":  False}
+
+@register.inclusion_tag('gearStore/display_comments.html')
+def show_starred_gear_comments(gear, user):
+    comments = BookingComments.objects.all().filter(booking__gearItem=gear).filter(starred=True)
+    return {"comments": comments,
+            "user": user,
+            "show_comment_links":  True}

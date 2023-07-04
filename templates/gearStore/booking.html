@@ -114,51 +114,7 @@
 
         <div id="comments-section">
             <h3 id="booking-comments">Comments on Changes to Gear Condition:</h3>
-            {% if comments %}
-                {% for comment in comments %}
-                    {% if user == comment.user %}
-                    <div class="speech-bubble-right">
-                        <div class="speech-bubble-box-right">
-                            <div class="speech-contents-wrapper">
-                                <div class="speech-bubble-header">
-                                    <img class="speech-bubble-profile-pic" src="/media/{{ comment.user.picture }}">
-                                    <p id="comment-user">You</p>
-                                </div>
-                                <div class="speech-bubble-comment">
-                                    {{ comment.comment }}
-                                    <br>
-                                    <p class="comment-date-stamp">Posted {{ comment.dateAdded }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="speech-bubble-tail-right-container">
-                            <div class="speech-bubble-tail-right">
-
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    {% else %}
-                    <div class="speech-bubble-left">
-                        <div class="speech-bubble-tail-left"></div>
-                        <div class="speech-bubble-box-left">
-                            <div class="speech-bubble-header">
-                                <img class="speech-bubble-profile-pic" src="/media/{{ comment.user.picture }}">
-                                <p id="comment-user">{{ comment.user.first_name}} {{ comment.user.last_name}}</p>
-                            </div>
-                            <div class="speech-bubble-comment">
-                                {{ comment.comment }}
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    <br>
-                {% endfor %}
-            {% else %}
-                <div class="bubble-text">
-                    <p>There are currently no comments.</p>
-                </div>
-            {% endif %}
+            {% show_all_booking_comments booking user %}
 
             <div id="centered-button-container">
                 <button id="action-button" onclick="showCommentForm()">Add Comment</button>

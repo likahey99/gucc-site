@@ -96,6 +96,13 @@
                     <div class="form-value">
                         <form method="post" action="{% url "gearStore:view-gear" gear.slug %}" enctype="multipart/form-data">
                             {% csrf_token %}
+                            <div class="input-box">
+                                <div class="form-text-wrapper">
+                                    <ion-icon name="calendar-outline"></ion-icon>
+                                    <Label for="">Return Date</Label>
+                                </div>
+                                <input type="date" name="dateToReturn" min="{{ min_date|date:"Y-m-d" }}" max="{{ max_date|date:"Y-m-d" }}" value="{{ default_date|date:"Y-m-d" }}" required>
+                            </div>
                             <div class="submit-button">
                                 <button>Borrow</button>
                             </div>
@@ -113,6 +120,11 @@
             <br>
             <div id="gear-bookings">
                 {% show_gear_bookings gear %}
+            </div>
+            <br>
+            <div id="comments-section">
+                <h3 id="booking-comments">Comments:</h3>
+                {% show_starred_gear_comments gear user_profile %}
             </div>
         {% endif %}
     {% else %}

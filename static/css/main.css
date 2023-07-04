@@ -705,12 +705,21 @@ h1, h2, h3 {
     margin-top: 25px;
 }
 
-#content .comment-date-stamp {
+#content .comment-date-stamp, #content .comment-date-stamp a {
     color: gray;
     width: auto;
     padding: 0;
     text-align: left;
     font-size: 12px;
+}
+
+#content .comment-date-stamp a {
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+#content .comment-date-stamp a:hover {
+    color: #454444;
 }
 
 #centered-button-container {
@@ -907,6 +916,25 @@ h3#booking-comments, p#booking-comment {
     margin-right: 30px;
 }
 
+.comments-edit-buttons ion-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+}
+
+.comments-edit-buttons {
+    position: absolute;
+    bottom: 15px;
+}
+
+.comments-edit-buttons.left {
+    right: 10px;
+}
+
+.comments-edit-buttons.right {
+    right: 30px;
+}
+
 h3#booking-comments {
     padding: 20px;
     text-align: center;
@@ -915,6 +943,8 @@ h3#booking-comments {
 p#comment-user {
     padding: 0;
     padding-left: 5px;
+    text-align: left;
+    word-break: break-word;
 }
 
 /* Table styling */
