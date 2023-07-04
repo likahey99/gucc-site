@@ -800,6 +800,11 @@ footer {
         width: calc(0.9 * 100vw);
     }
 
+    body .popup-form-container {
+        width: 90%;
+        left: 5%;
+    }
+
     #main-body {
         display: block;
         grid-template-columns: none;
@@ -922,6 +927,17 @@ h3#booking-comments, p#booking-comment {
     margin-left: 5px;
 }
 
+.comments-edit-buttons button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    transition: all 0.5s;
+}
+
+.comments-edit-buttons button:hover {
+    color: gray;
+}
+
 .comments-edit-buttons {
     position: absolute;
     bottom: 15px;
@@ -933,6 +949,50 @@ h3#booking-comments, p#booking-comment {
 
 .comments-edit-buttons.right {
     right: 30px;
+}
+
+.popup-form-container {
+    position: fixed;
+    width: 50%;
+    height: 80%;
+    left: 25%;
+    top: 10%;
+    background-size: cover;
+    background: no-repeat fixed initial;
+    background-color: grey;
+    background-blend-mode: multiply;
+    border-radius: 25px;
+    z-index: 10;
+}
+
+button#hide_form_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    box-shadow: none;
+    background: none;
+    color: white;
+    border: none;
+}
+
+.popup-form-container h1#page-header {
+    margin-top: 50px;
+}
+
+button#hide_form_button ion-icon {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    transition: all 0.5s;
+}
+
+button#hide_form_button:hover {
+    color: gray;
 }
 
 h3#booking-comments {
