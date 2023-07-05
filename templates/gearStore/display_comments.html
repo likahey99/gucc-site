@@ -15,7 +15,7 @@
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
-                <input type="hidden" id="edit_id" name="id" value="">
+                <input type="hidden" id="edit_id" name="edit_id" value="">
                 <div class="input-box">
                     <div class="form-text-wrapper">
                         <ion-icon name="pencil-outline"></ion-icon>
@@ -45,7 +45,7 @@
                         <ion-icon name="person-outline"></ion-icon>
                         <Label for="">Admin Password</Label>
                     </div>
-                    <input type="password" id="password" name="password" placeholder="Admin Password" required>
+                    <input type="password" id="password" name="delete_password" placeholder="Admin Password" required>
                 </div>
                 <div class="submit-button">
                     <button>Delete</button>
@@ -65,12 +65,13 @@
                     {{ hidden }}
                 {% endfor %}
                 <input type="hidden" id="star_id" name="star_id" value="">
+                <input type="hidden" id="hidden_star_value" name="hidden_star_value">
                 <div class="input-box">
                     <div class="form-text-wrapper">
                         <ion-icon name="person-outline"></ion-icon>
                         <Label for="">Admin Password</Label>
                     </div>
-                    <input type="password" id="password" name="password" placeholder="Admin Password" required>
+                    <input type="password" id="password" name="star_password" placeholder="Admin Password" required>
                 </div>
                 <div class="submit-button">
                     <button>Submit</button>
@@ -88,7 +89,7 @@
                         <p id="comment-user">You</p>
                         <div class="comments-edit-buttons right">
                             {% if user == comment.user %}
-                                <button onclick="show_popup('edit','{{ comment.id }}','{{ comment.comment }}')",><ion-icon name="create-outline"></ion-icon></button>
+                                <button onclick="show_popup('edit','{{ comment.id }}','{{ comment.comment.strip }}')"><ion-icon name="create-outline"></ion-icon></button>
                             {% endif %}
                             {% if user.adminStatus %}
                                  <button onclick="show_popup('delete','{{ comment.id }}',false)"><ion-icon name="trash-outline"></ion-icon></button>
@@ -118,13 +119,13 @@
                     <img class="speech-bubble-profile-pic" src="/media/{{ comment.user.picture }}">
                     <p id="comment-user">{{ comment.user.first_name}} {{ comment.user.last_name}}</p>
                     <div class="comments-edit-buttons left">
-                        {% if user == comment.user %}
-                            <button onclick="show_popup('edit','{{ comment.id }}',false)",><ion-icon name="create-outline"></ion-icon></button>
-                        {% endif %}
-                        {% if user.adminStatus %}
-                             <button onclick="show_popup('delete','{{ comment.id }}',false)"><ion-icon name="trash-outline"></ion-icon></button>
-                             <button onclick="show_popup('star','{{ comment.id }}',{{ comment.starred|lower }})"><ion-icon name="star-outline"></ion-icon></button>
-                        {% endif %}
+                            {% if user == comment.user %}
+                                <button onclick="show_popup('edit','{{ comment.id }}','{{ comment.comment }}')"><ion-icon name="create-outline"></ion-icon></button>
+                            {% endif %}
+                            {% if user.adminStatus %}
+                                 <button onclick="show_popup('delete','{{ comment.id }}',false)"><ion-icon name="trash-outline"></ion-icon></button>
+                                 <button onclick="show_popup('star','{{ comment.id }}',{{ comment.starred|lower }})"><ion-icon name="star{% if not comment.starred %}-outline{% endif %}"></ion-icon></button>
+                            {% endif %}
                     </div>
                 </div>
                 <div class="speech-bubble-comment">
