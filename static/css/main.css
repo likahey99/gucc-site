@@ -705,6 +705,11 @@ h1, h2, h3 {
     margin-top: 25px;
 }
 
+#content .comment-date-stamp {
+    word-break: break-word;
+    max-width: 50%;
+}
+
 #content .comment-date-stamp, #content .comment-date-stamp a {
     color: gray;
     width: auto;

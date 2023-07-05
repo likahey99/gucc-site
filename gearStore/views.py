@@ -178,12 +178,65 @@ def view_gear(request, gear_name_slug):
 
         # attempt to borrow the gear
         if request.method == 'POST':
-            borrow = Booking()
-            if request.user:
-                borrow.gearItem = gear
-                borrow.user = UserProfile.objects.get(user=request.user)
-                borrow.dateToReturn = datetime.now().date() + timedelta(days=14)
-                borrow.save()
+            errors = []
+            if request.POST.get('edit_id'):
+                if request.POST.get('comment'):
+                    try:
+                        comment = BookingComments.objects.get(id=request.POST.get('edit_id'))
+                        comment.comment = request.POST.get('comment')
+                        comment.save()
+                        return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                    except BookingComments.DoesNotExist:
+                        errors.append("Error: Booking does not exist.")
+            elif request.POST.get('delete_id'):
+                if request.POST.get('delete_password'):
+                    try:
+                        comment = BookingComments.objects.get(id=request.POST.get('delete_id'))
+                        input_password = request.POST.get("delete_password")
+                        plaintext = input_password.encode()
+                        hash = hashlib.sha256(plaintext)
+                        readable_hash = hash.hexdigest()
+                        passwords = AdminPassword.objects.all()
+                        if passwords[0].password == readable_hash:
+                            comment.delete()
+                            return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                        else:
+                            errors.append("Error: Incorrect Password.")
+                        comment.save()
+                    except BookingComments.DoesNotExist:
+                        errors.append("Error: Booking does not exist.")
+            elif request.POST.get('star_id'):
+                starred = request.POST.get('hidden_star_value')
+                if starred:
+                    if request.POST.get('star_password'):
+                        try:
+                            comment = BookingComments.objects.get(id=request.POST.get('star_id'))
+                            input_password = request.POST.get("star_password")
+                            plaintext = input_password.encode()
+                            hash = hashlib.sha256(plaintext)
+                            readable_hash = hash.hexdigest()
+                            passwords = AdminPassword.objects.all()
+                            if passwords[0].password == readable_hash:
+                                if starred == "true" or starred == "false":
+                                    starred = starred == "true"
+                                    comment.starred = starred
+                                    comment.save()
+                                    return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                            else:
+                                errors.append("Error: Incorrect Password.")
+                            comment.save()
+                        except BookingComments.DoesNotExist:
+                            errors.append("Error: Booking does not exist.")
+                else:
+                    errors.append("Error: No star status.")
+            else:
+                borrow = Booking()
+                if request.user:
+                    borrow.gearItem = gear
+                    borrow.user = UserProfile.objects.get(user=request.user)
+                    borrow.dateToReturn = datetime.now().date() + timedelta(days=14)
+                    borrow.save()
+                    return redirect(reverse("gearStore:booking", kwargs={'booking_id': borrow.id }))
 
         # find if the gear is currently on loan
         is_available, active_booking = gear.is_available()

@@ -100,7 +100,7 @@
                     <div class="speech-bubble-comment">
                         {{ comment.comment }}
                         <br>
-                        <p class="comment-date-stamp">Posted {{ comment.dateAdded }}</p>
+                        <p class="comment-date-stamp">Posted {{ comment.dateAdded }}{% if show_comment_links %} on <a href="{% url 'gearStore:booking' comment.booking.id %}">Booking {{ comment.booking.id }}</a>{% endif %}</p>
                     </div>
                 </div>
             </div>
