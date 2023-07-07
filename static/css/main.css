@@ -758,6 +758,15 @@ h1, h2, h3 {
     justify-content: center;
     flex-grow: 1;
 }
+.borrow-button {
+    display: flex;
+    justify-content: center;
+}
+
+.borrow-button #action-button {
+    margin-left: 0;
+    margin-right: 0;
+}
 
 input#file-choice, input#password, input#text-input {
     display: block;

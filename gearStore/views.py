@@ -231,7 +231,8 @@ def view_gear(request, gear_name_slug):
                 if request.user:
                     borrow.gearItem = gear
                     borrow.user = UserProfile.objects.get(user=request.user)
-                    borrow.dateToReturn = datetime.now().date() + timedelta(days=14)
+                    borrow.dateToReturn = request.POST.get("dateToReturn")
+                    borrow.purpose = request.POST.get("purpose")
                     borrow.save()
                     return redirect(reverse("gearStore:booking", kwargs={'booking_id': borrow.id }))
 
@@ -255,6 +256,8 @@ def view_gear(request, gear_name_slug):
         if user_profile:
             if user_profile.adminStatus:
                 context_dict['admin'] = True
+    context_dict['options'] = STATUS_CHOICES
+    context_dict['purpose_options'] = PURPOSE_CHOICES
     return render(request, 'gearStore/view_gear.html', context_dict)
 
 

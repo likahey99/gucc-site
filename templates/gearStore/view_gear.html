@@ -10,6 +10,10 @@
     {% endif %}
 {% endblock %}
 
+{% block head_block %}
+    <script src="{% static 'js/show_popup.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
     {% if gear %}
         <div class="gear-view-contents">
@@ -91,11 +95,39 @@
             {% endif %}
         {% else %}
             <p>Not currently borrowed</p>
+            <div class="borrow-button">
+                <button id="action-button" onclick="show_generic_popup('booking_popup')">Borrow</button>
+            </div>
             {% if user.is_authenticated %}
-                <div class="form-container">
+                <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="booking_popup">
+                    <h1 id="page-header">Make Booking</h1>
+                    <button id="hide_form_button" onclick="hide_generic_popup('booking_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+                    <p id="starred_status_text"></p>
                     <div class="form-value">
-                        <form method="post" action="{% url "gearStore:view-gear" gear.slug %}" enctype="multipart/form-data">
+                        <form enctype="multipart/form-data" id='edit_booking' method="post">
                             {% csrf_token %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            <div class="input-box">
+                                <div class="form-text-wrapper">
+                                    <ion-icon name="stats-chart-outline"></ion-icon>
+                                    <Label for="">Purpose</Label>
+                                </div>
+                                <div id="dropdown-selector">
+                                    <select name="purpose" id="dropdown" required>
+                                    {% if purpose_options %}
+                                        {% for option in purpose_options %}
+                                            {% if option.0 == booking.purpose %}
+                                                <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                            {% else %}
+                                                <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    </select>
+                                </div>
+                            </div>
                             <div class="input-box">
                                 <div class="form-text-wrapper">
                                     <ion-icon name="calendar-outline"></ion-icon>
@@ -104,7 +136,7 @@
                                 <input type="date" name="dateToReturn" min="{% get_date "min" %}" max="{% get_date "max" %}" value="{% get_date "default" %}" required>
                             </div>
                             <div class="submit-button">
-                                <button>Borrow</button>
+                                <button>Submit</button>
                             </div>
                         </form>
                     </div>
