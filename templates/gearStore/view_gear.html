@@ -20,7 +20,7 @@
                         <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-gear' gear.slug %}"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
                         <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-gear' gear.slug %}"><ion-icon id="delete-button" class="edit-delete-button" name="trash-outline"></ion-icon></a>
                     {% endif %}
-                    </div>
+                </div>
             </div>
             <div id="gear-view-text-widget" class="text-widget">
                 <div id="category-section" class="widget-section">
@@ -101,7 +101,7 @@
                                     <ion-icon name="calendar-outline"></ion-icon>
                                     <Label for="">Return Date</Label>
                                 </div>
-                                <input type="date" name="dateToReturn" min="{{ min_date|date:"Y-m-d" }}" max="{{ max_date|date:"Y-m-d" }}" value="{{ default_date|date:"Y-m-d" }}" required>
+                                <input type="date" name="dateToReturn" min="{% get_date "min" %}" max="{% get_date "max" %}" value="{% get_date "default" %}" required>
                             </div>
                             <div class="submit-button">
                                 <button>Borrow</button>

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
     BackgroundImageForm, LogoImageForm, BookingCommentsForm, IconImageForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
-    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE
+    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE, PURPOSE_CHOICES
 
 from django.template.defaultfilters import slugify
 
@@ -156,9 +156,6 @@ def category_menu(request):
 
 def view_gear(request, gear_name_slug):
     context_dict = {'categories': Category.objects.all()}
-    context_dict['min_date'] = datetime.now().date()
-    context_dict['default_date'] = datetime.now().date() + timedelta(days=14)
-    context_dict['max_date'] = datetime.now().date() + timedelta(days=365)
     user_profile = None
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
@@ -879,6 +876,8 @@ def booking(request, booking_id):
                     errors.append("Error: No star status.")
             if request.POST.get('status'):
                 booking.status = request.POST.get('status')
+                booking.purpose = request.POST.get('purpose')
+                booking.dateToReturn = request.POST.get('dateToReturn')
                 booking.save()
                 return redirect(reverse("gearStore:booking", kwargs={'booking_id': booking.id}))
             else:
@@ -904,6 +903,7 @@ def booking(request, booking_id):
         context_dict['booking'] = None
 
     context_dict['options'] = STATUS_CHOICES
+    context_dict['purpose_options'] = PURPOSE_CHOICES
     context_dict['user'] = user_profile
     return render(request, 'gearStore/booking.html', context=context_dict)
 

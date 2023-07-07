@@ -4,6 +4,7 @@
 
 {% block head_block %}
     <script src="{% static 'js/showForm.js' %}"></script>
+    <script src="{% static 'js/show_popup.js' %}"></script>
 {% endblock %}
 
 {% block title_block %}
@@ -16,10 +17,74 @@
 
 {% block body_block %}
     {% if booking %}
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_booking_popup">
+            <h1 id="page-header">Edit Booking</h1>
+            <button id="hide_form_button" onclick="hide_generic_popup('edit_booking_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <p id="starred_status_text"></p>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='edit_booking' method="post">
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="stats-chart-outline"></ion-icon>
+                            <Label for="">Change Status</Label>
+                        </div>
+                        <div id="dropdown-selector">
+                            <select name="status" id="dropdown" required>
+                            {% if options %}
+                                {% for option in options %}
+                                    {% if option.0 == booking.status %}
+                                        <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                    {% else %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="stats-chart-outline"></ion-icon>
+                            <Label for="">Change Purpose</Label>
+                        </div>
+                        <div id="dropdown-selector">
+                            <select name="purpose" id="dropdown" required>
+                            {% if purpose_options %}
+                                {% for option in purpose_options %}
+                                    {% if option.0 == booking.purpose %}
+                                        <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                    {% else %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                            <Label for="">Change Return Date</Label>
+                        </div>
+                        <input type="date" name="dateToReturn" min="{% get_date "min" %}" max="{% get_date "max" %}" value="{{ booking.dateToReturn|date:"Y-m-d" }}" required>
+                    </div>
+                    <div class="submit-button">
+                        <button>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="gear-view-contents">
             <div class="top-image" style="background-image: url('/media/{{ booking.gearItem.picture }}')">
                 <div class="top-image-overlay">
                     <h1 id="image-overlay-header">Booking of {{ booking.gearItem.name }} by {{ booking.user.first_name }} {{ booking.user.last_name }}</h1>
+                    {% if admin %}
+                        <a id="edit-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_booking_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+                    {% endif %}
                 </div>
             </div>
             <div class="text-widget" id="booking-details-text-widget" style="background-color: {% get_colour booking.id %};">
@@ -80,38 +145,6 @@
                 </div>
             </div>
         </div>
-        {% if user.adminStatus %}
-            <div class="form-container" id="status-form">
-                <div class="form-value">
-                    <form enctype="multipart/form-data" method="post" action="{% url 'gearStore:booking' booking.id %}">
-                        {% csrf_token %}
-                        <div class="input-box">
-                            <div class="form-text-wrapper">
-                                <ion-icon name="stats-chart-outline"></ion-icon>
-                                <Label for="">Change Status</Label>
-                            </div>
-                            <div id="dropdown-selector">
-                                <select name="status" id="dropdown" required>
-                                {% if options %}
-                                    {% for option in options %}
-                                        {% if option.0 == booking.status %}
-                                            <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
-                                        {% else %}
-                                            <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="submit-button">
-                            <button>Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        {% endif %}
-
         <div id="comments-section">
             <h3 id="booking-comments">Comments on Changes to Gear Condition:</h3>
             {% show_all_booking_comments booking user %}

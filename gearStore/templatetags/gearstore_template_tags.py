@@ -1,3 +1,6 @@
+import datetime
+from datetime import *
+
 from django import template
 from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE, \
     BookingComments
@@ -321,3 +324,14 @@ def show_starred_gear_comments(gear, user):
     return {"comments": comments,
             "user": user,
             "show_comment_links":  True}
+
+@register.inclusion_tag('gearStore/display_date.html')
+def get_date(type):
+    date = ""
+    if type == "min":
+        date = datetime.now().date()
+    elif type == "max":
+        date = datetime.now().date() + timedelta(days=365)
+    elif type == "default":
+        date = datetime.now().date() + timedelta(days=14)
+    return {"date": date}

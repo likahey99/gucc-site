@@ -49,3 +49,13 @@ function hide_popup(popup_type) {
 
 
 }
+
+function show_generic_popup(id) {
+    let popup = document.getElementById(id);
+    popup.style.display = "block";
+}
+
+function hide_generic_popup(id) {
+    let popup = document.getElementById(id);
+    popup.style.display = "none";
+}
