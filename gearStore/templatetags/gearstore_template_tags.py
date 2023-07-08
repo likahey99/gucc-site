@@ -1,9 +1,11 @@
 import datetime
+import string
 from datetime import *
 
 from django import template
 from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE, \
-    BookingComments
+    BookingComments, IN_SERVICE
+from slugify import slugify
 
 register = template.Library()
 
@@ -27,6 +29,7 @@ def get_active_booking_statuses_for_user(user_profile):
             views.append(view[0])
     return views
 
+
 def get_active_booking_statuses_for_gear(gear):
     views = []
     booking_views = STATUS_CHOICES
@@ -35,6 +38,14 @@ def get_active_booking_statuses_for_gear(gear):
         if bookings:
             views.append(view[0])
     return views
+
+
+def get_size_options(gear):
+    size_options = {"all": "All"}
+    for gear_item in gear:
+        if not (slugify(gear_item.size) in size_options):
+            size_options[slugify(gear_item.size)] = string.capwords(gear_item.size)
+    return size_options
 
 
 @register.inclusion_tag('gearStore/category_menu.html')
@@ -217,6 +228,7 @@ def show_user_bookings(user_profile):
             "section": "user"
         }
 
+
 @register.inclusion_tag('gearStore/display_all_bookings.html')
 def show_gear_bookings(gear):
     orders = {
@@ -258,7 +270,7 @@ def show_gear_bookings(gear):
         "Name Desc.": {
             "id": "name-desc",
             "bookings": Booking.objects.all().filter(gearItem=gear).order_by('-user__last_name',
-                                                                                 '-user__first_name')
+                                                                             '-user__first_name')
         }
 
     }
@@ -275,13 +287,16 @@ def show_gear_bookings(gear):
             "section": "gear"
         }
 
+
 @register.inclusion_tag('gearStore/display_booking_details.html')
 def show_booking_details(booking):
     return {"booking": booking}
 
+
 @register.inclusion_tag('gearStore/display_user_booking_details.html')
 def show_user_booking_details(booking):
     return {"booking": booking}
+
 
 @register.inclusion_tag('gearStore/display_view_filter_bar.html')
 def show_view_filter_bar(order_id, booking_views, section):
@@ -299,6 +314,19 @@ def show_view_filter_bar(order_id, booking_views, section):
 def dict_lookup(dict, key):
     return dict.get(key)
 
+@register.filter
+def id_slugify(string):
+    return slugify(string)
+
+@register.filter
+def get_status(gear):
+    if gear.status == IN_SERVICE:
+        if gear.is_available()[0]:
+            return "available"
+        else:
+            return "unavailable"
+    else:
+        return "out-of-service"
 
 @register.inclusion_tag('gearStore/display_order_filter_bar.html')
 def show_order_filter_bar(orders, section):
@@ -311,19 +339,22 @@ def show_order_filter_bar(orders, section):
 def show_description(description):
     return {"description": description}
 
+
 @register.inclusion_tag('gearStore/display_comments.html')
 def show_all_booking_comments(booking, user):
     comments = BookingComments.objects.all().filter(booking=booking)
     return {"comments": comments,
             "user": user,
-            "show_comment_links":  False}
+            "show_comment_links": False}
+
 
 @register.inclusion_tag('gearStore/display_comments.html')
 def show_starred_gear_comments(gear, user):
     comments = BookingComments.objects.all().filter(booking__gearItem=gear).filter(starred=True)
     return {"comments": comments,
             "user": user,
-            "show_comment_links":  True}
+            "show_comment_links": True}
+
 
 @register.inclusion_tag('gearStore/display_date.html')
 def get_date(type):
@@ -335,3 +366,22 @@ def get_date(type):
     elif type == "default":
         date = datetime.now().date() + timedelta(days=14)
     return {"date": date}
+
+
+@register.inclusion_tag('gearStore/display_gear_filter_bar.html')
+def show_size_filter_bar(gear):
+    options = get_size_options(gear)
+
+    return {"options": options,
+            "property_type": "size"}
+
+@register.inclusion_tag('gearStore/display_gear_filter_bar.html')
+def show_availability_filter_bar(gear):
+    options = {"all": "All",
+               "available": "Available",
+               "unavailable": "Unavailable",
+               "out-of-service": "Out of Service"
+               }
+
+    return {"options": options,
+            "property_type": "status"}

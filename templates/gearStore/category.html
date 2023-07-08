@@ -1,5 +1,6 @@
 {% extends 'gearStore/base.html' %}
 {% load staticfiles %}
+{% load gearstore_template_tags %}
 
 {% block title_block %}
     {% if category %}
@@ -41,17 +42,21 @@
                     </div>
                 </div>
             </div>
-            <p class="below-picture">Description: {{ category.description }}</p>
+            {% show_description category.description %}
         </div>
         {% if gear or admin %}
+            <br>
+            <br>
+            {% show_size_filter_bar gear %}
+            {% show_availability_filter_bar gear %}
             <div class="menu-container">
                 {% if gear %}
                     {% for piece_of_gear in gear %}
-                        <a href="{% url 'gearStore:view-gear' piece_of_gear.slug %}" class="menu-card-link" style="background-image: url('/media/{{ piece_of_gear.picture }}')"><div class="menu-card"><p>{{ piece_of_gear.name }}</p></div></a>
+                        <a href="{% url 'gearStore:view-gear' piece_of_gear.slug %}" class="menu-card-link menu-card-size-{{ piece_of_gear.size|id_slugify }} menu-card-status-{{ piece_of_gear|get_status }}" style="background-image: url('/media/{{ piece_of_gear.picture }}')"><div class="menu-card"><p>{{ piece_of_gear.name }}</p></div></a>
                     {% endfor %}
                 {% endif %}
                 {% if admin %}
-                    <a id="add-button" href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+                    <a id="add-button" href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link add-menu-card" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
                 {% endif %}
             </div>
         {% else %}

@@ -1486,3 +1486,7 @@ div#profile-pic-and-name img {
     margin: 0;
     margin-right: 10px;
 }
+
+body .status-card-link-hidden, body .size-card-link-hidden {
+    display: none;
+}
