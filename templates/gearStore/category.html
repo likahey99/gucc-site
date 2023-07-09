@@ -16,79 +16,141 @@
 
 {% block body_block %}
     {% if admin %}
-    <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_category_popup">
-        <button id="hide_form_button" onclick="hide_generic_popup('edit_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
-        <h1 id="page-header">Edit {{ category.name }}</h1>
-        <div class="form-value">
-            <form enctype="multipart/form-data" id='category_form' method="post">
-                {% csrf_token %}
-                <input type="hidden" name="edit-category" value="edit-category">
-                <div class="input-box">
-                    <div class="form-text-wrapper">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <Label for="">Category Name</Label>
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="add_gear_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('add_gear_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Add Gear</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='gear_form' method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="add-gear" value="add-gear">
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Gear Name</Label>
+                        </div>
+                        <input type="text" name="name" placeholder="Gear name" required>
                     </div>
-                    <input type="text" name="name" placeholder="category name" value="{{ category.name }}" required>
-                </div>
-                <div class="input-box">
-                    <div class="form-text-wrapper">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <Label for="">Description</Label>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <Label for="">Description</Label>
+                        </div>
+                        <input type="text" name="description" placeholder="Description" required>
                     </div>
-                    <input type="text" name="description" placeholder="description" value="{{ category.description }}" required>
-                </div>
-                <div class="input-box">
-                    <div class="form-text-wrapper">
-                        <ion-icon name="image-outline"></ion-icon>
-                        <Label for="">Category Image</Label>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="wallet-outline"></ion-icon>
+                            <Label for="">Deposit</Label>
+                        </div>
+                        <input type="text" name="deposit" placeholder="Free" value="Free" required>
                     </div>
-                    <input type="file" name="picture" accept="image/*">
-                </div>
-                <div class="submit-button">
-                    <button>Submit Changes</button>
-                </div>
-            </form>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="resize-outline"></ion-icon>
+                            <Label for="">Size</Label>
+                        </div>
+                        <input type="text" name="size" placeholder="Size" required>
+                    </div>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Gear Image</Label>
+                        </div>
+                        <input type="file" name="picture" accept="image/*">
+                    </div>
+
+                    <div class="submit-button">
+                        <button>Add</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
         </div>
-        {% if errors %}
-            <ul class='form-errors'>
-                <li class="error-warning">An error has occurred:</li>
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            <br>
-        {% endif %}
-    </div>
-    <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="delete_category_popup">
-        <button id="hide_form_button" onclick="hide_generic_popup('delete_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
-        <h1 id="page-header">Delete {{ category.name }}</h1>
-        <div class="form-value">
-            <form enctype="multipart/form-data" id='gear_form' method="post">
-                {% csrf_token %}
-                <input type="hidden" name="delete-category" value="delete-category">
-                <p>Enter the admin password to confirm deletion.</p>
-                <div class="input-box">
-                    <div class="form-text-wrapper">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <Label for="">Admin Password</Label>
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_category_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('edit_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Edit {{ category.name }}</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='category_form' method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="edit-category" value="edit-category">
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Category Name</Label>
+                        </div>
+                        <input type="text" name="name" placeholder="category name" value="{{ category.name }}" required>
                     </div>
-                    <input type="password" name="password" placeholder="Admin Password" required>
-                </div>
-                <div class="submit-button">
-                    <button>Delete</button>
-                </div>
-            </form>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <Label for="">Description</Label>
+                        </div>
+                        <input type="text" name="description" placeholder="description" value="{{ category.description }}" required>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Category Image</Label>
+                        </div>
+                        <input type="file" name="picture" accept="image/*">
+                    </div>
+                    <div class="submit-button">
+                        <button>Submit Changes</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
         </div>
-        {% if errors %}
-            <ul class='form-errors'>
-                <li class="error-warning">An error has occurred:</li>
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            <br>
-        {% endif %}
-    </div>
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="delete_category_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('delete_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Delete {{ category.name }}</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='gear_form' method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete-category" value="delete-category">
+                    <p>Enter the admin password to confirm deletion.</p>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Admin Password</Label>
+                        </div>
+                        <input type="password" name="password" placeholder="Admin Password" required>
+                    </div>
+                    <div class="submit-button">
+                        <button>Delete</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
+        </div>
     {% endif %}
     {% if category %}
         <div class="gear-view-contents">
@@ -135,7 +197,7 @@
                     {% endfor %}
                 {% endif %}
                 {% if admin %}
-                    <a id="add-button" href="{% url 'gearStore:add-gear' category.slug %}" class="menu-card-link add-menu-card" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
+                    <a id="add-button" onclick="show_generic_popup('add_gear_popup')" class="menu-card-link add-menu-card" style="background-image: url('{% static 'images/plus_symbol.png' %}')"><div class="menu-card"><p></p></div></a>
                 {% endif %}
             </div>
         {% else %}

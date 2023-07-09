@@ -529,8 +529,23 @@ def view_category(request, category_name_slug):
         context_dict['gear'] = None
 
     if request.method == 'POST':
-        errors = []
-        if request.POST.get("edit-category"):
+        if request.POST.get("add-gear"):
+            errors = []
+            form = GearForm(request.POST, request.FILES)
+            if form.is_valid():
+                if category:
+                    gear = form.save(commit=False)
+                    gear.category = category
+                    if not request.FILES:
+                        gear.picture = category.picture
+                    gear.save()
+                    return redirect(reverse('gearStore:view-category',
+                                            kwargs={'category_name_slug': category_name_slug}))
+            else:
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+        elif request.POST.get("edit-category"):
             form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
 
             if form.is_valid():
@@ -592,45 +607,6 @@ def add_category(request):
     context_dict['errors'] = errors
     context_dict['form'] = form
     return render(request, 'gearStore/add_category.html', context_dict)
-
-
-@login_required
-def add_gear(request, category_name_slug):
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    context_dict = {'categories': Category.objects.all()}
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        category = None
-
-    if category is None:
-        return redirect(reverse("gearStore:index"))
-
-    form = GearForm()
-
-    if request.method == 'POST':
-        form = GearForm(request.POST, request.FILES)
-        errors = []
-        if form.is_valid():
-            if category:
-                gear = form.save(commit=False)
-                gear.category = category
-                if not request.FILES:
-                    gear.picture = category.picture
-                gear.save()
-                return redirect(reverse('gearStore:view-category',
-                                        kwargs={'category_name_slug': category_name_slug}))
-        else:
-            for error_category in form.errors:
-                for error in form.errors[error_category]:
-                    errors.append(error)
-        context_dict['errors'] = errors
-    context_dict['form'] = form
-    context_dict['category'] = category
-    return render(request, 'gearStore/add_gear.html', context=context_dict)
-
 
 
 @login_required
