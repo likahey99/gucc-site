@@ -39,8 +39,11 @@
                             <textarea type="text" name="home-text" placeholder="Home Page Text" required></textarea>
                         {% endif %}
                     </div>
-                    <p>Please enter the url of the site in order to create QR codes correctly.</p>
-                    <p>Ex. https://gearstore.com</p>
+                    <h1 id="page-header">Site Settings</h1>
+                    <div class="bubble-text">
+                        <p>Please enter the url of the site in order to create QR codes correctly.</p>
+                        <p>Ex. https://gearstore.com</p>
+                    </div>
                     <div class="input-box">
                         <div class="form-text-wrapper">
                             <ion-icon name="pencil-outline"></ion-icon>
@@ -94,6 +97,6 @@
         <div class="bubble-text">{{ content.home_contents|linebreaks }}</div>
     {% endif %}
     {% if admin %}
-        <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_gear_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+        <a id="delete-button-parent" class="edit-delete-button-parent"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
     {% endif %}
 {% endblock %}

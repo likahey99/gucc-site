@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% load gearstore_template_tags %}
 
+{% block head_block %}
+    <script src="{% static 'js/show_popup.js' %}"></script>
+{% endblock %}
+
 {% block title_block %}
     {% if gear %}
         {{ gear.name }}
@@ -10,19 +14,124 @@
     {% endif %}
 {% endblock %}
 
-{% block head_block %}
-    <script src="{% static 'js/show_popup.js' %}"></script>
-{% endblock %}
-
 {% block body_block %}
+    {% if admin %}
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_gear_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('edit_gear_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Edit {{ gear.name }}</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='gear_form' method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="edit-gear" value="edit-gear">
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Gear Name</Label>
+                        </div>
+                        <input type="text" name="name" placeholder="gear name" value="{{ gear.name }}" required>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="stats-chart-outline"></ion-icon>
+                            <Label for="">Change Status</Label>
+                        </div>
+                        <div id="dropdown-selector">
+                            <select name="status" id="dropdown" required>
+                            {% if gear_status_options %}
+                                {% for option in gear_status_options %}
+                                    {% if option.0 == gear.status %}
+                                        <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                    {% else %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                            <Label for="">Deposit Required</Label>
+                        </div>
+                        <input type="text" name="deposit" placeholder="deposit" value="{{ gear.deposit }}" required>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                            <Label for="">Description</Label>
+                        </div>
+                        <input type="text" name="description" placeholder="description" value="{{ gear.description }}" required>
+                    </div>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Gear Image</Label>
+                        </div>
+                        <input type="file" name="picture" accept="image/*">
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="resize-outline"></ion-icon>
+                            <Label for="">Size</Label>
+                        </div>
+                        <input type="text" name="size" placeholder="size" value="{{ gear.size }}" required>
+                    </div>
+                    <div class="submit-button">
+                        <button>Submit Changes</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
+        </div>
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="delete_gear_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('delete_gear_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Delete {{ gear.name }}</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='gear_form' method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete-gear" value="delete-gear">
+                    <p>Enter the admin password to confirm deletion.</p>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <Label for="">Admin Password</Label>
+                        </div>
+                        <input type="password" name="password" placeholder="Admin Password" required>
+                    </div>
+                    <div class="submit-button">
+                        <button>Delete</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
+        </div>
+    {% endif %}
     {% if gear %}
         <div class="gear-view-contents">
             <div class="top-image" style="background-image: url('/media/{{ gear.picture }}')">
                 <div class="top-image-overlay">
                     <h1 id="image-overlay-header">{{ gear.name }}</h1>
                     {% if admin %}
-                        <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-gear' gear.slug %}"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
-                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-gear' gear.slug %}"><ion-icon id="delete-button" class="edit-delete-button" name="trash-outline"></ion-icon></a>
+                        <a id="edit-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_gear_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+                        <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('delete_gear_popup')"><ion-icon id="delete-button" class="edit-delete-button" name="trash-outline"></ion-icon></a>
                     {% endif %}
                 </div>
             </div>

@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% load gearstore_template_tags %}
 
+{% block head_block %}
+    <script src="{% static 'js/show_popup.js' %}"></script>
+{% endblock %}
+
 {% block title_block %}
     {% if category %}
         {{ category.name }}
@@ -11,14 +15,89 @@
 {% endblock %}
 
 {% block body_block %}
+    {% if admin %}
+    <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_category_popup">
+        <button id="hide_form_button" onclick="hide_generic_popup('edit_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+        <h1 id="page-header">Edit {{ category.name }}</h1>
+        <div class="form-value">
+            <form enctype="multipart/form-data" id='category_form' method="post">
+                {% csrf_token %}
+                <input type="hidden" name="edit-category" value="edit-category">
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Category Name</Label>
+                    </div>
+                    <input type="text" name="name" placeholder="category name" value="{{ category.name }}" required>
+                </div>
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <Label for="">Description</Label>
+                    </div>
+                    <input type="text" name="description" placeholder="description" value="{{ category.description }}" required>
+                </div>
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <Label for="">Category Image</Label>
+                    </div>
+                    <input type="file" name="picture" accept="image/*">
+                </div>
+                <div class="submit-button">
+                    <button>Submit Changes</button>
+                </div>
+            </form>
+        </div>
+        {% if errors %}
+            <ul class='form-errors'>
+                <li class="error-warning">An error has occurred:</li>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+    </div>
+    <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="delete_category_popup">
+        <button id="hide_form_button" onclick="hide_generic_popup('delete_category_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+        <h1 id="page-header">Delete {{ category.name }}</h1>
+        <div class="form-value">
+            <form enctype="multipart/form-data" id='gear_form' method="post">
+                {% csrf_token %}
+                <input type="hidden" name="delete-category" value="delete-category">
+                <p>Enter the admin password to confirm deletion.</p>
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <Label for="">Admin Password</Label>
+                    </div>
+                    <input type="password" name="password" placeholder="Admin Password" required>
+                </div>
+                <div class="submit-button">
+                    <button>Delete</button>
+                </div>
+            </form>
+        </div>
+        {% if errors %}
+            <ul class='form-errors'>
+                <li class="error-warning">An error has occurred:</li>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+    </div>
+    {% endif %}
     {% if category %}
         <div class="gear-view-contents">
             <div class="top-image" style="background-image: url('/media/{{ category.picture }}')">
                 <div class="top-image-overlay">
                     <h1 id="image-overlay-header">{{ category.name }}</h1>
                     {% if admin %}
-                        <a id="edit-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-category' category.slug %}"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
-                        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:delete-category' category.slug %}"><img id="delete-button" class="edit-delete-button" src='{% static 'images/delete_symbol.png' %}'></a>
+                        <a id="edit-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_category_popup')"><img id="edit-button" class="edit-delete-button" src='{% static 'images/edit_symbol.png' %}'></a>
+                        <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('delete_category_popup')"><img id="delete-button" class="edit-delete-button" src='{% static 'images/delete_symbol.png' %}'></a>
                     {% endif %}
                 </div>
             </div>

@@ -98,19 +98,6 @@ def index(request):
     return render(request, 'gearStore/index.html', context_dict)
 
 
-def view_category(request, category_name_slug):
-    context_dict = {'categories': Category.objects.all()}
-    context_dict['categories'] = Category.objects.all()
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        # Redirect to home page if category doesn't exist
-        return redirect(reverse("gearStore:index"))
-    context_dict["category"] = category
-    context_dict["gear_list"] = Gear.object.filter(category=category)
-    return render(request, 'gearStore/category.html', context=context_dict)
-
-
 def register(request):
     context_dict = {'categories': Category.objects.all()}
     context_dict['category'] = None
@@ -284,69 +271,109 @@ def view_gear(request, gear_name_slug):
         # attempt to borrow the gear
         if request.method == 'POST':
             errors = []
-            if request.POST.get('edit_id'):
-                if request.POST.get('comment'):
-                    try:
-                        comment = BookingComments.objects.get(id=request.POST.get('edit_id'))
-                        comment.comment = request.POST.get('comment')
-                        comment.save()
-                        return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
-                    except BookingComments.DoesNotExist:
-                        errors.append("Error: Booking does not exist.")
-            elif request.POST.get('delete_id'):
-                if request.POST.get('delete_password'):
-                    try:
-                        comment = BookingComments.objects.get(id=request.POST.get('delete_id'))
-                        input_password = request.POST.get("delete_password")
-                        plaintext = input_password.encode()
-                        hash = hashlib.sha256(plaintext)
-                        readable_hash = hash.hexdigest()
-                        passwords = AdminPassword.objects.all()
-                        if passwords[0].password == readable_hash:
-                            comment.delete()
-                            return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
-                        else:
-                            errors.append("Error: Incorrect Password.")
-                        comment.save()
-                    except BookingComments.DoesNotExist:
-                        errors.append("Error: Booking does not exist.")
-            elif request.POST.get('star_id'):
-                starred = request.POST.get('hidden_star_value')
-                if starred:
-                    if request.POST.get('star_password'):
+            if request.POST.get("edit-gear"):
+                form = GearForm(request.POST or None, request.FILES or None, instance=gear)
+                if form.is_valid():
+                    new_slug = slugify(request.POST.get("name"))
+                    if gear_name_slug != new_slug:
                         try:
-                            comment = BookingComments.objects.get(id=request.POST.get('star_id'))
-                            input_password = request.POST.get("star_password")
+                            existing_obj = Gear.objects.get(slug=new_slug)
+                        except Gear.DoesNotExist:
+                            existing_obj = None
+                        if not existing_obj:
+                            gear = form.save()
+                            return redirect(reverse('gearStore:view-gear',
+                                                    kwargs={'gear_name_slug': gear.slug}))
+                        else:
+                            errors.append("Error: Gear name already exists.")
+                    else:
+                        gear = form.save(commit=False)
+                        if request.POST.get("status"):
+                            gear.status = request.POST.get("status")
+                        gear.save()
+                        return redirect(reverse('gearStore:view-gear',
+                                                kwargs={'gear_name_slug': gear.slug}))
+                else:
+                    for error_category in form.errors:
+                        for error in form.errors[error_category]:
+                            errors.append(error)
+                context_dict['errors'] = errors
+            elif request.POST.get("delete-gear"):
+                input_password = request.POST.get("password")
+                plaintext = input_password.encode()
+                hash = hashlib.sha256(plaintext)
+                readable_hash = hash.hexdigest()
+                passwords = AdminPassword.objects.all()
+                if passwords[0].password == readable_hash:
+                    gear.delete()
+                    return redirect(reverse('gearStore:view-category',
+                                            kwargs={'category_name_slug': gear.category.slug}))
+                else:
+                    errors.append("Error: Incorrect Password.")
+            else:
+                if request.POST.get('edit_id'):
+                    if request.POST.get('comment'):
+                        try:
+                            comment = BookingComments.objects.get(id=request.POST.get('edit_id'))
+                            comment.comment = request.POST.get('comment')
+                            comment.save()
+                            return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                        except BookingComments.DoesNotExist:
+                            errors.append("Error: Booking does not exist.")
+                elif request.POST.get('delete_id'):
+                    if request.POST.get('delete_password'):
+                        try:
+                            comment = BookingComments.objects.get(id=request.POST.get('delete_id'))
+                            input_password = request.POST.get("delete_password")
                             plaintext = input_password.encode()
                             hash = hashlib.sha256(plaintext)
                             readable_hash = hash.hexdigest()
                             passwords = AdminPassword.objects.all()
                             if passwords[0].password == readable_hash:
-                                if starred == "true" or starred == "false":
-                                    starred = starred == "true"
-                                    comment.starred = starred
-                                    comment.save()
-                                    return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                                comment.delete()
+                                return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
                             else:
                                 errors.append("Error: Incorrect Password.")
                             comment.save()
                         except BookingComments.DoesNotExist:
                             errors.append("Error: Booking does not exist.")
+                elif request.POST.get('star_id'):
+                    starred = request.POST.get('hidden_star_value')
+                    if starred:
+                        if request.POST.get('star_password'):
+                            try:
+                                comment = BookingComments.objects.get(id=request.POST.get('star_id'))
+                                input_password = request.POST.get("star_password")
+                                plaintext = input_password.encode()
+                                hash = hashlib.sha256(plaintext)
+                                readable_hash = hash.hexdigest()
+                                passwords = AdminPassword.objects.all()
+                                if passwords[0].password == readable_hash:
+                                    if starred == "true" or starred == "false":
+                                        starred = starred == "true"
+                                        comment.starred = starred
+                                        comment.save()
+                                        return redirect(reverse("gearStore:view-gear", kwargs={'gear_name_slug': gear_name_slug}))
+                                else:
+                                    errors.append("Error: Incorrect Password.")
+                                comment.save()
+                            except BookingComments.DoesNotExist:
+                                errors.append("Error: Booking does not exist.")
+                    else:
+                        errors.append("Error: No star status.")
                 else:
-                    errors.append("Error: No star status.")
-            else:
-                borrow = Booking()
-                if request.user:
-                    borrow.gearItem = gear
-                    borrow.user = UserProfile.objects.get(user=request.user)
-                    borrow.dateToReturn = request.POST.get("dateToReturn")
-                    borrow.purpose = request.POST.get("purpose")
-                    borrow.save()
-                    qr_code = QR_Code()
-                    qr_code.booking = borrow
-                    qr_code.save()
-                    qr_code.update_qrcode()
-                    return redirect(reverse("gearStore:booking", kwargs={'booking_id': borrow.id }))
+                    borrow = Booking()
+                    if request.user:
+                        borrow.gearItem = gear
+                        borrow.user = UserProfile.objects.get(user=request.user)
+                        borrow.dateToReturn = request.POST.get("dateToReturn")
+                        borrow.purpose = request.POST.get("purpose")
+                        borrow.save()
+                        qr_code = QR_Code()
+                        qr_code.booking = borrow
+                        qr_code.save()
+                        qr_code.update_qrcode()
+                        return redirect(reverse("gearStore:booking", kwargs={'booking_id': borrow.id }))
 
         # find if the gear is currently on loan
         is_available, active_booking = gear.is_available()
@@ -354,11 +381,8 @@ def view_gear(request, gear_name_slug):
         context_dict['active_booking'] = active_booking
 
         # find the gear's category
-        try:
-            category = Category.objects.get(name=gear.category)
-            context_dict['category'] = category
-        except Category.DoesNotExist:
-            context_dict['category'] = None
+        category = Category.objects.get(name=gear.category)
+        context_dict['category'] = category
     except Gear.DoesNotExist:
         context_dict['gear'] = None
 
@@ -370,6 +394,7 @@ def view_gear(request, gear_name_slug):
                 context_dict['admin'] = True
     context_dict['options'] = STATUS_CHOICES
     context_dict['purpose_options'] = PURPOSE_CHOICES
+    context_dict['gear_status_options'] = GEAR_STATUS_CHOICES
     return render(request, 'gearStore/view_gear.html', context_dict)
 
 
@@ -502,6 +527,47 @@ def view_category(request, category_name_slug):
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['gear'] = None
+
+    if request.method == 'POST':
+        errors = []
+        if request.POST.get("edit-category"):
+            form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
+
+            if form.is_valid():
+                new_slug = slugify(request.POST.get("name"))
+                if category_name_slug != new_slug:
+                    try:
+                        existing_obj = Category.objects.get(slug=new_slug)
+                    except Category.DoesNotExist:
+                        existing_obj = None
+                    if not existing_obj:
+                        category = form.save()
+                        return redirect(reverse('gearStore:view-category',
+                                                kwargs={'category_name_slug': category.slug}))
+                    else:
+                        errors.append("Error: Category name already exists.")
+                else:
+                    category = form.save()
+                    return redirect(reverse('gearStore:view-category',
+                                            kwargs={'category_name_slug': category.slug}))
+            else:
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+
+        if request.POST.get("delete-category"):
+            input_password = request.POST.get("password")
+            plaintext = input_password.encode()
+            hash = hashlib.sha256(plaintext)
+            readable_hash = hash.hexdigest()
+            passwords = AdminPassword.objects.all()
+            if passwords[0].password == readable_hash:
+                category.delete()
+                return redirect(reverse('gearStore:find-gear'))
+            else:
+                errors.append("Error: Incorrect Password.")
+
+        context_dict['errors'] = errors
     return render(request, 'gearStore/category.html', context=context_dict)
 
 
@@ -565,170 +631,6 @@ def add_gear(request, category_name_slug):
     context_dict['category'] = category
     return render(request, 'gearStore/add_gear.html', context=context_dict)
 
-
-@login_required
-def edit_category(request, category_name_slug):
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    context_dict = {'categories': Category.objects.all()}
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Gear.DoesNotExist:
-        category = None
-
-    if category is None:
-        return redirect(reverse("gearStore:index"))
-
-    form = CategoryForm()
-
-    if request.method == 'POST':
-        form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
-        errors = []
-
-        if form.is_valid():
-            new_slug = slugify(request.POST.get("name"))
-            if category_name_slug != new_slug:
-                try:
-                    existing_obj = Category.objects.get(slug=new_slug)
-                except Category.DoesNotExist:
-                    existing_obj = None
-                if not existing_obj:
-                    category = form.save()
-                    return redirect(reverse('gearStore:view-category',
-                                            kwargs={'category_name_slug': category.slug}))
-                else:
-                    errors.append("Error: Category name already exists.")
-
-        else:
-            for error_category in form.errors:
-                for error in form.errors[error_category]:
-                    errors.append(error)
-        context_dict['errors'] = errors
-    category = Category.objects.get(slug=category_name_slug)
-    context_dict['category'] = category
-    context_dict['form'] = form
-    return render(request, 'gearStore/edit_category.html', context=context_dict)
-
-
-@login_required
-def edit_gear(request, gear_name_slug):
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    context_dict = {'categories': Category.objects.all()}
-    try:
-        gear = Gear.objects.get(slug=gear_name_slug)
-    except Gear.DoesNotExist:
-        gear = None
-
-    if gear is None:
-        return redirect(reverse("gearStore:index"))
-
-    form = GearForm()
-
-    if request.method == 'POST':
-        form = GearForm(request.POST or None, request.FILES or None, instance=gear)
-        errors = []
-        if form.is_valid():
-            new_slug = slugify(request.POST.get("name"))
-            if gear_name_slug != new_slug:
-                try:
-                    existing_obj = Gear.objects.get(slug=new_slug)
-                except Gear.DoesNotExist:
-                    existing_obj = None
-                if not existing_obj:
-                    gear = form.save()
-                    return redirect(reverse('gearStore:view-gear',
-                                            kwargs={'gear_name_slug': gear.slug}))
-                else:
-                    errors.append("Error: Gear name already exists.")
-            else:
-                gear = form.save(commit=False)
-                if request.POST.get("status"):
-                    gear.status = request.POST.get("status")
-                gear.save()
-                return redirect(reverse('gearStore:view-gear',
-                                        kwargs={'gear_name_slug': gear.slug}))
-        else:
-            for error_category in form.errors:
-                for error in form.errors[error_category]:
-                    errors.append(error)
-        context_dict['errors'] = errors
-
-    gear = Gear.objects.get(slug=gear_name_slug)
-
-    context_dict['form'] = form
-    context_dict['options'] = GEAR_STATUS_CHOICES
-    context_dict['gear'] = gear
-    context_dict['category'] = gear.category
-    return render(request, 'gearStore/edit_gear.html', context=context_dict)
-
-
-@login_required
-def delete_gear(request, gear_name_slug):
-    # check if user is admin
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    context_dict = {'categories': Category.objects.all()}
-    try:
-        gear = Gear.objects.get(slug=gear_name_slug)
-    except Gear.DoesNotExist:
-        gear = None
-
-    if gear is None:
-        return redirect(reverse("gearStore:index"))
-
-    if request.method == 'POST':
-        errors = []
-        input_password = request.POST.get("password")
-        plaintext = input_password.encode()
-        hash = hashlib.sha256(plaintext)
-        readable_hash = hash.hexdigest()
-        passwords = AdminPassword.objects.all()
-        if passwords[0].password == readable_hash:
-            gear.delete()
-            return redirect(reverse('gearStore:view-category',
-                                    kwargs={'category_name_slug': gear.category.slug}))
-        else:
-            errors.append("Error: Incorrect Password.")
-        context_dict['errors'] = errors
-    context_dict['gear'] = gear
-    context_dict['category'] = gear.category
-    return render(request, 'gearStore/delete_gear.html', context=context_dict)
-
-
-@login_required
-def delete_category(request, category_name_slug):
-    # check if user is admin
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    context_dict = {'categories': Category.objects.all()}
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        category = None
-
-    if category is None:
-        return redirect(reverse("gearStore:index"))
-
-    if request.method == 'POST':
-        errors = []
-        input_password = request.POST.get("password")
-        plaintext = input_password.encode()
-        hash = hashlib.sha256(plaintext)
-        readable_hash = hash.hexdigest()
-        passwords = AdminPassword.objects.all()
-        if passwords[0].password == readable_hash:
-            category.delete()
-            return redirect(reverse('gearStore:find-gear'))
-        else:
-            errors.append("Error: Incorrect Password.")
-        context_dict['errors'] = errors
-    context_dict['category'] = category
-    return render(request, 'gearStore/delete_category.html', context=context_dict)
 
 
 @login_required

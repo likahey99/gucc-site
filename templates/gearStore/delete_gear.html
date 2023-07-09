@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1 id="page-header">Delete {{ gear.name }}</h1>
     <div class="form-container">
+        <h1 id="page-header">Delete {{ gear.name }}</h1>
         <div class="form-value">
             <form enctype="multipart/form-data" id='gear_form' method="post"
                   action="{% url "gearStore:delete-gear" gear.slug %}">
@@ -29,14 +29,14 @@
                 </div>
             </form>
         </div>
+        {% if errors %}
+            <ul class='form-errors'>
+                <li class="error-warning">An error has occurred:</li>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
     </div>
-    {% if errors %}
-        <ul class='form-errors'>
-            <li class="error-warning">An error has occurred:</li>
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <br>
-    {% endif %}
 {% endblock %}
