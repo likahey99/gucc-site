@@ -245,6 +245,17 @@ def category_menu(request):
             if user_profile.adminStatus:
                 context_dict['admin'] = True
 
+    if request.POST:
+        errors = []
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('gearStore:find-gear'))
+        else:
+            for error_category in form.errors:
+                for error in form.errors[error_category]:
+                    errors.append(error)
+        context_dict['errors'] = errors
     context_dict['category'] = None
     return render(request, 'gearStore/category_menu.html', context_dict)
 
@@ -584,29 +595,6 @@ def view_category(request, category_name_slug):
 
         context_dict['errors'] = errors
     return render(request, 'gearStore/category.html', context=context_dict)
-
-
-@login_required
-def add_category(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-    errors = []
-    context_dict = {'categories': Category.objects.all()}
-    form = None
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('gearStore:find-gear'))
-        else:
-            for error_category in form.errors:
-                for error in form.errors[error_category]:
-                    errors.append(error)
-    context_dict['errors'] = errors
-    context_dict['form'] = form
-    return render(request, 'gearStore/add_category.html', context_dict)
 
 
 @login_required
