@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
     BackgroundImageForm, LogoImageForm, BookingCommentsForm, IconImageForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
-    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE, PURPOSE_CHOICES
+    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE, PURPOSE_CHOICES, QR_Code
 
 from django.template.defaultfilters import slugify
 
@@ -234,6 +234,10 @@ def view_gear(request, gear_name_slug):
                     borrow.dateToReturn = request.POST.get("dateToReturn")
                     borrow.purpose = request.POST.get("purpose")
                     borrow.save()
+                    qr_code = QR_Code()
+                    qr_code.booking = borrow
+                    qr_code.save()
+                    qr_code.update_qrcode()
                     return redirect(reverse("gearStore:booking", kwargs={'booking_id': borrow.id }))
 
         # find if the gear is currently on loan
@@ -643,6 +647,9 @@ def edit_home(request):
         if request.POST.get("site-title"):
             content.title = request.POST.get("site-title")
 
+        if request.POST.get("domain"):
+            content.domain = request.POST.get("domain")
+
         if request.POST.get("home-text"):
             content.home_contents = request.POST.get("home-text")
 
@@ -908,6 +915,9 @@ def booking(request, booking_id):
     context_dict['options'] = STATUS_CHOICES
     context_dict['purpose_options'] = PURPOSE_CHOICES
     context_dict['user'] = user_profile
+    qr_code = QR_Code.objects.get(booking=booking)
+    qr_code.update_qrcode()
+    context_dict['qr_code'] = qr_code.qr_code
     return render(request, 'gearStore/booking.html', context=context_dict)
 
 @login_required

@@ -87,6 +87,9 @@
                     {% endif %}
                 </div>
             </div>
+            {% if qr_code %}
+                <img class="center-image" src="/media/{{ qr_code }}">
+            {% endif %}
             <div class="text-widget" id="booking-details-text-widget" style="background-color: {% get_colour booking.id %};">
                 <div id="status-section" class="widget-section">
                     <p class="widget-label">Status</p>

@@ -41,7 +41,7 @@ def get_active_booking_statuses_for_gear(gear):
 
 
 def get_size_options(gear):
-    size_options = {"all": "All"}
+    size_options = {"all": "All Sizes"}
     for gear_item in gear:
         if not (slugify(gear_item.size) in size_options):
             size_options[slugify(gear_item.size)] = string.capwords(gear_item.size)

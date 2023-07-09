@@ -1,10 +1,9 @@
 from django.contrib import admin
-from gearStore.models import Category, UserProfile, Gear, Booking, PageContents, BookingComments
+from gearStore.models import Category, UserProfile, Gear, Booking, PageContents, BookingComments, QR_Code
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'dateAdded', 'picture')
-
 
 class GearAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'category', 'size', 'dateAdded', 'picture')
@@ -25,3 +24,4 @@ admin.site.register(Gear, GearAdmin)
 admin.site.register(Booking)
 admin.site.register(PageContents)
 admin.site.register(BookingComments, BookingCommentsAdmin)
+admin.site.register(QR_Code)

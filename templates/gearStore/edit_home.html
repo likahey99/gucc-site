@@ -20,11 +20,7 @@
                         <ion-icon name="pencil-outline"></ion-icon>
                         <Label for="">Site Name</Label>
                     </div>
-                    {% if content %}
-                        <input type="text" name="site-title" placeholder="Site Title" value="{{ content.title }}" required>
-                    {% else %}
-                        <input type="text" name="site-title" placeholder="Site Title" required>
-                    {% endif %}
+                    <input type="text" name="site-title" placeholder="Site Title"{% if content %}value="{{ content.title }}" {% endif %} required>
                 </div>
                 <div class="input-box">
                     <div class="form-text-wrapper">
@@ -37,7 +33,15 @@
                         <textarea type="text" name="home-text" placeholder="Home Page Text" required></textarea>
                     {% endif %}
                 </div>
-
+                <p>Please enter the url of the site in order to create QR codes correctly.</p>
+                <p>Ex. https://gearstore.com</p>
+                <div class="input-box">
+                    <div class="form-text-wrapper">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                        <Label for="">Site URL</Label>
+                    </div>
+                    <input type="text" name="domain" placeholder="URL"{% if content %}value="{{ content.domain }}" {% endif %} required>
+                </div>
                 <div class="input-box">
                     <div class="form-text-wrapper">
                         <ion-icon name="image-outline"></ion-icon>

@@ -1,7 +1,10 @@
 import string
 from datetime import timedelta
+from io import BytesIO
 
 import django
+import qrcode
+from django.core.files import File
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -140,7 +143,6 @@ def return_date_time():
     now = timezone.now()
     return now + timedelta(days=7)
 
-
 class Booking(models.Model):
     id = models.TextField(max_length=6, primary_key=True, default=id_generator)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -159,6 +161,25 @@ class Booking(models.Model):
         return False
 
 
+class QR_Code(models.Model):
+    qr_code = models.ImageField(upload_to="qrcode_images", default="qrcode_images/default_qrcode.png")
+    domain = models.TextField(default="")
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+
+    def update_qrcode(self):
+        content = PageContents.objects.all()
+        if content:
+            content = content[0]
+            if content.domain != self.domain:
+                self.domain = content.domain
+
+                img = qrcode.make(self.domain + '/gear-store/booking/' + self.booking.id)
+                stream = BytesIO()
+                img.save(stream, 'png')
+                img_url = 'qrcode_' + self.booking.id + '.png'
+                self.qr_code.save(img_url, File(stream), save=False)
+                self.save()
+
 class AdminPassword(models.Model):
     password = models.CharField(max_length=64, default="password123")
 
@@ -176,6 +197,7 @@ class PageContents(models.Model):
     contact = models.CharField(max_length=128, default="07123 456 789")
     contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=PHONE)
     title = models.TextField(default="Gear Store")
+    domain = models.URLField(default="")
 
 
 class BookingComments(models.Model):
