@@ -540,8 +540,8 @@ def view_category(request, category_name_slug):
         context_dict['gear'] = None
 
     if request.method == 'POST':
+        errors = []
         if request.POST.get("add-gear"):
-            errors = []
             form = GearForm(request.POST, request.FILES)
             if form.is_valid():
                 if category:
