@@ -21,9 +21,6 @@ urlpatterns = [
     path('edit-gear/<slug:gear_name_slug>/', views.edit_gear, name='edit-gear'),
     path('delete-gear/<slug:gear_name_slug>/', views.delete_gear, name='delete-gear'),
     path('delete-category/<slug:category_name_slug>', views.delete_category, name='delete-category'),
-    path('edit-home/', views.edit_home, name='edit-home'),
-    path('edit-about/', views.edit_about, name='edit-about'),
-    path('edit-contact', views.edit_contact, name='edit-contact'),
     path('booking/<booking_id>/', views.booking, name='booking'),
     path('user/<user>/', views.user, name='user')
 ]

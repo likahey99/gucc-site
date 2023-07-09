@@ -979,6 +979,7 @@ h3#booking-comments, p#booking-comment {
     background-blend-mode: multiply;
     border-radius: 25px;
     z-index: 10;
+    overflow-y: scroll;
 }
 
 button#hide_form_button {

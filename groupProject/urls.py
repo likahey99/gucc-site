@@ -25,3 +25,5 @@ urlpatterns = [
   path('admin/', admin.site.urls),
   path('', views.index, name='index')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'gearStore.views.handler404'

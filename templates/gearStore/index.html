@@ -1,17 +1,99 @@
 {% extends 'gearStore/base.html' %}
 {% load staticfiles %}
+{% load gearstore_template_tags %}
+
+{% block head_block %}
+    <script src="{% static 'js/show_popup.js' %}"></script>
+{% endblock %}
 
 {% block title_block %}
     Home
 {% endblock %}
 
 {% block body_block %}
+    {% if admin %}
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_gear_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('edit_gear_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+            <h1 id="page-header">Edit Home</h1>
+            <div class="form-value">
+                <form enctype="multipart/form-data" id='edit-home-form' method="post">
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                            <Label for="">Site Name</Label>
+                        </div>
+                        <input type="text" name="site-title" placeholder="Site Title"{% if content %}value="{{ content.title }}" {% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                            <Label for="">Home Page Text</Label>
+                        </div>
+                        {% if content %}
+                            <textarea type="text" name="home-text" placeholder="Home Page Text" required>{{ content.home_contents }}</textarea>
+                        {% else %}
+                            <textarea type="text" name="home-text" placeholder="Home Page Text" required></textarea>
+                        {% endif %}
+                    </div>
+                    <p>Please enter the url of the site in order to create QR codes correctly.</p>
+                    <p>Ex. https://gearstore.com</p>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                            <Label for="">Site URL</Label>
+                        </div>
+                        <input type="text" name="domain" placeholder="URL"{% if content %}value="{{ content.domain }}" {% endif %} required>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Background Image</Label>
+                        </div>
+                        <input type="file" name="background_image" accept="image/*">
+                    </div>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Logo Image</Label>
+                        </div>
+                        <input type="file" name="logo_image" accept="image/*">
+                    </div>
+
+                    <div class="input-box">
+                        <div class="form-text-wrapper">
+                            <ion-icon name="image-outline"></ion-icon>
+                            <Label for="">Icon Image</Label>
+                        </div>
+                        <input type="file" name="icon_image" accept="image/png">
+                    </div>
+
+                    <div class="submit-button">
+                        <button>Submit Changes</button>
+                    </div>
+                </form>
+            </div>
+            {% if errors %}
+                <ul class='form-errors'>
+                    <li class="error-warning">An error has occurred:</li>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+            {% endif %}
+        </div>
+    {% endif %}
     <h1 id="page-header">Home</h1>
     {% if content %}
         <img src="/media/{{ content.logo_image }}" class="picture">
         <div class="bubble-text">{{ content.home_contents|linebreaks }}</div>
     {% endif %}
     {% if admin %}
-        <a id="delete-button-parent" class="edit-delete-button-parent" href="{% url 'gearStore:edit-home'%}"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+        <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_gear_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
     {% endif %}
 {% endblock %}

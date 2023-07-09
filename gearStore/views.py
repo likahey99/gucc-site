@@ -33,6 +33,68 @@ def index(request):
             if user_profile.adminStatus:
                 context_dict['admin'] = True
 
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("site-title"):
+            content.title = request.POST.get("site-title")
+
+        if request.POST.get("domain"):
+            content.domain = request.POST.get("domain")
+
+        if request.POST.get("home-text"):
+            content.home_contents = request.POST.get("home-text")
+
+            content = content.save()
+
+        if request.FILES:
+            # update background-image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = BackgroundImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+            else:
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+            # update logo image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = LogoImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+            else:
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+
+            # update icon image
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            form = IconImageForm(request.POST or None, request.FILES, instance=content)
+            if form.is_valid():
+                content = form.save()
+            else:
+                for error_category in form.errors:
+                    for error in form.errors[error_category]:
+                        errors.append(error)
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return redirect(reverse('gearStore:index'))
+    # render the page
+    context_dict['content'] = content
+
     return render(request, 'gearStore/index.html', context_dict)
 
 
@@ -120,6 +182,25 @@ def about(request):
             if user_profile.adminStatus:
                 context_dict['admin'] = True
 
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("about-text"):
+            content.about_contents = request.POST.get("about-text")
+
+            content = content.save()
+
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return redirect(reverse('gearStore:about'))
+
     return render(request, 'gearStore/about.html', context_dict)
 
 
@@ -137,6 +218,33 @@ def contact(request):
         if user_profile:
             if user_profile.adminStatus:
                 context_dict['admin'] = True
+
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("contact-text"):
+            content.contact_contents = request.POST.get("contact-text")
+
+        if request.POST.get("contact"):
+            content.contact = request.POST.get("contact")
+
+        if request.POST.get("contact-option"):
+            content.contact_option = request.POST.get("contact-option")
+
+        content = content.save()
+
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return redirect(reverse('gearStore:contact'))
+
+    context_dict['options'] = CONTACT_CHOICES
 
     return render(request, 'gearStore/contact.html', context_dict)
 
@@ -624,180 +732,6 @@ def delete_category(request, category_name_slug):
 
 
 @login_required
-def edit_home(request):
-    # check if user is admin
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-
-    # add categories into the context dict for left sidebar
-    context_dict = {'categories': Category.objects.all()}
-    context_dict['category'] = None
-
-    # add page content into context dict for form autofill
-    content = PageContents.objects.all()
-    if content:
-        content = content[0]
-    else:
-        content = PageContents()
-
-    if request.method == 'POST':
-        errors = []
-
-        if request.POST.get("site-title"):
-            content.title = request.POST.get("site-title")
-
-        if request.POST.get("domain"):
-            content.domain = request.POST.get("domain")
-
-        if request.POST.get("home-text"):
-            content.home_contents = request.POST.get("home-text")
-
-            content = content.save()
-
-        if request.FILES:
-            # update background-image
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            form = BackgroundImageForm(request.POST or None, request.FILES, instance=content)
-            if form.is_valid():
-                content = form.save()
-            else:
-                for error_category in form.errors:
-                    for error in form.errors[error_category]:
-                        errors.append(error)
-            # update logo image
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            form = LogoImageForm(request.POST or None, request.FILES, instance=content)
-            if form.is_valid():
-                content = form.save()
-            else:
-                for error_category in form.errors:
-                    for error in form.errors[error_category]:
-                        errors.append(error)
-
-            # update icon image
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            form = IconImageForm(request.POST or None, request.FILES, instance=content)
-            if form.is_valid():
-                content = form.save()
-            else:
-                for error_category in form.errors:
-                    for error in form.errors[error_category]:
-                        errors.append(error)
-        context_dict['errors'] = errors
-        if not errors:
-            context_dict = {'categories': Category.objects.all()}
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            context_dict['category'] = None
-            context_dict['content'] = content
-            context_dict['admin'] = True
-            return render(request, 'gearStore/index.html', context_dict)
-            # return redirect('gearStore:index', context_dict=context_dict)
-    # render the page
-    context_dict['content'] = content
-    return render(request, 'gearStore/edit_home.html', context=context_dict)
-
-
-@login_required
-def edit_about(request):
-    # check if user is admin
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-
-    # add categories into the context dict for left sidebar
-    context_dict = {'categories': Category.objects.all()}
-    context_dict['category'] = None
-
-    # add page content into context dict for form autofill
-    content = PageContents.objects.all()
-    if content:
-        content = content[0]
-    else:
-        content = PageContents()
-
-    if request.method == 'POST':
-        errors = []
-
-        if request.POST.get("about-text"):
-            content.about_contents = request.POST.get("about-text")
-
-            content = content.save()
-
-        context_dict['errors'] = errors
-        if not errors:
-            context_dict = {'categories': Category.objects.all()}
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            context_dict['category'] = None
-            context_dict['content'] = content
-            context_dict['admin'] = True
-            return render(request, 'gearStore/about.html', context_dict)
-
-    # render the page
-    context_dict['content'] = content
-    return render(request, 'gearStore/edit_about.html', context=context_dict)
-
-
-@login_required
-def edit_contact(request):
-    # check if user is admin
-    user_profile = UserProfile.objects.get(user=request.user)
-    if not user_profile.adminStatus:
-        return redirect(reverse("gearStore:admin-error"))
-
-    # add categories into the context dict for left sidebar
-    context_dict = {'categories': Category.objects.all()}
-    context_dict['category'] = None
-
-    # add page content into context dict for form autofill
-    content = PageContents.objects.all()
-    if content:
-        content = content[0]
-    else:
-        content = PageContents()
-
-    if request.method == 'POST':
-        errors = []
-
-        if request.POST.get("contact-text"):
-            content.contact_contents = request.POST.get("contact-text")
-
-        if request.POST.get("contact"):
-            content.contact = request.POST.get("contact")
-
-        if request.POST.get("contact-option"):
-            content.contact_option = request.POST.get("contact-option")
-
-        content = content.save()
-
-        context_dict['errors'] = errors
-        if not errors:
-            context_dict = {'categories': Category.objects.all()}
-            content = PageContents.objects.all()
-            if content:
-                content = content[0]
-            context_dict['category'] = None
-            context_dict['content'] = content
-            context_dict['admin'] = True
-            return render(request, 'gearStore/contact.html', context_dict)
-
-    context_dict['options'] = CONTACT_CHOICES
-    # render the page
-    context_dict['content'] = content
-    return render(request, 'gearStore/edit_contact.html', context=context_dict)
-
-
-@login_required
 def booking(request, booking_id):
     context_dict = {'categories': Category.objects.all()}
 
@@ -943,3 +877,8 @@ def user(request, user):
     context_dict["user_bookings"] = user_bookings
 
     return render(request, 'gearStore/user.html', context_dict)
+
+def handler404(request, exception):
+    context_dict = {'categories': Category.objects.all()}
+    context_dict['category'] = None
+    return render(request, 'gearStore/404.html', context=context_dict)
