@@ -12,8 +12,8 @@
 
 {% block body_block %}
     {% if admin %}
-        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_gear_popup">
-            <button id="hide_form_button" onclick="hide_generic_popup('edit_gear_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
+        <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_home_popup">
+            <button id="hide_form_button" onclick="hide_generic_popup('edit_home_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
             <h1 id="page-header">Edit Home</h1>
             <div class="form-value">
                 <form enctype="multipart/form-data" id='edit-home-form' method="post">
@@ -97,6 +97,6 @@
         <div class="bubble-text">{{ content.home_contents|linebreaks }}</div>
     {% endif %}
     {% if admin %}
-        <a id="delete-button-parent" class="edit-delete-button-parent"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
+        <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_home_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
     {% endif %}
 {% endblock %}
