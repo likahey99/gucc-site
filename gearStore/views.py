@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from gearStore.forms import UserForm, UserProfileForm, CategoryForm, GearForm, AdminForm, PageContentsForm, \
     BackgroundImageForm, LogoImageForm, BookingCommentsForm, IconImageForm
 from gearStore.models import UserProfile, Category, Gear, Booking, AdminPassword, BookingComments, PageContents, \
-    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE, PURPOSE_CHOICES, QR_Code
+    CONTACT_CHOICES, STATUS_CHOICES, GEAR_STATUS_CHOICES, PRIMARY_PURPOSE, PURPOSE_CHOICES, QR_Code, SidebarLinks
 
 from django.template.defaultfilters import slugify
 
@@ -35,6 +35,50 @@ def index(request):
 
     if request.method == 'POST':
         errors = []
+
+        if request.POST.get("edit-link-id"):
+            try:
+                link = SidebarLinks.objects.get(id=request.POST.get("edit-link-id"))
+                link.link_text = request.POST.get("edit-link-text")
+                link.url = request.POST.get("edit-link-url")
+                link.save()
+                return redirect(reverse('gearStore:index'))
+            except SidebarLinks.DoesNotExist:
+                print("Missing ID")
+                return redirect(reverse('gearStore:index'))
+
+        if request.POST.get("delete-link-id"):
+            try:
+                link = SidebarLinks.objects.get(id=request.POST.get("delete-link-id"))
+                if request.POST.get("password"):
+                    input_password = request.POST.get("password")
+                    plaintext = input_password.encode()
+                    hash = hashlib.sha256(plaintext)
+                    readable_hash = hash.hexdigest()
+                    passwords = AdminPassword.objects.all()
+                    if passwords[0].password == readable_hash:
+                        link.delete()
+                        return redirect(reverse('gearStore:index'))
+                    else:
+                        errors.append("Error: Incorrect admin password.")
+                else:
+                    errors.append("Error: No admin password entered.")
+            except SidebarLinks.DoesNotExist:
+                print("Missing ID")
+                return redirect(reverse('gearStore:index'))
+
+        if request.POST.get("new-link-name"):
+            if request.POST.get("new-link-url"):
+                new_sidebar_link = SidebarLinks()
+                new_sidebar_link.link_text = request.POST.get("new-link-name")
+                new_sidebar_link.url = request.POST.get("new-link-url")
+                new_sidebar_link.save()
+                return redirect(reverse('gearStore:index'))
+            else:
+                errors.append("Error: New link URL must be completed.")
+        else:
+            if request.POST.get("new-link-url"):
+                errors.append("Error: New link name must be completed.")
 
         if request.POST.get("site-title"):
             content.title = request.POST.get("site-title")
@@ -94,7 +138,11 @@ def index(request):
             return redirect(reverse('gearStore:index'))
     # render the page
     context_dict['content'] = content
-
+    sidebar_links = SidebarLinks.objects.all()
+    if sidebar_links:
+        context_dict['sidebar_links'] = SidebarLinks.objects.all()
+    else:
+        context_dict['sidebar_links'] = None
     return render(request, 'gearStore/index.html', context_dict)
 
 

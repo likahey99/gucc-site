@@ -100,7 +100,9 @@
                 <form enctype="multipart/form-data" id='gear_form' method="post">
                     {% csrf_token %}
                     <input type="hidden" name="delete-gear" value="delete-gear">
-                    <p>Enter the admin password to confirm deletion.</p>
+                    <div class="bubble-text">
+                        <p>Enter the admin password to confirm deletion.</p>
+                    </div>
                     <div class="input-box">
                         <div class="form-text-wrapper">
                             <ion-icon name="person-outline"></ion-icon>

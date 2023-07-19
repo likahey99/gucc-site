@@ -4,7 +4,7 @@ from datetime import *
 
 from django import template
 from gearStore.models import Category, PageContents, Booking, STATUS_CHOICES, PRIMARY_PURPOSE, SECONDARY_PURPOSE, \
-    BookingComments, IN_SERVICE
+    BookingComments, IN_SERVICE, SidebarLinks
 from slugify import slugify
 
 register = template.Library()
@@ -385,3 +385,11 @@ def show_availability_filter_bar(gear):
 
     return {"options": options,
             "property_type": "status"}
+
+@register.inclusion_tag('gearStore/display_right_sidebar_links.html')
+def show_right_sidebar_links():
+    links = SidebarLinks.objects.all()
+    if links:
+        return {"links": links}
+    else:
+        return {}

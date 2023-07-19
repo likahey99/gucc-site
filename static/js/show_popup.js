@@ -59,3 +59,18 @@ function hide_generic_popup(id) {
     let popup = document.getElementById(id);
     popup.style.display = "none";
 }
+
+function show_edit_delete_link_popup(popup_type, id, link_text, link_url) {
+    let popup_id = popup_type + '_link_popup';
+    let popup = document.getElementById(popup_id);
+    popup.style.display = 'block';
+
+    let hidden_value_id = popup_type + '-link-id';
+    let hidden_value = document.getElementById(hidden_value_id);
+    hidden_value.value = id;
+
+    if (popup_type == 'edit') {
+        document.getElementById('edit-link-text').value = link_text;
+        document.getElementById('edit-link-url').value = link_url;
+    }
+}

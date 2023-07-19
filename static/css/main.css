@@ -264,6 +264,38 @@ p {
     font-size: 35px;
 }
 
+.popup-form-container form {
+    width: 100%;
+}
+
+.popup-form-container form .input-box {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edit-delete-link-super {
+    display: block;
+    width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edit-delete-link {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.edit-delete-link a ion-icon {
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
 .edit-delete-button, .edit-delete-button-parent {
     margin: 0;
     width:35px;
@@ -1247,6 +1279,12 @@ tr:nth-child(even), tr:nth-child(even) a {
 input{
     margin-left: 0;
     margin-right: 0;
+}
+
+input:disabled {
+    background-color: white;
+    opacity: 0.9;
+    color: black;
 }
 
 input#password {}

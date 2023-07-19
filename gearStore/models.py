@@ -213,3 +213,4 @@ class BookingComments(models.Model):
 class SidebarLinks(models.Model):
     link_text = models.TextField()
     url = models.URLField()
+    id = models.TextField(max_length=6, primary_key=True, default=comment_id_generator)
