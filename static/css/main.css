@@ -1492,16 +1492,16 @@ div.admin-user-view-header#account-header #welcome-text {
     background-color: #c9c7c7;
 }
 
-::-webkit-scrollbar {
+div ::-webkit-scrollbar {
   width: 10px;
 }
 
-::-webkit-scrollbar-thumb {
+div ::-webkit-scrollbar-thumb {
     background: white;
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+div ::-webkit-scrollbar-thumb:hover {
     background: white;
 }
 
