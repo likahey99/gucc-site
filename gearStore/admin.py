@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gearStore.models import Category, UserProfile, Gear, Booking, PageContents, BookingComments, QR_Code
+from gearStore.models import Category, UserProfile, Gear, Booking, PageContents, BookingComments, QR_Code, AdminPassword
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -18,6 +18,8 @@ class ContentsAdmin(admin.ModelAdmin):
 class BookingCommentsAdmin(admin.ModelAdmin):
     list_display = ('comment', 'booking', 'user',)
 
+
+
 admin.site.register(UserProfile)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Gear, GearAdmin)
@@ -25,3 +27,4 @@ admin.site.register(Booking)
 admin.site.register(PageContents)
 admin.site.register(BookingComments, BookingCommentsAdmin)
 admin.site.register(QR_Code)
+admin.site.register(AdminPassword)
