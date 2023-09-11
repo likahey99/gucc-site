@@ -17,13 +17,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from gearStore import views
+from guccSite import views
 
 urlpatterns = [
-  path('gear-store/', include('gearStore.urls')),
-  # The above line means any urls starting with gearStore/ are handled by gearStore
+  path('gucc-site/', include('guccSite.urls')),
+  # The above line means any urls starting with guccSite/ are handled by guccSite
   path('admin/', admin.site.urls),
   path('', views.index, name='index')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'gearStore.views.handler404'
+handler404 = 'guccSite.views.handler404'

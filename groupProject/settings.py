@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gearStore'
+    'guccSite'
 ]
 
 MIDDLEWARE = [
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
@@ -139,5 +139,5 @@ PASSWORD_HASHERS = [
 ]
 
 # redirect in login required
-LOGIN_REDIRECT_URL = "/gear-store/profile/"
-LOGIN_URL = "/gear-store/login/"
+LOGIN_REDIRECT_URL = "/gucc-site/profile/"
+LOGIN_URL = "/gucc-site/login/"
