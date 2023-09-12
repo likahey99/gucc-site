@@ -34,9 +34,9 @@
                             <Label for="">Home Page Text</Label>
                         </div>
                         {% if content %}
-                            <textarea type="text" name="home-text" placeholder="Home Page Text" required>{{ content.home_contents }}</textarea>
+                            <textarea type="text" name="home-text" placeholder="Home Page Text">{{ content.home_contents }}</textarea>
                         {% else %}
-                            <textarea type="text" name="home-text" placeholder="Home Page Text" required></textarea>
+                            <textarea type="text" name="home-text" placeholder="Home Page Text"></textarea>
                         {% endif %}
                     </div>
                     <h1 id="page-header">Site Settings</h1>

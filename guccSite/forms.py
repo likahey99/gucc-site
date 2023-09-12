@@ -37,7 +37,7 @@ class GearForm(forms.ModelForm):
     name = forms.CharField(max_length=128,
                            help_text="Please the enter the gear name.")
     deposit = forms.CharField(max_length=16)
-    description = forms.CharField(max_length=128)
+    description = forms.CharField(max_length=256)
     dateAdded = forms.DateField(widget=forms.HiddenInput(), required=False)
     picture = forms.ImageField(required=False)
     size = forms.CharField(max_length=128)

@@ -283,6 +283,51 @@ def contact(request):
 
     return render(request, 'guccSite/contact.html', context_dict)
 
+def gallery(request):
+    context_dict = {'categories': Category.objects.all()}
+    content = PageContents.objects.all()
+    if content:
+        content = content[0]
+    context_dict['category'] = None
+    context_dict['content'] = content
+
+    context_dict['admin'] = False
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile:
+            if user_profile.adminStatus:
+                context_dict['admin'] = True
+
+    if request.method == 'POST':
+        errors = []
+
+        if request.POST.get("contact-text"):
+            content.contact_contents = request.POST.get("contact-text")
+
+        if request.POST.get("contact"):
+            content.contact = request.POST.get("contact")
+
+        if request.POST.get("contact-option"):
+            content.contact_option = request.POST.get("contact-option")
+
+        content = content.save()
+
+        context_dict['errors'] = errors
+        if not errors:
+            context_dict = {'categories': Category.objects.all()}
+            content = PageContents.objects.all()
+            if content:
+                content = content[0]
+            context_dict['category'] = None
+            context_dict['content'] = content
+            context_dict['admin'] = True
+            return redirect(reverse('guccSite:gallery'))
+
+    context_dict['options'] = CONTACT_CHOICES
+
+    return render(request, 'guccSite/gallery.html', context_dict)
+
+
 
 def category_menu(request):
     context_dict = {'categories': Category.objects.all()}

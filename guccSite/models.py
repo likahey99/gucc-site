@@ -17,7 +17,7 @@ EMAIL = 'mail-outline'
 
 CONTACT_CHOICES = (
     (INSTAGRAM, 'Instagram'),
-    (FACEBOOK, 'Faceook'),
+    (FACEBOOK, 'Facebook'),
     (EMAIL, 'Email'),
 )
 
@@ -112,8 +112,8 @@ class UserProfile(models.Model):
 class Gear(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    deposit = models.TextField(max_length=16, default="Free")
-    description = models.CharField(max_length=128)
+    deposit = models.TextField(max_length=16, default="Yes")
+    description = models.CharField(max_length=256)
     status = models.CharField(max_length=16, choices=GEAR_STATUS_CHOICES, default=IN_SERVICE)
     dateAdded = models.DateField(auto_now_add=True)
     picture = models.ImageField(upload_to="gear_images", default="gear_images/default.png")
@@ -194,7 +194,7 @@ class PageContents(models.Model):
     home_contents = models.TextField(default="")
     about_contents = models.TextField(default="")
     contact_contents = models.TextField(default="")
-    contact = models.CharField(max_length=128, default="07123 456 789")
+    contact = models.CharField(max_length=128, default="@gusacanoe")
     contact_option = models.CharField(max_length=128, choices=CONTACT_CHOICES, default=FACEBOOK)
     title = models.TextField(default="Gear Store")
     domain = models.URLField(default="")

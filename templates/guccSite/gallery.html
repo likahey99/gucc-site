@@ -7,11 +7,11 @@
 {% endblock %}
 
 {% block title_block %}
-    Contact Us
+    Gallery
 {% endblock %}
 
 {% block body_block %}
-    {% if admin %}
+    <!-- {% if admin %}
         <div class="popup-form-container" style="display: none; background-image: {% get_background %}" id="edit_contact_popup">
             <h1 id="page-header">Edit Contact</h1>
             <button id="hide_form_button" onclick="hide_generic_popup('edit_contact_popup')"><ion-icon name="close-circle-outline"></ion-icon></button>
@@ -83,7 +83,7 @@
         </div>
         <a id="delete-button-parent" class="edit-delete-button-parent" onclick="show_generic_popup('edit_contact_popup')"><ion-icon id="edit-button" class="edit-delete-button" name="create-outline"></ion-icon></a>
     {% endif %}
-    <h1 id="page-header">Contact Us</h1>
+    <h1 id="page-header">Gallery</h1>
     {% if content %}
         <div class="bubble-text">{{ content.contact_contents|linebreaks }}
             <br>
@@ -96,7 +96,14 @@
                 </div>
             </div>
             <br>
-            <p>And dont be afraid to drop us a message.</p>
+            <p>And dont be afraid to drop us a message</p>
         </div>
-    {% endif %}
+    {% endif %} -->
+
+    <h1 id="page-header">Gallery</h1>
+    <div style="text-align: center;">
+        <img src="\static\images\slider.gif">
+        <img src="\static\images\exampleEventGallery.png">
+    </div>
+
 {% endblock %}

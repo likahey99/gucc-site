@@ -44,15 +44,16 @@
             <ul class="navbar">
                 <li><a href="{% url 'guccSite:index' %}">Home</a></li>
                 <li><a href="{% url 'guccSite:about' %}">About</a></li>
-                <li><a href="{% url 'guccSite:find-gear' %}">Borrow Gear</a></li>
+                <li><a href="{% url 'guccSite:find-gear' %}">Inventory</a></li>
                 <li><a href="{% url 'guccSite:contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'guccSite:gallery' %}">Gallery</a></li>
             </ul>
         </header>
         <article>
             <div id="main-body">
                 <div id="left-sidebar" class="body-column">
-                    <h3>Gear Types</h3>
-                    <ul>
+                    <h3>Announcements</h3>
+                    <!-- <ul>
                         {% if categories %}
                             {% for c in categories %}
                                 {% if c == category %}
@@ -67,9 +68,11 @@
                             {% endfor %}
                         {% else %}
                             <li><strong>There are no categories present.</strong></li>
-                        {% endif %}
+                        {% endif %} -->
 
-                    </ul>
+                        this will show the most recent Announcements
+
+                    </ul> 
 
                 </div>
 
@@ -88,7 +91,7 @@
             <br>
         </article>
         <footer style="background-image: {% get_background %}">
-            <p class="copyright">Copyright Group 10E</p>
+            <p class="">Copyright GUSA Canoe</p>
         </footer>
     </body>
 </html>
