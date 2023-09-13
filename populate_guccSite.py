@@ -14,41 +14,42 @@ from guccSite.models import Gear, Category, PageContents
 
 def populate():
     gear = [
-        {'name': 'Climbing Rope', 'description': 'A strong, dynamic rope used for climbing',
-         'size': 'medium', 'category': 'Rope', 'picture': '/gear_images/rope.jpg'},
-        {'name': 'Climbing Harnesses', 'description': 'A safety harness worn by climbers',
-         'size': 'medium', 'category': 'Harnesses', 'picture': '/gear_images/harness.jpg'},
-        {'name': 'Climbing Helmet', 'description': 'A protective helmet worn by climbers',
-         'size': 'large', 'category': 'Clothing', 'picture': '/gear_images/helmet.jpg'},
-        {'name': 'Climbing Shoes', 'description': 'Specialized shoes used for rock climbing',
-         'size': 'medium', 'category': 'Clothing', 'picture': '/gear_images/shoes.jpg'},
-        {'name': 'Climbing Chalk Bag', 'description': 'A bag used to hold chalk for climbing',
-         'size': 'small', 'category': 'Accessories', 'picture': '/gear_images/chalkbag.jpg'},
-        {'name': 'Crampons', 'description': 'Spiky attachments for climbing shoes', 'size': 'small',
-         'category': 'Accessories', 'picture': '/gear_images/g12.jpg'},
-        {'name': 'Steel Ice Axe', 'description': 'A tool used for ice climbing and mountaineering',
-         'size': 'large', 'category': 'Axes', 'picture': '/gear_images/petzl.jpeg'},
-        {'name': 'Raven Ice Axe', 'description': 'A tool used for ice climbing and mountaineering',
-         'size': 'large', 'category': 'Axes', 'picture': '/gear_images/raven.png'},
-        {'name': 'Mountaineering Boots', 'description': 'Boots designed for use in mountaineering',
-         'size': 'large', 'category': 'Clothing', 'picture': '/gear_images/b2.jpg'},
-        {'name': 'Backpack', 'description': 'A bag for carrying gear',
-         'size': 'medium', 'category': 'Backpacks', 'picture': '/gear_images/default.png'},
-        {'name': 'Rucksack', 'description': ' A rucksack for carrying gear', 'size': 'small',
-         'category': 'Backpacks', 'picture': '/gear_images/tempest30.jpg'},
-        {'name': 'Belay Device', 'description': 'A device used to control a climbing rope',
+        {'name': 'Dagger Axiom', 'description': 'info on size and difficulty of axiom',
+         'size': 'medium', 'category': 'Boats', 'picture': '/gear_images/daggerAxiom.jpg'},
+        {'name': 'Dagger Mamba', 'description': 'info on size and difficulty',
+         'size': 'large', 'category': 'Boats', 'picture': '/gear_images/harness.jpg'},
+        {'name': 'EXO T-REX', 'description': 'info on size and difficulty. Could mention its Patricks',
+         'size': 'large', 'category': 'Boats', 'picture': '/gear_images/helmet.jpg'},
+        {'name': 'Werner Orange Glass', 'description': 'orange Werner carbon and glass paddle ',
+         'size': '197', 'category': 'Paddles', 'picture': '/gear_images/wernerGlassOrange.jpg'},
+        {'name': 'Red Ainsworth ', 'description': 'red club paddle',
+         'size': 'medium', 'category': 'Paddles', 'picture': '/gear_images/chalkbag.jpg'},
+        {'name': 'Red Palm helmet', 'description': 'red club helmet', 'size': 'small',
+         'category': 'Helmets', 'picture': '/gear_images/g12.jpg'},
+        {'name': 'Red Bouyancy Aid', 'description': 'A wearable flotation device',
+         'size': 'medium', 'category': 'BAs', 'picture': '/gear_images/petzl.jpeg'},
+        {'name': 'Pink Wetsuit', 'description': 'A pink Wetsuit',
+         'size': 'small', 'category': 'Wetsuits', 'picture': '/gear_images/raven.png'},
+        {'name': 'Orange Club Cag', 'description': 'A club cag with seals that work well!',
+         'size': 'large', 'category': 'CAGs', 'picture': '/gear_images/b2.jpg'},
+        {'name': 'Nookie 1', 'description': 'A spray deck to keep water out your boat',
+         'size': 'large', 'category': 'Spraydecks', 'picture': '/gear_images/default.png'},
+        {'name': 'Nookie 2', 'description': 'A spray deck to keep water out your boat example with make and unique id to differentiate', 'size': 'small',
+         'category': 'Spraydecks', 'picture': '/gear_images/tempest30.jpg'},
+        {'name': 'Nookie small 5', 'description': 'A spray deck to keep water out your boat example of naming with make and size and id to differentiate',
          'size': 'small', 'category': 'Accessories', 'picture': '/gear_images/bigair.jpg'},
-        {'name': 'Hiking Boots', 'description': 'Boots designed for use in hiking', 'size': 'medium',
+        {'name': 'Palm 17', 'description': 'A spray deck to keep water out your boat example of naming sith make and unique id', 'size': 'medium',
          'category': 'Clothing', 'picture': '/gear_images/summer.png'}
     ]
 
     categories = [
-        {'name': 'Rope', 'description': 'Ropes for mountaineering', 'picture': '/category_images/ropes.jpg'},
-        {'name': 'Harnesses', 'description': 'Harnesses for mountaineering', 'picture': '/category_images/harness.jpg'},
-        {'name': 'Accessories', 'description': 'Misc accessories for mountaineering', 'picture': '/category_images/chalkbag.jpg'},
-        {'name': 'Backpacks', 'description': 'Backpacks for mountaineering', 'picture': '/category_images/bag.jpg'},
-        {'name': 'Axes', 'description': 'Ice axes for mountaineering', 'picture': '/category_images/axes.jpg'},
-        {'name': 'Clothing', 'description': 'Clothing items for mountaineering', 'picture': '/category_images/helmet.jpg'}
+        {'name': 'Boats', 'description': 'Whitewater kayaking boats ', 'picture': '/category_images/ropes.jpg'},
+        {'name': 'Paddles', 'description': 'Whitewater kayaking paddles', 'picture': '/category_images/harness.jpg'},
+        {'name': 'BAs', 'description': 'Bouyancy Aides to keep you afloat', 'picture': '/category_images/chalkbag.jpg'},
+        {'name': 'Wetsuits', 'description': 'Wetsuits to keep you warm', 'picture': '/category_images/bag.jpg'},
+        {'name': 'CAGs', 'description': 'Dry jackets to keep your body warm and dry (ish)', 'picture': '/category_images/axes.jpg'},
+        {'name': 'Helmets', 'description': 'Helmets to protect your head', 'picture': '/category_images/helmet.jpg'}
+        {'name': 'Spraydecks', 'description': 'Spraydeck to keep water out your boat', 'picture': '/category_images/helmet.jpg'}
     ]
 
     default_data = [
@@ -68,7 +69,7 @@ def populate():
          ''',
          'contact': '07933 123 456',
          'contact_option': 'logo-whatsapp',
-         'title': 'Gear Store'
+         'title': 'gucc-site'
          }
     ]
 
